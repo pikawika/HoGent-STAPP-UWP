@@ -20,12 +20,11 @@ namespace uwp_app_aalst_groep_a3.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPageView : Page
+    public sealed partial class HomePageView : Page
     {
-        public MainPageView()
+        public HomePageView()
         {
             this.InitializeComponent();
-            mainFrame.Navigate(typeof(HomePageView));
         }
     }
 }
