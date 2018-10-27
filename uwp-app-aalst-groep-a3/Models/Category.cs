@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace uwp_app_aalst_groep_a3.Models
 {
-    enum Category
+    public enum Category
     {
         RESTAURANT,
     }

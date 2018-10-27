@@ -8,6 +8,7 @@ namespace uwp_app_aalst_groep_a3.Models
 {
     public class Address
     {
+        public int AddressId { get; set; }
         public String Street { get; set; }
         public String HouseNumber { get; set; }
         public String Bus { get; set; }

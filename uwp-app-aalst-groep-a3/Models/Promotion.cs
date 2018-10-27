@@ -8,6 +8,7 @@ namespace uwp_app_aalst_groep_a3.Models
 {
     public class Promotion
     {
+        public int PromotionId { get; set; }
         public String Name { get; set; }
     }
 }
