@@ -26,5 +26,10 @@ namespace uwp_app_aalst_groep_a3.Views
         {
             this.InitializeComponent();
         }
+
+        private void Search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+
+        }
     }
 }

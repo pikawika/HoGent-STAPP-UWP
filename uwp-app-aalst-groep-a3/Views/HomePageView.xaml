@@ -14,18 +14,60 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Image x:Name="_mainPhoto" 
-               HorizontalAlignment="Stretch" 
-               VerticalAlignment="Stretch" 
-                
-               Source="https://images.pexels.com/photos/373912/pexels-photo-373912.jpeg?auto=compress" 
-               Stretch="UniformToFill"/>
-        <Canvas  HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock TextAlignment="Center" Text="STAPP" HorizontalAlignment="Center" FontSize="120" Foreground="#FFF" FocusVisualPrimaryBrush="#FF2F6CB9" FontWeight="Bold" Canvas.Left="-744" Margin="0,0,0,0" Width="1491" Height="180" Canvas.Top="-88" VerticalAlignment="Stretch"/>
-        </Canvas>
+        <ParallaxView x:Name="paraimage" Grid.Row="0" VerticalAlignment="Bottom">
+            <Image 
+                   Margin="-0,0,0,0"
+                   Stretch="UniformToFill"
+                   MinHeight="690">
+                <Image.Source>
+                    <BitmapImage UriSource="https://images.pexels.com/photos/373912/pexels-photo-373912.jpeg?auto=compress" />
+                </Image.Source>
+            </Image>
+            
+        </ParallaxView>
 
-        
-        
+        <TextBlock Grid.Row="0" TextAlignment="Center" Text="STAPP" HorizontalAlignment="Center" FontSize="120" Foreground="#FFF" FocusVisualPrimaryBrush="#FF2F6CB9" FontWeight="Bold" Canvas.Left="-744" Margin="0,0,0,0" Width="1491" Height="180" Canvas.Top="-88" VerticalAlignment="Stretch"/>
+
+
+        <TextBlock Grid.Row="1" VerticalAlignment="Top" FontWeight="Medium" Margin="24,12,0,0" Text="Aanbevolen" />
+
+        <GridView Grid.Row="1" x:Name="HomeFeedGrid" IsItemClickEnabled="True"
+                      ScrollViewer.HorizontalScrollMode="Auto" 
+                        ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+                      ScrollViewer.VerticalScrollMode="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      VerticalAlignment="Stretch"
+                     Margin="0,40,0,0"
+                      >
+            
+            <Grid x:Name="GalleryItem" Margin="10,0">
+                
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="200" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                       
+
+                        <Image x:Name="Image" 
+                                   HorizontalAlignment="Left"
+                                   Stretch="UniformToFill" Height="190" Width="190">
+                            <Image.Source>
+                        <BitmapImage UriSource="https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress">
+                                </BitmapImage>
+                            </Image.Source>
+                        </Image>
+                
+                        <StackPanel VerticalAlignment="Bottom" Grid.Row="1" Margin="5,0,5,0" Width="180">
+                            <TextBlock Text="Testsqfd" FontWeight="Medium" 
+                                       TextWrapping="NoWrap"
+                                       HorizontalAlignment="Left" />
+                            <TextBlock Text="qsdfqsdfqsdf"  />
+                        </StackPanel>
+                
+                
+            </Grid>
+        </GridView>
+
     </Grid>
 
 
