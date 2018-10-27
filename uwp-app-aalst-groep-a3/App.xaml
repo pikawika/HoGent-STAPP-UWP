@@ -2,6 +2,13 @@
     x:Class="uwp_app_aalst_groep_a3.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:uwp_app_aalst_groep_a3">
+    xmlns:local="using:uwp_app_aalst_groep_a3"
+    xmlns:view="using:uwp_app_aalst_groep_a3.Views">
+
+    <Application.Resources>
+        <DataTemplate x:Key="MainPageViewModel">
+            <view:MainPageView />
+        </DataTemplate>
+    </Application.Resources>
 
 </Application>
