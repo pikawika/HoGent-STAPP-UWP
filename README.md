@@ -1,4 +1,4 @@
-# Welkom bij Lunchers!
+# Welkom bij Stapp!
 
 Dit is de GitHub repository voor Stapp, het Stads-app project van Groep A3 uit HoGent Aalst. U kan hier steeds alle broncode raadplegen en clonen.
 
