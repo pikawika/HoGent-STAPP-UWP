@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace uwp_app_aalst_groep_a3.Models
 {
-    public enum Category
+    public enum SocialMediaEnum
     {
-        RESTAURANT,
+        FACEBOOK, TWITTER, INSTAGRAM, YOUTUBE, LINKEDIN,
     }
 }
