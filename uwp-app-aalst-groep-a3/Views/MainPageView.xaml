@@ -6,9 +6,26 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:vm="using:uwp_app_aalst_groep_a3.ViewModels">
 
-    <Grid>
+    <Page.DataContext>
+        <vm:MainPageViewModel />
+    </Page.DataContext>
 
-    </Grid>
+    <NavigationView>
+        <NavigationView.MenuItems>
+            <NavigationViewItem Icon="Home" Content="Events" Tag="Events" />
+            <NavigationViewItem Content="Page 1" Tag="PageOne">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE825;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Icon="Home" Content="Page 2" Tag="Page2" />
+            <NavigationViewItem Icon="Microphone" Content="Page 3" Tag="Page3" />
+        </NavigationView.MenuItems>
+        <NavigationView.Content>
+            <Frame x:Name="mainFrame" />
+        </NavigationView.Content>
+    </NavigationView>
+
 </Page>
