@@ -26,8 +26,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private DataTemplate GetTemplate()
         {
-            string s = GetType().Name; //bvb. MainPageViewModel
-            return (DataTemplate)App.Current.Resources[s]; //bvb. View:MainPage
+            string s = GetType().Name;
+            return (DataTemplate)App.Current.Resources[s];
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
