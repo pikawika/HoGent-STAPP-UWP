@@ -111,6 +111,9 @@
     <Compile Include="Views\EventsView.xaml.cs">
       <DependentUpon>EventsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HomePageView.xaml.cs">
+      <DependentUpon>HomePageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
     </Compile>
@@ -119,7 +122,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="uwp-app-aalst-groep-a3_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
@@ -137,6 +139,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Views\EventsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HomePageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
