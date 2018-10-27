@@ -8,10 +8,25 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
-        <TextBlock>
-           HALLO FROM JOOD
-        </TextBlock>
-    </StackPanel>
+    <Grid x:Name="myGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Image x:Name="_mainPhoto" 
+               HorizontalAlignment="Stretch" 
+               VerticalAlignment="Stretch" 
+                
+               Source="https://images.pexels.com/photos/373912/pexels-photo-373912.jpeg?auto=compress" 
+               Stretch="UniformToFill"/>
+        <Canvas  HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock TextAlignment="Center" Text="STAPP" HorizontalAlignment="Center" FontSize="120" Foreground="#FFF" FocusVisualPrimaryBrush="#FF2F6CB9" FontWeight="Bold" Canvas.Left="-744" Margin="0,0,0,0" Width="1491" Height="180" Canvas.Top="-88" VerticalAlignment="Stretch"/>
+        </Canvas>
+
+        
+        
+    </Grid>
+
 
 </Page>

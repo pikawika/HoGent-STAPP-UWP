@@ -24,8 +24,9 @@
             <NavigationViewItem Icon="Microphone" Content="Page 3" Tag="Page3" />
         </NavigationView.MenuItems>
         <NavigationView.Content>
-            <Frame x:Name="mainFrame" />
+            <Frame x:Name="mainFrame" HorizontalAlignment="Stretch" Margin="0,-60,0,0" VerticalAlignment="Stretch" />
         </NavigationView.Content>
+        
     </NavigationView>
-
+    
 </Page>
