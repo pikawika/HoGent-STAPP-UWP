@@ -1,18 +1,13 @@
 ﻿<Page
-    x:Class="uwp_app_aalst_groep_a3.MainPage"
+    x:Class="uwp_app_aalst_groep_a3.Views.MainPageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:uwp_app_aalst_groep_a3"
+    xmlns:local="using:uwp_app_aalst_groep_a3.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    xmlns:vm="using:uwp_app_aalst_groep_a3.ViewModels">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Page.DataContext>
-        <vm:MainPageViewModel />
-    </Page.DataContext>
-    
     <Grid>
 
     </Grid>
