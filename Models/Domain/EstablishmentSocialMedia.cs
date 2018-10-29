@@ -11,7 +11,7 @@ namespace uwp_app_aalst_groep_a3.Models.Domain
     {
         [Key]
         public int EstablishmentSocialMediaId { get; private set; }
-        public SocialMedia SocialMediaInfo { get; set; }
-        public String url { get; set; }
+        SocialMedia SocialMediaInfo { get; set; }
+        String url { get; set; }
     }
 }

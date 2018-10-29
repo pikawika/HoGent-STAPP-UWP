@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace uwp_app_aalst_groep_a3.Models.Domain
 {
-    public class EstablishmentSocialMedia
+    public class SocialMedia
     {
         [Key]
-        public int EstablishmentSocialMediaId { get; private set; }
-        public SocialMedia SocialMediaInfo { get; set; }
-        public String url { get; set; }
+        public int SocialMediaId { get; private set; }
+        public String Name { get; set; }
+        public String LogoPath { get; set; }
     }
 }

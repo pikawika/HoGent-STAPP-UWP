@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace uwp_app_aalst_groep_a3.Models.Domain
 {
-    public class EstablishmentSocialMedia
+    public class OpenDay
     {
         [Key]
-        public int EstablishmentSocialMediaId { get; private set; }
-        public SocialMedia SocialMediaInfo { get; set; }
-        public String url { get; set; }
+        public int OpenDayId { get; set; }
+        public int DayOfTheWeek { get; set; }
+        public List<OpenHour> OpenHours { get; set; }
     }
 }
