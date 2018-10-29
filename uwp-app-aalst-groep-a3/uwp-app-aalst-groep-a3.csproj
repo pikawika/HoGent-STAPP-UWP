@@ -95,14 +95,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Company.cs" />
-    <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\Event.cs" />
-    <Compile Include="Models\Merchant.cs" />
-    <Compile Include="Models\Promotion.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Domain\Establishment.cs" />
+    <Compile Include="Models\Domain\EstablishmentCategory.cs" />
+    <Compile Include="Models\Domain\EstablishmentSocialMedia.cs" />
+    <Compile Include="Models\Domain\EstablishmentSubscription.cs" />
+    <Compile Include="Models\Domain\Category.cs" />
+    <Compile Include="Models\Domain\Company.cs" />
+    <Compile Include="Models\Domain\Customer.cs" />
+    <Compile Include="Models\Domain\Event.cs" />
+    <Compile Include="Models\Domain\Merchant.cs" />
+    <Compile Include="Models\Domain\Promotion.cs" />
+    <Compile Include="Models\Domain\SocialMedia.cs" />
+    <Compile Include="Models\Domain\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModels\EventsViewModel.cs" />
