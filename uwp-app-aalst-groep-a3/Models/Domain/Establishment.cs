@@ -23,6 +23,7 @@ namespace uwp_app_aalst_groep_a3.Models.Domain
         public List<Event> Events { get; set; }
         public List<EstablishmentSocialMedia> Socials { get; set; }
 
-        //openingsuren
+        public List<ExceptionalDay> ExceptionalDays { get; set; }
+        public List<OpenDay> OpenDays { get; set; }
     }
 }
