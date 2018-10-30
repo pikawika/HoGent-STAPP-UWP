@@ -4,6 +4,6 @@ namespace stappBackend.Models
 {
     public class Customer : User
     {
-        public List<EstablishmentSubscription> Subscriptions { get; private set; }
+        public List<EstablishmentSubscription> Subscriptions { get; set; } = new List<EstablishmentSubscription>();
     }
 }

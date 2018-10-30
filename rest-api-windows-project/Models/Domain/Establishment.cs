@@ -15,12 +15,12 @@ namespace stappBackend.Models
         public String Straatnaam { get; set; }
         public String Huisnummer { get; set; }
 
-        public List<EstablishmentCategory> Categories { get; set; }
-        public List<Promotion> Promotions { get; set; }
-        public List<Event> Events { get; set; }
-        public List<EstablishmentSocialMedia> Socials { get; set; }
+        public List<EstablishmentCategory> Categories { get; set; } = new List<EstablishmentCategory>();
+        public List<Promotion> Promotions { get; set; } = new List<Promotion>();
+        public List<Event> Events { get; set; } = new List<Event>();
+        public List<EstablishmentSocialMedia> Socials { get; set; } = new List<EstablishmentSocialMedia>();
 
-        public List<ExceptionalDay> ExceptionalDays { get; set; }
-        public List<OpenDay> OpenDays { get; set; }
+        public List<ExceptionalDay> ExceptionalDays { get; set; } = new List<ExceptionalDay>();
+        public List<OpenDay> OpenDays { get; set; } = new List<OpenDay>();
     }
 }
