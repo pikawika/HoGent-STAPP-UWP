@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uwp-app-aalst-groep-a3", "uwp-app-aalst-groep-a3\uwp-app-aalst-groep-a3.csproj", "{7CECE0ED-F503-425B-AC4B-FBD8D7D19A75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stapp", "rest-api-windows-project\stapp.csproj", "{527953B0-C046-402C-8890-0D22CCF16152}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "stappBackend", "rest-api-windows-project\stappBackend.csproj", "{527953B0-C046-402C-8890-0D22CCF16152}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

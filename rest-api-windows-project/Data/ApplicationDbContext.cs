@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using uwp_app_aalst_groep_a3.Models;
-using uwp_app_aalst_groep_a3.Models.Domain;
+using stappBackend.Models;
 
-namespace stapp.Data
+namespace stappBackend.Data
 {
     public class ApplicationDbContext:DbContext
     {
