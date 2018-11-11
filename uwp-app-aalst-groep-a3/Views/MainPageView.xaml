@@ -9,10 +9,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <NavigationView>
-        
+    <NavigationView x:Name="NavView">
+        <i:Interaction.Behaviors>
+            <ic:EventTriggerBehavior EventName="ItemInvoked">
+                <ic:InvokeCommandAction
+                    Command="{Binding NavigationCommand}"
+                    CommandParameter="{x:Bind (NavigationViewItem)NavView.SelectedItem}"  />
+            </ic:EventTriggerBehavior>
+        </i:Interaction.Behaviors>
         <NavigationView.MenuItems>
-            <NavigationViewItem Icon="Home" Content="Home" Tag="Home" IsSelected="True"/>
+            <NavigationViewItem Icon="Home" Content="Home" Tag="Home"/>
             <NavigationViewItem Icon="Map" Content="Kaart" Tag="Map" />
             <NavigationViewItem Icon="People" Content="Handelaars" Tag="Merchants" />
             <NavigationViewItem Icon="OutlineStar" Content="Evenementen" Tag="Events" />

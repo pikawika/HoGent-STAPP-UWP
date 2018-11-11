@@ -19,38 +19,34 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _currentData = value; RaisePropertyChanged(); }
         }
 
-        public RelayCommand ShowHomeCommand { get; set; }
-        public RelayCommand ShowMapCommand { get; set; }
-        public RelayCommand ShowMerchantsCommand { get; set; }
-        public RelayCommand ShowEventsCommand { get; set; }
+        public RelayCommand NavigationCommand { get; set; }
 
         public MainPageViewModel()
         {
-            ShowHomeCommand = new RelayCommand(_ => ShowHome());
-            ShowMapCommand = new RelayCommand(_ => ShowMap());
-            ShowMerchantsCommand = new RelayCommand(_ => ShowMerchants());
-            ShowEventsCommand = new RelayCommand(_ => ShowEvents());
+            NavigationCommand = new RelayCommand((object args) => Navigate(args));
         }
 
-        private void ShowHome()
+        private void Navigate(object args)
         {
-            Debug.WriteLine("Hallo");
-            CurrentData = new HomePageViewModel();
-        }
-
-        private void ShowMap()
-        {
-            //CurrentData = new MoviesViewModel();
-        }
-
-        private void ShowMerchants()
-        {
-            //CurrentData = new MoviesViewModel();
-        }
-
-        private void ShowEvents()
-        {
-            //CurrentData = new MoviesViewModel();
+            string selected = ((NavigationViewItemInvokedEventArgs)args).InvokedItem.ToString();
+            switch (selected)
+            {
+                case "Home":
+                    CurrentData = new HomePageViewModel();
+                    break;
+                case "Kaart":
+                    CurrentData = new MapViewModel();
+                    break;
+                case "Handelaars":
+                    CurrentData = new MerchantsViewModel();
+                    break;
+                case "Evenementen":
+                    CurrentData = new EventsViewModel();
+                    break;
+                default:
+                    CurrentData = new HomePageViewModel();
+                    break;
+            }
         }
     }
 }
