@@ -13,11 +13,16 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+
 namespace uwp_app_aalst_groep_a3.Views
 {
-    public sealed partial class MainPageView : UserControl
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class MerchantsView : Page
     {
-        public MainPageView()
+        public MerchantsView()
         {
             this.InitializeComponent();
         }
