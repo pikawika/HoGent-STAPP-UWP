@@ -14,19 +14,8 @@
             x:Name="CityMap"
             Center="{Binding AalstPoint}"
             ZoomLevel="{Binding MapZoomlevel}"
-            MapServiceToken="RbezQ1rBRLOy9BrKVqBI~aNfmt8WGXe8c8De6xdkSsg~AgPkUhp73Hs6mj7dVZjFM98ci0InfdkbXgK0Tpi8XG2JqtOCeZu-dVRU68hjh0Ac">
-
-            <!--<maps:MapItemsControl ItemsSource="{x:Bind LandmarkOverlays}">
-                <maps:MapItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Background="Black" Tapped ="Overlay_Tapped">
-                            <TextBlock maps:MapControl.Location="{Binding Location}" Text="{Binding Title}"
-                    maps:MapControl.NormalizedAnchorPoint="0.5,0.5" FontSize="20" Margin="5"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </maps:MapItemsControl.ItemTemplate>
-            </maps:MapItemsControl>-->
-        </maps:MapControl>
+            Layers="{Binding MerchantMarkers}"
+            MapServiceToken="RbezQ1rBRLOy9BrKVqBI~aNfmt8WGXe8c8De6xdkSsg~AgPkUhp73Hs6mj7dVZjFM98ci0InfdkbXgK0Tpi8XG2JqtOCeZu-dVRU68hjh0Ac" />
     </Grid>
 
 </UserControl>
