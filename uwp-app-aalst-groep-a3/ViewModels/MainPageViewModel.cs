@@ -23,6 +23,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public MainPageViewModel()
         {
+            CurrentData = new HomePageViewModel();
             NavigationCommand = new RelayCommand((object args) => Navigate(args));
         }
 

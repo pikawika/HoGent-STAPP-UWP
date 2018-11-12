@@ -9,6 +9,8 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <maps:MapControl x:Name="CityMap" />
+    <maps:MapControl
+        x:Name="CityMap"
+        MapServiceToken="RbezQ1rBRLOy9BrKVqBI~aNfmt8WGXe8c8De6xdkSsg~AgPkUhp73Hs6mj7dVZjFM98ci0InfdkbXgK0Tpi8XG2JqtOCeZu-dVRU68hjh0Ac"/>
     
 </UserControl>

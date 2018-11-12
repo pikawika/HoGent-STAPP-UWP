@@ -16,6 +16,8 @@
     <ContentControl 
         Content="{Binding}"
         ContentTemplate="{Binding Template}"
+        VerticalAlignment="Stretch"
+        HorizontalAlignment="Stretch"
         VerticalContentAlignment="Stretch" 
         HorizontalContentAlignment="Stretch" />
 </Page>

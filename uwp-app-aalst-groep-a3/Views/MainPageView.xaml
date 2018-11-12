@@ -18,7 +18,7 @@
             </ic:EventTriggerBehavior>
         </i:Interaction.Behaviors>
         <NavigationView.MenuItems>
-            <NavigationViewItem Icon="Home" Content="Home" Tag="Home"/>
+            <NavigationViewItem Icon="Home" Content="Home" Tag="Home" IsSelected="True" />
             <NavigationViewItem Icon="Map" Content="Kaart" Tag="Map" />
             <NavigationViewItem Icon="People" Content="Handelaars" Tag="Merchants" />
             <NavigationViewItem Icon="OutlineStar" Content="Evenementen" Tag="Events" />
