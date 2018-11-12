@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +11,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        public Frame MainFrame { get; set; }
-        public RelayCommand ShowEventsCommand { get; set; }
-
         private ViewModelBase _currentData;
 
         public ViewModelBase CurrentData
@@ -21,15 +19,35 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _currentData = value; RaisePropertyChanged(); }
         }
 
+        public RelayCommand NavigationCommand { get; set; }
 
         public MainPageViewModel()
         {
-            ShowEventsCommand = new RelayCommand(_ => ShowEvents());
+            CurrentData = new HomePageViewModel();
+            NavigationCommand = new RelayCommand((object args) => Navigate(args));
         }
 
-        private void ShowEvents()
+        private void Navigate(object args)
         {
-            //CurrentData = new MoviesViewModel();
+            string selected = ((NavigationViewItemInvokedEventArgs)args).InvokedItem.ToString();
+            switch (selected)
+            {
+                case "Home":
+                    CurrentData = new HomePageViewModel();
+                    break;
+                case "Kaart":
+                    CurrentData = new MapViewModel();
+                    break;
+                case "Handelaars":
+                    CurrentData = new MerchantsViewModel();
+                    break;
+                case "Evenementen":
+                    CurrentData = new EventsViewModel();
+                    break;
+                default:
+                    CurrentData = new HomePageViewModel();
+                    break;
+            }
         }
     }
 }
