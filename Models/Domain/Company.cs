@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Models.Domain;
 
 namespace uwp_app_aalst_groep_a3.Models
 {
     public class Company
     {
-        public int CompanyId { get; set; }
+        [Key]
+        public int CompanyId { get; private set; }
+
         public String Name { get; set; }
-        public Address Address { get; set; }
-        public List<Promotion> Promotions { get; set; }
-        public List<Event> Events { get; set; }
-        //openingsuren
+
+        public List<Establishment> Establishments { get; set; }
     }
 }
