@@ -59,8 +59,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private MapIcon CreateMerchantMarker(Establishment e)
         {
-            Debug.WriteLine("De markers wordt aangemaakt");
-
             BasicGeoposition bg = new BasicGeoposition() { Latitude = e.Latitude, Longitude = e.Longitude };
             Geopoint gp = new Geopoint(bg);
 
@@ -76,7 +74,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         //Dit is maar een tijdelijke methode voor het ophalen van establishments
         private List<Establishment> DummyDataEstablishments()
         {
-            Debug.WriteLine("De dummy data wordt aangemaakt");
             List<Establishment> establishments = new List<Establishment>();
             Establishment e1 = new Establishment() { Name = "Fnac", Latitude = 50.939370, Longitude = 4.038105 };
             Establishment e2 = new Establishment() { Name = "Thuiszorgwinkel", Latitude = 50.937490, Longitude = 4.037666 };
