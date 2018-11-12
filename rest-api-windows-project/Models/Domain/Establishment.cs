@@ -14,6 +14,8 @@ namespace stappBackend.Models
         public String Gemeente { get; set; }
         public String Straatnaam { get; set; }
         public String Huisnummer { get; set; }
+        public Double Latitude { get; set; }
+        public Double Longitude { get; set; }
 
         public List<EstablishmentCategory> Categories { get; set; } = new List<EstablishmentCategory>();
         public List<Promotion> Promotions { get; set; } = new List<Promotion>();

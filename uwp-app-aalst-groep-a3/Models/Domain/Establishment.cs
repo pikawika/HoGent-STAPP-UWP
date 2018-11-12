@@ -17,6 +17,8 @@ namespace uwp_app_aalst_groep_a3.Models.Domain
         public String Gemeente { get; set; }
         public String Straatnaam { get; set; }
         public String Huisnummer { get; set; }
+        public Double Latitude { get; set; }
+        public Double Longitude { get; set; }
 
         public List<EstablishmentCategory> Categories { get; set; }
         public List<Promotion> Promotions { get; set; }
