@@ -9,15 +9,6 @@
         <DataTemplate x:Key="MainPageViewModel">
             <view:MainPageView />
         </DataTemplate>
-        <DataTemplate x:Key="HomePageViewModel">
-            <view:HomePageView />
-        </DataTemplate>
-        <DataTemplate x:Key="MapViewModel">
-            <view:MapView />
-        </DataTemplate>
-        <DataTemplate x:Key="MerchantsViewModel">
-            <view:MerchantsView />
-        </DataTemplate>
         <DataTemplate x:Key="EventsViewModel">
             <view:EventsView />
         </DataTemplate>

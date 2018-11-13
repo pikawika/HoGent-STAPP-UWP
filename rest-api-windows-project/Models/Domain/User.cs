@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace uwp_app_aalst_groep_a3.Models
+namespace stappBackend.Models
 {
     public abstract class User
     {
-        public String UserId { get; set; }
+        [Key]
+        public int UserId { get; private set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public String Email { get; set; }
