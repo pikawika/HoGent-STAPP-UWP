@@ -15,5 +15,6 @@ namespace stappBackend.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public Establishment Establishment { get; set; }
     }
 }
