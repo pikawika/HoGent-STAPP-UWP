@@ -20,14 +20,14 @@ namespace stappBackend.Models
         public Double Longitude { get; set; }
 
         public List<EstablishmentCategory> EstablishmentCategories { get; set; } = new List<EstablishmentCategory>();
-        public List<Promotion> Promotions { get; set; } = new List<Promotion>();
-        public List<Event> Events { get; set; } = new List<Event>();
         public List<EstablishmentSocialMedia> EstablishmentSocialMedias { get; set; } = new List<EstablishmentSocialMedia>();
-
         public List<Image> Images { get; set; } = new List<Image>();
 
         public List<ExceptionalDay> ExceptionalDays { get; set; } = new List<ExceptionalDay>();
         public List<OpenDay> OpenDays { get; set; } = new List<OpenDay>();
+
+        public List<Promotion> Promotions { get; set; } = new List<Promotion>();
+        public List<Event> Events { get; set; } = new List<Event>();
 
         [JsonIgnore]
         public List<EstablishmentSubscription> EstablishmentSubscriptions { get; set; }

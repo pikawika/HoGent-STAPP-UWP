@@ -94,9 +94,9 @@ namespace stappBackend.Data
                 // END SET PASSWORDS
 
                 // START SOCIAL MEDIA
-                SocialMedia facebookSocialMedia = new SocialMedia(){LogoPath = "img/socialMediaLogo/facebook.png", Name = "Facebook"};
-                SocialMedia instagramSocialMedia = new SocialMedia() { LogoPath = "img/socialMediaLogo/isntagram.png", Name = "Instagram" };
-                SocialMedia twitterSocialMedia = new SocialMedia() { LogoPath = "img/socialMediaLogo/twitter.png", Name = "Twitter" };
+                SocialMedia facebookSocialMedia = new SocialMedia(){LogoPath = "img/socialMediaLogos/facebook/facebook.png", Name = "Facebook"};
+                SocialMedia instagramSocialMedia = new SocialMedia() { LogoPath = "img/socialMediaLogos/instagram/instagram.png", Name = "Instagram" };
+                SocialMedia twitterSocialMedia = new SocialMedia() { LogoPath = "img/socialMediaLogos/twitter/twitter.png", Name = "Twitter" };
 
                 var socialsMedias = new List<SocialMedia>
                 {
@@ -117,11 +117,47 @@ namespace stappBackend.Data
                 // END COMPANIES
 
                 // START ESTABLISHMENT
-                Establishment mrspaghettiAalstEstablishment = new Establishment();
-                Establishment fnacAalstEstablishment = new Establishment();
-                Establishment safirAalstEstablishment = new Establishment();
-                Establishment hogentAalstEstablishment = new Establishment();
+                Establishment mrspaghettiAalstEstablishment = new Establishment(){ Name = "Restaurant Mr Spaghetti", PostalCode = "9300", City = "Aalst", Street = "Hopmarkt", HouseNumber = "33", Latitude = 50.937142, Longitude = 4.036673 };
 
+                mrspaghettiAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = restrauntCategory });
+                mrspaghettiAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = cafeCategory });
+
+                mrspaghettiAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() {SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/WeLoveMisterSpaghettiAalst/" });
+
+                mrspaghettiAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/1/1.jpg" });
+                mrspaghettiAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/1/2.jpg" });
+                //-------
+                Establishment fnacAalstEstablishment = new Establishment() { Name = "Fnac Aalst", PostalCode = "9300", City = "Aalst", Street = "Kattestraat", HouseNumber = "17", Latitude = 50.939538, Longitude = 4.037435 };
+
+                fnacAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = winkelCategory });
+
+                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/FnacAalst/" });
+                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, url = "https://twitter.com/fnacbelgie" });
+
+                fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/1.jpg" });
+                fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/2.jpg" });
+                fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/3.jpg" });
+                //-------
+                Establishment safirAalstEstablishment = new Establishment() { Name = "Café Safir", PostalCode = "9300", City = "Aalst", Street = "Grote Markt", HouseNumber = "22", Latitude = 50.938424, Longitude = 4.038867 };
+
+                safirAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = cafeCategory });
+                safirAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = restrauntCategory });
+
+                safirAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/pages/category/Cafe/Safir-188724374609159/" });
+                safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/1.jpg" });
+                safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/2.jpg" });
+                safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/3.jpg" });
+                //-------
+                Establishment hogentAalstEstablishment = new Establishment() { Name = "HoGent Campus Aalst", PostalCode = "9300", City = "Aalst", Street = "Arbeidstraat", HouseNumber = "14", Latitude = 51.141550, Longitude = 4.559644 };
+
+                hogentAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = schoolCategory });
+
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/HoGentCampusAalst/" });
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, url = "https://twitter.com/hogeschool_gent" });
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = instagramSocialMedia, url = "https://www.instagram.com/explore/locations/420243736/hogent-stadscampus-aalst" });
+
+                hogentAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/4/1.jpg" });
+                hogentAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/4/2.jpg" });
                 // END ESTABLISHMENT
 
                 // BEGIN SAVE CHANGES
