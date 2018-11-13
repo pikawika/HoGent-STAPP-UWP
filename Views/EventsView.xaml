@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<Page
     x:Class="uwp_app_aalst_groep_a3.Views.EventsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,7 +10,7 @@
 
     <StackPanel>
         <TextBlock>
-           Welkom bij de evenementen!
+           HALLO FOEFKE
         </TextBlock>
     </StackPanel>
-</UserControl>
+</Page>

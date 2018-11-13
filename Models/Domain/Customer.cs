@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Models.Domain;
 
 namespace uwp_app_aalst_groep_a3.Models
 {
-    public class Event
+    public class Customer : User
     {
-        public int EventId { get; set; }
-        public String Name { get; set; }
+        public List<EstablishmentSubscription> Subscriptions { get; private set; }
     }
 }

@@ -15,9 +15,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace uwp_app_aalst_groep_a3.Views
 {
-    public sealed partial class MainPageView : UserControl
+    public sealed partial class MapView : UserControl
     {
-        public MainPageView()
+        public MapView()
         {
             this.InitializeComponent();
         }
