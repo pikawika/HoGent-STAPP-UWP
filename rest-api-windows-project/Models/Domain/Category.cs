@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace stappBackend.Models
 {
@@ -7,6 +9,8 @@ namespace stappBackend.Models
     {
         [Key]
         public int CategoryId { get; private set; }
-        public String Name { get; set; }
+        public string Name { get; set; }
+        [JsonIgnore]
+        public List<EstablishmentCategory> EstablishmentCategories { get; set; }
     }
 }
