@@ -59,7 +59,7 @@ namespace stappBackend
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            //dummyDataInit.InitializeData();
+            dummyDataInit.InitializeData();
         }
     }
 }
