@@ -11,6 +11,6 @@ namespace stappBackend.Models
 
         public String Name { get; set; }
 
-        public List<Establishment> Establishments { get; set; }
+        public List<Establishment> Establishments { get; set; } = new List<Establishment>();
     }
 }

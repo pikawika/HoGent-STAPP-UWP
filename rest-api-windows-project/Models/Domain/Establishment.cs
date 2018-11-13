@@ -23,8 +23,8 @@ namespace stappBackend.Models
         public List<EstablishmentSocialMedia> EstablishmentSocialMedias { get; set; } = new List<EstablishmentSocialMedia>();
         public List<Image> Images { get; set; } = new List<Image>();
 
-        public List<ExceptionalDay> ExceptionalDays { get; set; } = new List<ExceptionalDay>();
         public List<OpenDay> OpenDays { get; set; } = new List<OpenDay>();
+        public List<ExceptionalDay> ExceptionalDays { get; set; } = new List<ExceptionalDay>();
 
         public List<Promotion> Promotions { get; set; } = new List<Promotion>();
         public List<Event> Events { get; set; } = new List<Event>();
