@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace uwp_app_aalst_groep_a3.Models
+namespace stappBackend.Models.Domain
 {
-    public class Event
+    public class Role
     {
         [Key]
-        public int EventId { get; private set; }
-        public String Name { get; set; }
+        public string Name { get; set; }
     }
 }
