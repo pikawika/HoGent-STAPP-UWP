@@ -23,6 +23,10 @@ namespace stappBackend.Data.Repositories
         {
             return _events
                 .Include(e => e.Images)
+                .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
+                .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
+                .Include(e => e.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
+                .Include(e => e.Establishment).ThenInclude(e => e.ExceptionalDays)
                 .ToList();
         }
 
@@ -30,6 +34,10 @@ namespace stappBackend.Data.Repositories
         {
             return _events.Where(e => e.EventId == id)
                 .Include(e => e.Images)
+                .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
+                .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
+                .Include(e => e.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
+                .Include(e => e.Establishment).ThenInclude(e => e.ExceptionalDays)
                 .FirstOrDefault();
         }
     }
