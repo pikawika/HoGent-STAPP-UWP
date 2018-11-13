@@ -9,7 +9,7 @@ namespace stappBackend.Models
         [Key]
         public int CompanyId { get; private set; }
 
-        public String Name { get; set; }
+        public string Name { get; set; }
 
         public List<Establishment> Establishments { get; set; } = new List<Establishment>();
     }

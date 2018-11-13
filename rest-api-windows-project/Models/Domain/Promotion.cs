@@ -9,7 +9,10 @@ namespace stappBackend.Models
     {
         [Key]
         public int PromotionId { get; private set; }
-        public String Name { get; set; }
+        public string Name { get; set; }
+        public string Message { get; set; }
         public List<Image> Images { get; set; } = new List<Image>();
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

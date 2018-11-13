@@ -11,13 +11,13 @@ namespace stappBackend.Models
         [Key]
         public int EstablishmentId { get; private set; }
 
-        public String Name { get; set; }
-        public String PostalCode { get; set; }
-        public String City { get; set; }
-        public String Street { get; set; }
-        public String HouseNumber { get; set; }
-        public Double Latitude { get; set; }
-        public Double Longitude { get; set; }
+        public string Name { get; set; }
+        public string PostalCode { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
+        public string HouseNumber { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         public List<EstablishmentCategory> EstablishmentCategories { get; set; } = new List<EstablishmentCategory>();
         public List<EstablishmentSocialMedia> EstablishmentSocialMedias { get; set; } = new List<EstablishmentSocialMedia>();

@@ -3,6 +3,7 @@ using stappBackend.Models;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using stappBackend.Models.Domain;
 
 namespace stappBackend.Data
@@ -140,6 +141,15 @@ namespace stappBackend.Data
                 mrspaghettiAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 5, OpenHours = new List<OpenHour>(){ new OpenHour() { StartHour = 11, Startminute = 30, EndHour = 14,  EndMinute = 00 }, new OpenHour() { StartHour = 18, Startminute = 00, EndHour = 22, EndMinute = 00 } } });
                 mrspaghettiAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 6, OpenHours = new List<OpenHour>(){ new OpenHour() { StartHour = 11, Startminute = 30, EndHour = 14, EndMinute = 00 }, new OpenHour() { StartHour = 18, Startminute = 00, EndHour = 22, EndMinute = 00 } } });
 
+                mrspaghettiAalstEstablishment.ExceptionalDays.Add(new ExceptionalDay(){Day = DateTime.Today, Message = "Gesloten wegens familiale redenen."});
+                mrspaghettiAalstEstablishment.ExceptionalDays.Add(new ExceptionalDay() { Day = DateTime.Today.AddDays(4), Message = "All you can eat event!" });
+                mrspaghettiAalstEstablishment.ExceptionalDays.Add(new ExceptionalDay() { Day = DateTime.Today.AddDays(10), Message = "Ladies night event!" });
+
+                mrspaghettiAalstEstablishment.Events.Add(new Event(){StartDate = DateTime.Today.AddDays(4), EndDate = DateTime.Today.AddDays(4).AddHours(5), Name = "All you can eat", Message = "Bij het all you can eat event betaal je een inkom van 20 euro en krijg je een ganse avond spaghetti voorgeschoteld! De normale openingsuren gelden."});
+                mrspaghettiAalstEstablishment.Events.Add(new Event(){StartDate = DateTime.Today.AddDays(10), EndDate = DateTime.Today.AddDays(10).AddHours(5), Name = "Ladies night", Message = "Voor deze ladies night kunnen alle meiden vanaf 6u savonds terrecht bij Mr Spaghetti te Aalst voor een hapje en een drankje terwijl er een Sturm Der Liebe marathon afspeeld op het groot scherm!"});
+
+                mrspaghettiAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(10).AddHours(5), Name = "€5 korting op een spaghetti naar keuze", Message = "5€ korting op een spaghetti naar keuze bij het vermelden van de couponcode 'Spaghet5'." });
+
                 mrspaghettiCompany.Establishments.Add(mrspaghettiAalstEstablishment);
                 //-------
                 Establishment fnacAalstEstablishment = new Establishment() { Name = "Fnac Aalst", PostalCode = "9300", City = "Aalst", Street = "Kattestraat", HouseNumber = "17", Latitude = 50.939538, Longitude = 4.037435 };
@@ -161,6 +171,10 @@ namespace stappBackend.Data
                 fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 5, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 18, EndMinute = 00 } } });
                 fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 6 });
 
+                fnacAalstEstablishment.ExceptionalDays.Add(new ExceptionalDay() { Day = DateTime.Today.AddDays(2), Message = "Gesloten wegens werken" });
+                
+                fnacAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today.AddDays(12), EndDate = DateTime.Today.AddDays(16), Name = "Week van de smartphone.", Message = "Tot wel 50% korting op ons assortiment smartphones. Kom eens binnen en luister welk toestel onze experts u aanraden." });
+
                 fnacCompany.Establishments.Add(fnacAalstEstablishment);
                 //-------
                 Establishment safirAalstEstablishment = new Establishment() { Name = "Café Safir", PostalCode = "9300", City = "Aalst", Street = "Grote Markt", HouseNumber = "22", Latitude = 50.938424, Longitude = 4.038867 };
@@ -180,6 +194,8 @@ namespace stappBackend.Data
                 safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 4, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 0, EndMinute = 00 } } });
                 safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 5, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 0, EndMinute = 00 } } });
                 safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 6 });
+
+                safirAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today.AddDays(2), EndDate = DateTime.Today.AddDays(2).AddHours(5), Name = "Happy hours!", Message = "2 pintjes voor de prijs van 1!" });
 
                 safirCompany.Establishments.Add(safirAalstEstablishment);
                 //-------
@@ -202,6 +218,14 @@ namespace stappBackend.Data
                 hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 5 });
                 hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 6 });
 
+                hogentAalstEstablishment.Events.Add(new Event()
+                {
+                    StartDate = new DateTime(2019, 3, 5), EndDate = new DateTime(2019, 3, 8),
+                    Name = "Open lessen dagen!",
+                    Message =
+                        "Een goede manier om een toekomstige opleiding te kiezen, is gewoon komen proeven. Proeven van de leerstof, van de manier van lesgeven, van de sfeer op de campus. Gewoon een échte les meemaken tussen onze huidige studenten. Het aanbod aan Live! lessen is zeer divers. Pik eventueel ook een les mee uit een richting die je minder bekend in de oren klinkt."
+                });
+
                 hogentCompany.Establishments.Add(hogentAalstEstablishment);
                 // END ESTABLISHMENT
 
@@ -212,6 +236,14 @@ namespace stappBackend.Data
                 merchantSchoolHoGent.Companies.Add(hogentCompany);
                 // END ASSIGN COMPANY TO MERCHANT 
 
+                // START SUBSCRIPTIONS 
+                customerLennert.EstablishmentSubscriptions.Add(new EstablishmentSubscription(){DateAdded = DateTime.Today.AddDays(-10), Establishment = fnacAalstEstablishment});
+                customerLennert.EstablishmentSubscriptions.Add(new EstablishmentSubscription(){DateAdded = DateTime.Today.AddDays(-4), Establishment = hogentAalstEstablishment});
+                customerBram.EstablishmentSubscriptions.Add(new EstablishmentSubscription(){DateAdded = DateTime.Today.AddDays(-8), Establishment = fnacAalstEstablishment});
+                customerBram.EstablishmentSubscriptions.Add(new EstablishmentSubscription(){DateAdded = DateTime.Today.AddDays(-3), Establishment = mrspaghettiAalstEstablishment});
+                customerJodi.EstablishmentSubscriptions.Add(new EstablishmentSubscription(){DateAdded = DateTime.Today.AddDays(-6), Establishment = safirAalstEstablishment});
+                customerJodi.EstablishmentSubscriptions.Add(new EstablishmentSubscription(){DateAdded = DateTime.Today.AddDays(-1), Establishment = mrspaghettiAalstEstablishment});
+                // END SUBSCRIPTIONS 
 
                 // BEGIN SAVE CHANGES
                 _dbContext.Categories.AddRange(categories);

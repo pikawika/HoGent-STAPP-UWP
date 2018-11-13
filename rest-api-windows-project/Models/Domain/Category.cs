@@ -9,7 +9,7 @@ namespace stappBackend.Models
     {
         [Key]
         public int CategoryId { get; private set; }
-        public String Name { get; set; }
+        public string Name { get; set; }
         [JsonIgnore]
         public List<EstablishmentCategory> EstablishmentCategories { get; set; }
     }
