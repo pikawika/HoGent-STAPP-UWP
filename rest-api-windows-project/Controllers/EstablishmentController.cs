@@ -20,14 +20,14 @@ namespace stappBackend.Controllers
             _establishmentRepository = establishmentRepository;
         }
 
-        // GET api/Establishment
+        // GET api/establishment
         [HttpGet]
         public IEnumerable<Establishment> Get()
         {
             return _establishmentRepository.GetAll();
         }
 
-        // GET api/Establishment/id
+        // GET api/establishment/id
         [HttpGet("{id}")]
         public Establishment Get(int id)
         {
