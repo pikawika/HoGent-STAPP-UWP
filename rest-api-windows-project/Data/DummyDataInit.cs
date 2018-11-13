@@ -153,12 +153,12 @@ namespace stappBackend.Data
                 fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/2.jpg" });
                 fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/3.jpg" });
 
-                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 0 });
-                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 1 });
-                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 2 });
-                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 3 });
-                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 4 });
-                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 5 });
+                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 0, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 18, EndMinute = 00 } } });
+                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 1, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 18, EndMinute = 00 } } });
+                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 2, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 18, EndMinute = 00 } } });
+                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 3, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 18, EndMinute = 00 } } });
+                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 4, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 18, EndMinute = 00 } } });
+                fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 5, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 18, EndMinute = 00 } } });
                 fnacAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 6 });
 
                 fnacCompany.Establishments.Add(fnacAalstEstablishment);
@@ -173,6 +173,14 @@ namespace stappBackend.Data
                 safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/2.jpg" });
                 safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/3.jpg" });
 
+                safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 0, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 0, EndMinute = 00 } } });
+                safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 1, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 0, EndMinute = 00 } } });
+                safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 2, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 0, EndMinute = 00 } } });
+                safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 3, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 0, EndMinute = 00 } } });
+                safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 4, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 0, EndMinute = 00 } } });
+                safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 5, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 9, Startminute = 30, EndHour = 0, EndMinute = 00 } } });
+                safirAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 6 });
+
                 safirCompany.Establishments.Add(safirAalstEstablishment);
                 //-------
                 Establishment hogentAalstEstablishment = new Establishment() { Name = "HoGent Campus Aalst", PostalCode = "9300", City = "Aalst", Street = "Arbeidstraat", HouseNumber = "14", Latitude = 51.141550, Longitude = 4.559644 };
@@ -185,6 +193,14 @@ namespace stappBackend.Data
 
                 hogentAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/4/1.jpg" });
                 hogentAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/4/2.jpg" });
+
+                hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 0, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 8, Startminute = 30, EndHour = 12, EndMinute = 00 }, new OpenHour() { StartHour = 13, Startminute = 00, EndHour = 16, EndMinute = 30 } } });
+                hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 1, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 8, Startminute = 30, EndHour = 12, EndMinute = 00 }, new OpenHour() { StartHour = 13, Startminute = 00, EndHour = 16, EndMinute = 30 } } });
+                hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 2, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 8, Startminute = 30, EndHour = 12, EndMinute = 00 } } });
+                hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 3, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 8, Startminute = 30, EndHour = 12, EndMinute = 00 }, new OpenHour() { StartHour = 13, Startminute = 00, EndHour = 16, EndMinute = 30 } } });
+                hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 4, OpenHours = new List<OpenHour>() { new OpenHour() { StartHour = 8, Startminute = 30, EndHour = 12, EndMinute = 00 } } });
+                hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 5 });
+                hogentAalstEstablishment.OpenDays.Add(new OpenDay() { DayOfTheWeek = 6 });
 
                 hogentCompany.Establishments.Add(hogentAalstEstablishment);
                 // END ESTABLISHMENT
