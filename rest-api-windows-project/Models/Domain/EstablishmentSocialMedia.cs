@@ -5,9 +5,10 @@ namespace stappBackend.Models
 {
     public class EstablishmentSocialMedia
     {
-        [Key]
-        public int EstablishmentSocialMediaId { get; private set; }
-        public SocialMedia SocialMediaInfo { get; set; }
-        public String url { get; set; }
+        public int EstablishmentId { get; set; }
+        public Establishment Establishment { get; set; }
+        public int SocialMediaId { get; set; }
+        public SocialMedia SocialMedia { get; set; }
+        public string url { get; set; }
     }
 }

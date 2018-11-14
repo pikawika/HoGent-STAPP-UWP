@@ -4,8 +4,9 @@ namespace stappBackend.Models
 {
     public class EstablishmentCategory
     {
-        [Key]
-        public int EstablishmentCategoryId { get; private set; }
+        public int EstablishmentId { get; set; }
+        public Establishment Establishment { get; set; }
+        public int CategoryId { get; set; }
         public Category Category { get; set; }
     }
 }

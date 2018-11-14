@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using stappBackend.Models.Domain;
 
 namespace stappBackend.Models
 {
@@ -9,20 +11,25 @@ namespace stappBackend.Models
         [Key]
         public int EstablishmentId { get; private set; }
 
-        public String Name { get; set; }
-        public String Postcode { get; set; }
-        public String Gemeente { get; set; }
-        public String Straatnaam { get; set; }
-        public String Huisnummer { get; set; }
-        public Double Latitude { get; set; }
-        public Double Longitude { get; set; }
+        public string Name { get; set; }
+        public string PostalCode { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
+        public string HouseNumber { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
-        public List<EstablishmentCategory> Categories { get; set; } = new List<EstablishmentCategory>();
+        public List<EstablishmentCategory> EstablishmentCategories { get; set; } = new List<EstablishmentCategory>();
+        public List<EstablishmentSocialMedia> EstablishmentSocialMedias { get; set; } = new List<EstablishmentSocialMedia>();
+        public List<Image> Images { get; set; } = new List<Image>();
+
+        public List<OpenDay> OpenDays { get; set; } = new List<OpenDay>();
+        public List<ExceptionalDay> ExceptionalDays { get; set; } = new List<ExceptionalDay>();
+
         public List<Promotion> Promotions { get; set; } = new List<Promotion>();
         public List<Event> Events { get; set; } = new List<Event>();
-        public List<EstablishmentSocialMedia> Socials { get; set; } = new List<EstablishmentSocialMedia>();
 
-        public List<ExceptionalDay> ExceptionalDays { get; set; } = new List<ExceptionalDay>();
-        public List<OpenDay> OpenDays { get; set; } = new List<OpenDay>();
+        [JsonIgnore]
+        public List<EstablishmentSubscription> EstablishmentSubscriptions { get; set; }
     }
 }
