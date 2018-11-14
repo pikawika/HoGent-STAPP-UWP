@@ -17,8 +17,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Promotion> Promotions { get; set; }
         public ObservableCollection<Establishment> Establishments { get; set; }
 
+        private NetworkAPI NetworkAPI { get; set; }
+
         public HomePageViewModel()
         {
+            NetworkAPI = new NetworkAPI();
             InitializeHomePage();
         }
 

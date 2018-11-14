@@ -98,6 +98,24 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Establishment.cs" />
+    <Compile Include="Models\EstablishmentCategory.cs" />
+    <Compile Include="Models\EstablishmentSocialMedia.cs" />
+    <Compile Include="Models\EstablishmentSubscription.cs" />
+    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\ExceptionalDay.cs" />
+    <Compile Include="Models\Image.cs" />
+    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Merchant.cs" />
+    <Compile Include="Models\OpenDay.cs" />
+    <Compile Include="Models\OpenHour.cs" />
+    <Compile Include="Models\Promotion.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\SocialMedia.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Network\NetworkAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
@@ -179,9 +197,7 @@
       <Version>11.0.2</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

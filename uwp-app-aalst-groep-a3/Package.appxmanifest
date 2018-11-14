@@ -14,7 +14,7 @@
   <mp:PhoneIdentity PhoneProductId="af6d8b69-7655-4df2-9638-aca4f2e2b5e8" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>uwp-app-aalst-groep-a3</DisplayName>
+    <DisplayName>uwp_app_aalst_groep_a3</DisplayName>
     <PublisherDisplayName>Bram De Coninck</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -32,10 +32,10 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="uwp_app_aalst_groep_a3.App">
       <uap:VisualElements
-        DisplayName="uwp-app-aalst-groep-a3"
+        DisplayName="uwp_app_aalst_groep_a3"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="uwp-app-aalst-groep-a3"
+        Description="uwp_app_aalst_groep_a3"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

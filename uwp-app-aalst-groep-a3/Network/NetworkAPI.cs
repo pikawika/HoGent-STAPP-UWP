@@ -8,21 +8,29 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
-using uwp_app_aalst_groep_a3.Models.Domain;
 
 namespace uwp_app_aalst_groep_a3.Network
 {
-    public static class NetworkAPI
+    public class NetworkAPI
     {
-        // The HttpClient used by all methods
-        private static HttpClient client { get; } = new HttpClient();
+        // The HttpClient used for all REST API calls
+        private HttpClient client { get; }
 
         // The base URL of our backend
-        private static String baseUrl { get; } = "http://localhost:53128/api";
+        private static String baseUrl { get; } = "https://localhost:44315/api";
+
+        public NetworkAPI()
+        {
+            var httpClientHandler = new HttpClientHandler();
+            httpClientHandler.ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+            client = new HttpClient(httpClientHandler);
+        }
 
         /* ESTABLISHMENTS */
         // Get all establishments
-        public static async Task<ObservableCollection<Establishment>> GetAllEstablishments()
+        public async Task<ObservableCollection<Establishment>> GetAllEstablishments()
         {
             ObservableCollection<Establishment> establishments = new ObservableCollection<Establishment>();
             try
@@ -32,15 +40,15 @@ namespace uwp_app_aalst_groep_a3.Network
             }
             catch (HttpRequestException e)
             {
-                Debug.WriteLine($"Er is een error opgetreden tijdens het" +
-                                $"ophalen van alle establishments uit de databank:" +
+                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                $"ophalen van alle establishments uit de databank: " +
                                 $"{e}");
             }
             return establishments;
         }
 
         // Get establishment by id
-        public static async Task<Establishment> GetEstablishmentById(int id)
+        public async Task<Establishment> GetEstablishmentById(int id)
         {
             Establishment establishment = new Establishment();
             try
@@ -50,8 +58,8 @@ namespace uwp_app_aalst_groep_a3.Network
             }
             catch (HttpRequestException e)
             {
-                Debug.WriteLine($"Er is een error opgetreden tijdens het" +
-                                $"ophalen van een specifiek establishment uit de databank:" +
+                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                $"ophalen van een specifiek establishment uit de databank: " +
                                 $"{e}");
             }
             return establishment;
@@ -59,7 +67,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
         /* PROMOTIONS */
         // Get all promotions
-        public static async Task<ObservableCollection<Promotion>> GetAllPromotions()
+        public async Task<ObservableCollection<Promotion>> GetAllPromotions()
         {
             ObservableCollection<Promotion> promotions = new ObservableCollection<Promotion>();
             try
@@ -69,15 +77,15 @@ namespace uwp_app_aalst_groep_a3.Network
             }
             catch (HttpRequestException e)
             {
-                Debug.WriteLine($"Er is een error opgetreden tijdens het" +
-                                $"ophalen van alle promotions uit de databank:" +
+                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                $"ophalen van alle promotions uit de databank: " +
                                 $"{e}");
             }
             return promotions;
         }
 
         // Get promotion by id
-        public static async Task<Promotion> GetPromotionById(int id)
+        public async Task<Promotion> GetPromotionById(int id)
         {
             Promotion promotion = new Promotion();
             try
@@ -87,8 +95,8 @@ namespace uwp_app_aalst_groep_a3.Network
             }
             catch (HttpRequestException e)
             {
-                Debug.WriteLine($"Er is een error opgetreden tijdens het" +
-                                $"ophalen een specifieke promotion uit de databank:" +
+                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                $"ophalen een specifieke promotion uit de databank: " +
                                 $"{e}");
             }
             return promotion;

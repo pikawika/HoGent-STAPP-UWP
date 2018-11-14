@@ -56,7 +56,6 @@ namespace stappBackend
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             dummyDataInit.InitializeData();
