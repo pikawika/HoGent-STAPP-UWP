@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using stappBackend.Data;
+using stappBackend.Data.Repositories;
+using stappBackend.Models.IRepositories;
 
 namespace stappBackend
 {
@@ -25,9 +29,16 @@ namespace stappBackend
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("windows")));
 
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
             services.AddScoped<DummyDataInit>();
-            //om repo's toe te voegen:
-            //services.AddScoped<IRepositoryName, RepositoryName>();
+            services.AddScoped<IEstablishmentRepository, EstablishmentRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IPromotionRepository, PromotionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +55,9 @@ namespace stappBackend
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             dummyDataInit.InitializeData();
         }

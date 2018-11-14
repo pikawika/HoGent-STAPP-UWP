@@ -8,6 +8,6 @@ namespace stappBackend.Models
         [Key]
         public int ExceptionalDayId { get; set; }
         public DateTime Day { get; set; }
-        public String Message { get; set; }
+        public string Message { get; set; }
     }
 }
