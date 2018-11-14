@@ -28,14 +28,27 @@
             <RowDefinition Height="230" />
         </Grid.RowDefinitions>
 
-        <controls:Carousel InvertPositive="True" 
-                           Orientation="Horizontal"
-                           SelectedIndex="0" Margin="0,0,0,6.2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-
-            <Image Source="https://images.pexels.com/photos/264554/pexels-photo-264554.jpeg" Margin="0,0,0,0" Width="1497" Height="985" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Image Source="https://images.pexels.com/photos/135620/pexels-photo-135620.jpeg" Margin="0,0,0,0" Width="1497" Height="985" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Image Source="https://images.pexels.com/photos/929245/pexels-photo-929245.jpeg" Margin="0,0,0,0" Width="1497" Height="985" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-
+        <controls:Carousel
+            InvertPositive="True" 
+            Orientation="Horizontal"
+            SelectedIndex="0"
+            Margin="0,0,0,6.2"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            ItemsSource="{Binding Promotions}">
+            
+            <controls:Carousel.ItemTemplate>
+                <DataTemplate>
+                    <Image
+                        Source="{Binding Images[0].Path}"
+                        Margin="0,0,0,0"
+                        Width="1497"
+                        Height="985"
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch"/>
+                </DataTemplate>
+            </controls:Carousel.ItemTemplate>
+            
         </controls:Carousel>
 
         <Grid Grid.Row="1">
