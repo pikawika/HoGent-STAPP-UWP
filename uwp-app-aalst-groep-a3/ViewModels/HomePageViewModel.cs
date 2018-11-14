@@ -14,8 +14,21 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
     {
-        public ObservableCollection<Promotion> Promotions { get; set; }
-        public ObservableCollection<Establishment> Establishments { get; set; }
+        private ObservableCollection<Promotion> _promotions;
+
+        public ObservableCollection<Promotion> Promotions
+        {
+            get { return _promotions; }
+            set { _promotions = value; RaisePropertyChanged(nameof(Promotions)); }
+        }
+
+        private ObservableCollection<Establishment> _establishments;
+
+        public ObservableCollection<Establishment> Establishments
+        {
+            get { return _establishments; }
+            set { _establishments = value; RaisePropertyChanged(nameof(Establishments)); }
+        }
 
         private NetworkAPI NetworkAPI { get; set; }
 

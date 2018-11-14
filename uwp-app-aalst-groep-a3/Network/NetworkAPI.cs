@@ -17,7 +17,7 @@ namespace uwp_app_aalst_groep_a3.Network
         private HttpClient client { get; }
 
         // The base URL of our backend
-        private static String baseUrl { get; } = "https://localhost:44315/api";
+        public static String baseUrl { get; } = "https://localhost:44315/";
 
         public NetworkAPI()
         {
@@ -35,7 +35,7 @@ namespace uwp_app_aalst_groep_a3.Network
             ObservableCollection<Establishment> establishments = new ObservableCollection<Establishment>();
             try
             {
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}/establishment"));
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/establishment"));
                 establishments =  JsonConvert.DeserializeObject<ObservableCollection<Establishment>>(json);
             }
             catch (HttpRequestException e)
@@ -53,8 +53,9 @@ namespace uwp_app_aalst_groep_a3.Network
             Establishment establishment = new Establishment();
             try
             {
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}/establishment/{id}"));
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/establishment/{id}"));
                 establishment = JsonConvert.DeserializeObject<Establishment>(json);
+
             }
             catch (HttpRequestException e)
             {
@@ -72,7 +73,7 @@ namespace uwp_app_aalst_groep_a3.Network
             ObservableCollection<Promotion> promotions = new ObservableCollection<Promotion>();
             try
             {
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}/promotion"));
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/promotion"));
                 promotions = JsonConvert.DeserializeObject<ObservableCollection<Promotion>>(json);
             }
             catch (HttpRequestException e)
@@ -90,7 +91,7 @@ namespace uwp_app_aalst_groep_a3.Network
             Promotion promotion = new Promotion();
             try
             {
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}/promotion/{id}"));
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/promotion/{id}"));
                 promotion = JsonConvert.DeserializeObject<Promotion>(json);
             }
             catch (HttpRequestException e)
