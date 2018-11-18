@@ -10,6 +10,7 @@ using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Models.Domain;
 using uwp_app_aalst_groep_a3.Network;
 
+
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class HomePageViewModel : ViewModelBase
@@ -42,6 +43,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             Promotions = await NetworkAPI.GetAllPromotions();
             Establishments = await NetworkAPI.GetAllEstablishments();
+
+            
         }
 
     }

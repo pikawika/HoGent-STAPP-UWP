@@ -11,13 +11,22 @@
 
 
     <UserControl.Resources>
-        <DataTemplate x:Key="PhotosTemplate">
-            <Grid>
+        <DataTemplate x:Key="EstablishmentsTemplate">
+            <Grid
+                Background="White">
                 <Image
-                    Source="{Binding Thumbnail}"
+                    Source="/Assets/2000px-Solid_black.svg.png"
                     Stretch="UniformToFill"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"/>
+                <Image
+                    Source="{Binding Images[0].Path}"
+                    Stretch="UniformToFill"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Opacity="0.6">
+
+                </Image>
+                <TextBlock Text="{Binding Name}" FocusVisualPrimaryBrush="White" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
@@ -25,7 +34,7 @@
     <Grid x:Name="myGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"  />
-            <RowDefinition Height="230" />
+            <RowDefinition Height="300" />
         </Grid.RowDefinitions>
 
         <controls:Carousel
@@ -36,20 +45,45 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             ItemsSource="{Binding Promotions}">
-            
+
             <controls:Carousel.ItemTemplate>
                 <DataTemplate>
-                    <Image
+                    <Grid>
+                        <Image
+                        Source="/Assets/2000px-Solid_black.svg.png"
+                        Stretch="UniformToFill"
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"/>
+                        <Image
                         Source="{Binding Images[0].Path}"
-                        Margin="0,0,0,0"
-                        Width="1497"
-                        Height="985"
-                        HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch"/>
+                        Stretch="UniformToFill"
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center" Opacity="0.6"/>
+
+
+                        <TextBlock Text="{Binding Name}" FocusVisualPrimaryBrush="White" FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
+
+                        <AutoSuggestBox PlaceholderText="Search" QueryIcon="Find" Width="200"
+                                TextChanged="Search_TextChanged"
+                                QuerySubmitted="AutoSuggestBox_QuerySubmitted"
+                                SuggestionChosen="AutoSuggestBox_SuggestionChosen" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="650,100,650,0"/>
+
+
+
+                    </Grid>
+
+
+
                 </DataTemplate>
             </controls:Carousel.ItemTemplate>
-            
+
         </controls:Carousel>
+
+
+
+        
+
+
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -59,7 +93,16 @@
 
             <TextBlock Text="Te beleven in Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
 
-            
+            <Grid Grid.Row="2">
+                <controls:AdaptiveGridView Name="AdaptiveGridViewControl"
+                                   OneRowModeEnabled="True"
+                                   ItemHeight="200"
+                                   DesiredWidth="300"
+                                   SelectionMode="Single"
+                                   IsItemClickEnabled="True"
+                                   ItemsSource="{Binding Establishments}"
+                                   ItemTemplate="{StaticResource EstablishmentsTemplate}"/>
+            </Grid>
         </Grid>
 
 
