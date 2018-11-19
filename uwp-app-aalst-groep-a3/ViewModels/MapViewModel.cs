@@ -67,7 +67,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async void RetrieveMerchantLocations()
         {
-            Establishments = (await NetworkAPI.GetAllEstablishments()).ToList();
+            Establishments = await NetworkAPI.GetAllEstablishments();
             MapIcons = new List<MapIcon>();
 
             foreach (Establishment e in Establishments)

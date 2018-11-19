@@ -30,7 +30,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async void InitializeHomePage()
         {
-            Establishments = await NetworkAPI.GetAllEstablishments();
+            Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());
         }
     }
 }
