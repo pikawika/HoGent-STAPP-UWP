@@ -5,8 +5,9 @@ namespace stappBackend.Models
 {
     public class EstablishmentSubscription
     {
-        [Key]
-        public int EstablishmentSubscriptionId { get; private set; }
+        public int UserId { get; private set; }
+        public Customer Customer  { get; set; }
+        public int EstablishmentId { get; set; }
         public Establishment Establishment { get; set; }
         public DateTime DateAdded { get; set; }
     }

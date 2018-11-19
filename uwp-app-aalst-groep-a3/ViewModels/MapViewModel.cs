@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using uwp_app_aalst_groep_a3.Models.Domain;
+using uwp_app_aalst_groep_a3.Models;
+using uwp_app_aalst_groep_a3.Network;
+using uwp_app_aalst_groep_a3.Utils;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Services.Maps;
@@ -18,11 +20,27 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public BasicGeoposition AalstPosition { get; }
         public Geopoint AalstPoint { get; }
         public Double MapZoomlevel { get; }
+        List<Establishment> Establishments { get; set;  }
+        List<MapIcon> MapIcons { get; set; }
 
-        public ObservableCollection<MapLayer> MerchantMarkers { get; }
+        private ObservableCollection<MapLayer> _merchantMarkers;
+
+        public ObservableCollection<MapLayer> MerchantMarkers
+        {
+            get { return _merchantMarkers; }
+            set { _merchantMarkers = value; RaisePropertyChanged(nameof(MerchantMarkers)); }
+        }
+
+        private NetworkAPI NetworkAPI { get; set; }
+
+        public RelayCommand MapElementClickCommand { get; set; }
 
         public MapViewModel()
         {
+            NetworkAPI = new NetworkAPI();
+
+            MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
+
             AalstPosition = new BasicGeoposition()
             {
                 Latitude = 50.937753,
@@ -38,20 +56,29 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             RetrieveMerchantLocations();
         }
 
-        private void RetrieveMerchantLocations()
+        private void MapElementClicked(object args)
         {
-            List<Establishment> establishments = DummyDataEstablishments();
-            List<MapElement> mapIcons = new List<MapElement>();
+            string selected = (((MapElementClickEventArgs)args).MapElements.First() as MapIcon).Title;
 
-            foreach (Establishment e in establishments)
+            Establishment establishment = Establishments.SingleOrDefault(e => e.Name == selected);
+
+            Debug.WriteLine(establishment.Name);
+        }
+
+        private async void RetrieveMerchantLocations()
+        {
+            Establishments = await NetworkAPI.GetAllEstablishments();
+            MapIcons = new List<MapIcon>();
+
+            foreach (Establishment e in Establishments)
             {
-                mapIcons.Add(CreateMerchantMarker(e));
+                MapIcons.Add(CreateMerchantMarker(e));
             }
 
             var landmarkLayer = new MapElementsLayer
             {
                 ZIndex = 0,
-                MapElements = mapIcons
+                MapElements = new List<MapElement>(MapIcons)
             };
 
             MerchantMarkers.Add(landmarkLayer);
@@ -71,21 +98,5 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             return mapIcon;
         }
 
-        //Dit is maar een tijdelijke methode voor het ophalen van establishments
-        private List<Establishment> DummyDataEstablishments()
-        {
-            List<Establishment> establishments = new List<Establishment>();
-            Establishment e1 = new Establishment() { Name = "Fnac", Latitude = 50.939370, Longitude = 4.038105 };
-            Establishment e2 = new Establishment() { Name = "Thuiszorgwinkel", Latitude = 50.937490, Longitude = 4.037666 };
-            Establishment e3 = new Establishment() { Name = "Lab9", Latitude = 50.939608, Longitude = 4.037593 };
-            Establishment e4 = new Establishment() { Name = "Comar Sport", Latitude = 50.940590, Longitude = 4.030851 };
-            Establishment e5 = new Establishment() { Name = "De Banier", Latitude = 50.939765, Longitude = 4.042684 };
-            establishments.Add(e1);
-            establishments.Add(e2);
-            establishments.Add(e3);
-            establishments.Add(e4);
-            establishments.Add(e5);
-            return establishments;
-        }
     }
 }

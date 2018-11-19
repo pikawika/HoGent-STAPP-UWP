@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:uwp_app_aalst_groep_a3.Views"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
@@ -15,7 +17,14 @@
             Center="{Binding AalstPoint}"
             ZoomLevel="{Binding MapZoomlevel}"
             Layers="{Binding MerchantMarkers}"
-            MapServiceToken="RbezQ1rBRLOy9BrKVqBI~aNfmt8WGXe8c8De6xdkSsg~AgPkUhp73Hs6mj7dVZjFM98ci0InfdkbXgK0Tpi8XG2JqtOCeZu-dVRU68hjh0Ac" />
+            MapServiceToken="RbezQ1rBRLOy9BrKVqBI~aNfmt8WGXe8c8De6xdkSsg~AgPkUhp73Hs6mj7dVZjFM98ci0InfdkbXgK0Tpi8XG2JqtOCeZu-dVRU68hjh0Ac">
+            <i:Interaction.Behaviors>
+                <ic:EventTriggerBehavior EventName="MapElementClick">
+                    <ic:InvokeCommandAction
+                    Command="{Binding MapElementClickCommand}" />
+                </ic:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+        </maps:MapControl>
     </Grid>
 
 </UserControl>
