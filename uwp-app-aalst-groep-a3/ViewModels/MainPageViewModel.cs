@@ -38,6 +38,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             CurrentData = new HomePageViewModel();
 
             NavigationCommand = new RelayCommand((object args) => Navigate(args));
+
             NavigationViewItems = new ObservableCollection<NavigationViewItem>(CreateNavigationViewItems());
 
             SelectedItem = NavigationViewItems.FirstOrDefault();

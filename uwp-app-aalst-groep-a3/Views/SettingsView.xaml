@@ -10,7 +10,41 @@
 
     <StackPanel>
         <TextBlock>
-           Welkom bij de Settings!
+           Kies een thema
+        </TextBlock>
+        <RadioButton x:Name="LightTheme" Content="Licht thema" />
+        <RadioButton x:Name="DarkTheme" Content="Donker thema" />
+        <RadioButton x:Name="SystemTheme" Content="Gebruik systeeminstelling" />
+
+        <TextBlock>
+           Over deze applicatie
+        </TextBlock>
+        <TextBlock Text="{Binding LongDescription}" />
+        <TextBlock Text="{Binding ShortDescription}" />
+        <TextBlock>
+           Ontwikkelaars:
+        </TextBlock>
+        <ListView ItemsSource="{Binding Developers}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <TextBlock>
+            <Span xml:space="preserve"><Run>Deze applicatie is een open-source project. De broncode kan teruggevonden worden op </Run><Hyperlink NavigateUri="https://github.com/BramDC3/uwp-app-aalst-groep-a3">de Stapp GitHub repository</Hyperlink><Run>.</Run></Span>
+        </TextBlock>
+        <TextBlock>
+           Versie: 1.0.0.0
+        </TextBlock>
+        <TextBlock>
+           Privacybeleid: Nog niet beschikbaar
+        </TextBlock>
+
+        <TextBlock>
+           Copyright (c) Team Stapp. Alle rechten voorbehouden.
         </TextBlock>
     </StackPanel>
+
 </UserControl>
