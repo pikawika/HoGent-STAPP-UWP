@@ -63,7 +63,7 @@ namespace uwp_app_aalst_groep_a3.Views
         private async void InitDataAsync()
         {
             NetworkAPI api = new NetworkAPI();
-            Establishments = await api.GetAllEstablishments();
+            Establishments = new ObservableCollection<Establishment>(await api.GetAllEstablishments());
         }
     }
 }

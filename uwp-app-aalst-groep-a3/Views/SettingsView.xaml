@@ -1,0 +1,50 @@
+﻿<UserControl
+    x:Class="uwp_app_aalst_groep_a3.Views.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:uwp_app_aalst_groep_a3.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel>
+        <TextBlock>
+           Kies een thema
+        </TextBlock>
+        <RadioButton x:Name="LightTheme" Content="Licht thema" />
+        <RadioButton x:Name="DarkTheme" Content="Donker thema" />
+        <RadioButton x:Name="SystemTheme" Content="Gebruik systeeminstelling" />
+
+        <TextBlock>
+           Over deze applicatie
+        </TextBlock>
+        <TextBlock Text="{Binding LongDescription}" />
+        <TextBlock Text="{Binding ShortDescription}" />
+        <TextBlock>
+           Ontwikkelaars:
+        </TextBlock>
+        <ListView ItemsSource="{Binding Developers}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <TextBlock>
+            <Span xml:space="preserve"><Run>Deze applicatie is een open-source project. De broncode kan teruggevonden worden op </Run><Hyperlink NavigateUri="https://github.com/BramDC3/uwp-app-aalst-groep-a3">de Stapp GitHub repository</Hyperlink><Run>.</Run></Span>
+        </TextBlock>
+        <TextBlock>
+           Versie: 1.0.0.0
+        </TextBlock>
+        <TextBlock>
+           Privacybeleid: Nog niet beschikbaar
+        </TextBlock>
+
+        <TextBlock>
+           Copyright (c) Team Stapp. Alle rechten voorbehouden.
+        </TextBlock>
+    </StackPanel>
+
+</UserControl>

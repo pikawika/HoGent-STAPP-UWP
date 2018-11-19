@@ -41,10 +41,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async void InitializeHomePage()
         {
-            Promotions = await NetworkAPI.GetAllPromotions();
-            Establishments = await NetworkAPI.GetAllEstablishments();
-
-            
+            Promotions = new ObservableCollection<Promotion>(await NetworkAPI.GetAllPromotions());
+            Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());
         }
 
     }

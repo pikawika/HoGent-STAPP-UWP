@@ -9,27 +9,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <NavigationView x:Name="NavView">
+    <NavigationView
+        x:Name="NavView"
+        MenuItemsSource="{Binding NavigationViewItems}"
+        SelectedItem="{Binding SelectedItem}" >
         <i:Interaction.Behaviors>
             <ic:EventTriggerBehavior EventName="ItemInvoked">
                 <ic:InvokeCommandAction
-                    Command="{Binding NavigationCommand}"
-                    CommandParameter="{x:Bind (NavigationViewItem)NavView.SelectedItem}"  />
+                    Command="{Binding NavigationCommand}" />
             </ic:EventTriggerBehavior>
         </i:Interaction.Behaviors>
-        <NavigationView.MenuItems>
-            <NavigationViewItem Icon="Home" Content="Home" Tag="Home" IsSelected="True" />
-            <NavigationViewItem Icon="Map" Content="Kaart" Tag="Map" />
-            <NavigationViewItem Icon="People" Content="Handelaars" Tag="Merchants" />
-            <NavigationViewItem Icon="OutlineStar" Content="Evenementen" Tag="Events" />
-        </NavigationView.MenuItems>
         <NavigationView.Content>
             <ContentControl
                 x:Name="mainControl"
                 Content="{Binding CurrentData}"
                 ContentTemplate="{Binding CurrentData.Template}"
                 VerticalContentAlignment="Stretch" 
-                HorizontalContentAlignment="Stretch" Margin="0,-62,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                HorizontalContentAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch" />
         </NavigationView.Content>
     </NavigationView>
 

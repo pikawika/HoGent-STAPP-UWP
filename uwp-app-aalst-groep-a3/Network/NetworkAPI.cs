@@ -30,13 +30,13 @@ namespace uwp_app_aalst_groep_a3.Network
 
         /* ESTABLISHMENTS */
         // Get all establishments
-        public async Task<ObservableCollection<Establishment>> GetAllEstablishments()
+        public async Task<List<Establishment>> GetAllEstablishments()
         {
-            ObservableCollection<Establishment> establishments = new ObservableCollection<Establishment>();
+            List<Establishment> establishments = new List<Establishment>();
             try
             {
                 var json = await client.GetStringAsync(new Uri($"{baseUrl}api/establishment"));
-                establishments =  JsonConvert.DeserializeObject<ObservableCollection<Establishment>>(json);
+                establishments =  JsonConvert.DeserializeObject<List<Establishment>>(json);
             }
             catch (HttpRequestException e)
             {
@@ -68,13 +68,13 @@ namespace uwp_app_aalst_groep_a3.Network
 
         /* PROMOTIONS */
         // Get all promotions
-        public async Task<ObservableCollection<Promotion>> GetAllPromotions()
+        public async Task<List<Promotion>> GetAllPromotions()
         {
-            ObservableCollection<Promotion> promotions = new ObservableCollection<Promotion>();
+            List<Promotion> promotions = new List<Promotion>();
             try
             {
                 var json = await client.GetStringAsync(new Uri($"{baseUrl}api/promotion"));
-                promotions = JsonConvert.DeserializeObject<ObservableCollection<Promotion>>(json);
+                promotions = JsonConvert.DeserializeObject<List<Promotion>>(json);
             }
             catch (HttpRequestException e)
             {
