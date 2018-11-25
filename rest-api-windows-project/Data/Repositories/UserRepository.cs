@@ -48,9 +48,8 @@ namespace stappBackend.Data.Repositories
             {
                 user.Login.Salt = newSalt;
                 user.Login.Hash = newHash;
+                SaveChanges();
             }
-
-            SaveChanges();
         }
 
         public byte[] GetSalt(string username)
