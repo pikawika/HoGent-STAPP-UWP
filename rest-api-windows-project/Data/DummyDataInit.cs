@@ -123,7 +123,7 @@ namespace stappBackend.Data
 
                 // START ESTABLISHMENT
                 // Day of week 0 = maandag, openinghours null = gesloten 
-                Establishment mrspaghettiAalstEstablishment = new Establishment(){ Name = "Restaurant Mr Spaghetti", PostalCode = "9300", City = "Aalst", Street = "Hopmarkt", HouseNumber = "33", Latitude = 50.937142, Longitude = 4.036673 };
+                Establishment mrspaghettiAalstEstablishment = new Establishment(){ Name = "Restaurant Mr Spaghetti", Description = "Kom langs bij Mister Spaghetti en laat je verbazen door de pasta bij uitstek!", PostalCode = "9300", City = "Aalst", Street = "Hopmarkt", HouseNumber = "33", Latitude = 50.937142, Longitude = 4.036673 };
 
                 mrspaghettiAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = restrauntCategory });
                 mrspaghettiAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = cafeCategory });
@@ -164,7 +164,7 @@ namespace stappBackend.Data
 
                 mrspaghettiCompany.Establishments.Add(mrspaghettiAalstEstablishment);
                 //-------
-                Establishment fnacAalstEstablishment = new Establishment() { Name = "Fnac Aalst", PostalCode = "9300", City = "Aalst", Street = "Kattestraat", HouseNumber = "17", Latitude = 50.939538, Longitude = 4.037435 };
+                Establishment fnacAalstEstablishment = new Establishment() { Name = "Fnac Aalst", Description = "Ontdek onze nieuwe Fnac winkel, en vind al je onmisbare artikelen: Boeken, CD's, Computers, Telefoons en nog veel meer.", PostalCode = "9300", City = "Aalst", Street = "Kattestraat", HouseNumber = "17", Latitude = 50.939538, Longitude = 4.037435 };
 
                 fnacAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = winkelCategory });
 
@@ -193,7 +193,7 @@ namespace stappBackend.Data
 
                 fnacCompany.Establishments.Add(fnacAalstEstablishment);
                 //-------
-                Establishment safirAalstEstablishment = new Establishment() { Name = "Café Safir", PostalCode = "9300", City = "Aalst", Street = "Grote Markt", HouseNumber = "22", Latitude = 50.938424, Longitude = 4.038867 };
+                Establishment safirAalstEstablishment = new Establishment() { Name = "Café Safir", Description = "Het café van Aalst voor jong en oud! Verschillende snack en lunch mogelijkheden aanwezig.", PostalCode = "9300", City = "Aalst", Street = "Grote Markt", HouseNumber = "22", Latitude = 50.938424, Longitude = 4.038867 };
 
                 safirAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = cafeCategory });
                 safirAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = restrauntCategory });
@@ -219,7 +219,7 @@ namespace stappBackend.Data
 
                 safirCompany.Establishments.Add(safirAalstEstablishment);
                 //-------
-                Establishment hogentAalstEstablishment = new Establishment() { Name = "HoGent Campus Aalst", PostalCode = "9300", City = "Aalst", Street = "Arbeidstraat", HouseNumber = "14", Latitude = 51.141550, Longitude = 4.559644 };
+                Establishment hogentAalstEstablishment = new Establishment() { Name = "HoGent Campus Aalst", Description = "De hogeschool Gent Campus Aalst inspireert en stimuleert mensen om, op eigen wijze, het verschil te maken in en voor de samenleving.", PostalCode = "9300", City = "Aalst", Street = "Arbeidstraat", HouseNumber = "14", Latitude = 51.141550, Longitude = 4.559644 };
 
                 hogentAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = schoolCategory });
 
