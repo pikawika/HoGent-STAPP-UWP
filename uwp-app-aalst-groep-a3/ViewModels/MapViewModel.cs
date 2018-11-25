@@ -11,6 +11,7 @@ using uwp_app_aalst_groep_a3.Utils;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Services.Maps;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
@@ -19,9 +20,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
     {
         public BasicGeoposition AalstPosition { get; }
         public Geopoint AalstPoint { get; }
-        public Double MapZoomlevel { get; }
-        List<Establishment> Establishments { get; set;  }
-        List<MapIcon> MapIcons { get; set; }
+        public double MapZoomlevel { get; }
+        public List<Establishment> Establishments { get; set; }
+        public List<MapIcon> MapIcons { get; set; }
 
         private ObservableCollection<MapLayer> _merchantMarkers;
 
@@ -34,6 +35,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private NetworkAPI NetworkAPI { get; set; }
 
         public RelayCommand MapElementClickCommand { get; set; }
+
+        private ViewModelBase _currentData;
+
+        public ViewModelBase CurrentData
+        {
+            get { return _currentData; }
+            set { _currentData = value; RaisePropertyChanged(); }
+        }
 
         public MapViewModel()
         {
@@ -62,7 +71,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             Establishment establishment = Establishments.SingleOrDefault(e => e.Name == selected);
 
-            Debug.WriteLine(establishment.Name);
+            //Debug.WriteLine(establishment.Name);
+
+            ShowEstablishmentDialogAsync(establishment);
         }
 
         private async void RetrieveMerchantLocations()
@@ -96,6 +107,26 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             mapIcon.ZIndex = 0;
 
             return mapIcon;
+        }
+
+        private async void ShowEstablishmentDialogAsync(Establishment e)
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = e.Name;
+            contentDialog.Content = "Dit is een test";
+            contentDialog.PrimaryButtonText = "Bezoek";
+            contentDialog.CloseButtonText = "Terug naar kaart";
+            contentDialog.DefaultButton = ContentDialogButton.Primary;
+
+            contentDialog.PrimaryButtonClick += NavigateToEstablishmentDetail();
+
+            await contentDialog.ShowAsync();
+        }
+
+        private void NavigateToEstablishmentDetail(Establishment e)
+        {
+            CurrentData = new EstablishmentDetailViewModel() { Establishment = e };
         }
 
     }

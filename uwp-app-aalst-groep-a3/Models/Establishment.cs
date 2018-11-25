@@ -18,6 +18,8 @@ namespace uwp_app_aalst_groep_a3.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
+        public string Description { get; set; }
+
         public List<EstablishmentCategory> EstablishmentCategories { get; set; } = new List<EstablishmentCategory>();
         public List<EstablishmentSocialMedia> EstablishmentSocialMedias { get; set; } = new List<EstablishmentSocialMedia>();
         public List<Image> Images { get; set; } = new List<Image>();
