@@ -9,6 +9,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class EstablishmentDetailViewModel : ViewModelBase
     {
-        public Establishment Establishment { get; set; }
+        public Establishment _establishment { get; set; }
+        public Establishment Establishment
+        {
+            get { return _establishment; }
+            set { _establishment = value; RaisePropertyChanged(nameof(Establishment)); }
+        }
+
+        public EstablishmentDetailViewModel(Establishment establishment)
+        {
+            Establishment = establishment;
+        }
     }
 }

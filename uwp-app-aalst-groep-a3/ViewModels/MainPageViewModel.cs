@@ -72,7 +72,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         CurrentData = new HomePageViewModel();
                         break;
                     case "Kaart":
-                        CurrentData = new MapViewModel() { CurrentData = CurrentData};
+                        CurrentData = new MapViewModel(this);
                         break;
                     case "Handelaars":
                         CurrentData = new MerchantsViewModel();

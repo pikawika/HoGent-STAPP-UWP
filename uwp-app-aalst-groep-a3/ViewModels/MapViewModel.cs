@@ -36,16 +36,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public RelayCommand MapElementClickCommand { get; set; }
 
-        private ViewModelBase _currentData;
+        private MainPageViewModel mainPageViewModel;
 
-        public ViewModelBase CurrentData
+        public MapViewModel(MainPageViewModel mainPageViewModel)
         {
-            get { return _currentData; }
-            set { _currentData = value; RaisePropertyChanged(); }
-        }
+            this.mainPageViewModel = mainPageViewModel;
 
-        public MapViewModel()
-        {
             NetworkAPI = new NetworkAPI();
 
             MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
@@ -119,15 +115,13 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             contentDialog.CloseButtonText = "Terug naar kaart";
             contentDialog.DefaultButton = ContentDialogButton.Primary;
 
-            contentDialog.PrimaryButtonClick += NavigateToEstablishmentDetail();
+            contentDialog.PrimaryButtonCommand = new RelayCommand((object args) => NavigateToEstablishmentDetail(args));
+            contentDialog.PrimaryButtonCommandParameter = e;
 
             await contentDialog.ShowAsync();
         }
 
-        private void NavigateToEstablishmentDetail(Establishment e)
-        {
-            CurrentData = new EstablishmentDetailViewModel() { Establishment = e };
-        }
-
+        private void NavigateToEstablishmentDetail(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment);
+        
     }
 }
