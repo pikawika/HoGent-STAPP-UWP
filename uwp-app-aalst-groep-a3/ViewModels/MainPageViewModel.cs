@@ -35,7 +35,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public MainPageViewModel()
         {
-            CurrentData = new HomePageViewModel();
+            //CurrentData = new HomePageViewModel();
+            CurrentData = new LoginViewModel();
 
             NavigationCommand = new RelayCommand((object args) => Navigate(args));
 
@@ -69,7 +70,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 switch (selected)
                 {
                     case "Home":
-                        CurrentData = new HomePageViewModel();
+                        CurrentData = new HomePageViewModel(this);
                         break;
                     case "Kaart":
                         CurrentData = new MapViewModel(this);
@@ -79,9 +80,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         break;
                     case "Evenementen":
                         CurrentData = new EventsViewModel();
-                        break;
-                    default:
-                        CurrentData = new HomePageViewModel();
                         break;
                 }
             }

@@ -67,8 +67,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             Establishment establishment = Establishments.SingleOrDefault(e => e.Name == selected);
 
-            //Debug.WriteLine(establishment.Name);
-
             ShowEstablishmentDialogAsync(establishment);
         }
 

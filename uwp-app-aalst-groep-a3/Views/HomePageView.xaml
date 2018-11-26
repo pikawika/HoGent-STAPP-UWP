@@ -100,6 +100,7 @@
                                    DesiredWidth="300"
                                    SelectionMode="Single"
                                    IsItemClickEnabled="True"
+                                   ItemClickCommand="{Binding EstablishmentClickedCommand}"
                                    ItemsSource="{Binding Establishments}"
                                    ItemTemplate="{StaticResource EstablishmentsTemplate}"/>
             </Grid>
