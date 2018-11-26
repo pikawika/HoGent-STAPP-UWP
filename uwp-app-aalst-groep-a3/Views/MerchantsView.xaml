@@ -29,29 +29,25 @@
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
 
+        <TextBlock Text="Te beleven in Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
 
-
-
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="6*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Text="Te beleven in Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
-
-            <Grid Grid.Row="2">
-                <controls:AdaptiveGridView Name="AdaptiveGridViewControl"
-                                   OneRowModeEnabled="False"
-                                   ItemHeight="200"
-                                   DesiredWidth="300"
-                                   SelectionMode="Single"
-                                   IsItemClickEnabled="True"
-                                   ItemsSource="{Binding Establishments}"
-                                   ItemTemplate="{StaticResource EstablishmentsTemplate}"/>
-            </Grid>
+        <Grid Grid.Row="2">
+            <controls:AdaptiveGridView
+                Name="AdaptiveGridViewControl"
+                OneRowModeEnabled="False"
+                ItemHeight="200"
+                DesiredWidth="300"
+                SelectionMode="Single"
+                IsItemClickEnabled="True"
+                ItemClickCommand="{Binding EstablishmentClickedCommand}"
+                ItemsSource="{Binding Establishments}"
+                ItemTemplate="{StaticResource EstablishmentsTemplate}"/>
         </Grid>
-
-
+    </Grid>
 </UserControl>

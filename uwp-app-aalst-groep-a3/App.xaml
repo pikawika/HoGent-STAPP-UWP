@@ -24,6 +24,9 @@
         <DataTemplate x:Key="SettingsViewModel">
             <view:SettingsView />
         </DataTemplate>
+        <DataTemplate x:Key="EstablishmentDetailViewModel">
+            <view:EstablishmentDetailView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>
