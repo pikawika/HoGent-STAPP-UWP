@@ -86,26 +86,40 @@
 
         </controls:Carousel>
 
-        <TextBlock Grid.Row="0" Text="{Binding Establishment.Name}" FocusVisualPrimaryBrush="White" FontSize="75" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-
+        <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Margin="0,0,0,0" VerticalAlignment="Center">
+            <TextBlock Grid.Row="0" Text="{Binding Establishment.Name}" FocusVisualPrimaryBrush="White" FontSize="75" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="30">
+                <Button Background="#0078d7" Width="300" HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="White" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}">Volgen</Button>
+                <Button Background="White" Width="300"  HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="#0078d7" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}">Openingsuren</Button>
+            </StackPanel>
+        </StackPanel>
 
 
         <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <Grid.RowDefinitions>
-                <RowDefinition/> <!--Beschrijving-->
-                <RowDefinition/> <!--Social + adress -->
+                <RowDefinition/>
+                <!--Beschrijving-->
+                <RowDefinition/>
+                <!--Social + adress -->
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="1" FontSize="20" TextWrapping="Wrap" TextAlignment="Center" Text="{Binding Establishment.Description}" />
-            <!--<StackPanel Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Center">
-                <Image Source="https://facebookbrand.com/wp-content/themes/fb-branding/assets/images/fb-logo.png" Height="70"/>
-                <Image Source="https://seeklogo.com/images/T/twitter-2012-negative-logo-5C6C1F1521-seeklogo.com.png" Height="70"/>
-                <Image Source="https://pbs.twimg.com/media/DQRTbaNWsAAp3_G.png" Height="70"/>
-            </StackPanel>-->
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel Padding="15">
+                    <TextBlock FontSize="20" FontWeight="Bold" TextAlignment="Center" Text="Beschrijving"/>
+                    <Line StrokeThickness="3"/>
+                    <TextBlock  TextWrapping="Wrap" Padding="0,20,0,20" Text="{Binding Establishment.Description}" />
+                    <StackPanel Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="https://facebookbrand.com/wp-content/themes/fb-branding/assets/images/fb-logo.png" Height="40"/>
+                        <Image Source="https://seeklogo.com/images/T/twitter-2012-negative-logo-5C6C1F1521-seeklogo.com.png" Height="40"/>
+                        <Image Source="https://pbs.twimg.com/media/DQRTbaNWsAAp3_G.png" Height="40"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
 
             <StackPanel Grid.Row="1" Grid.Column="1" Margin="50,0,0,0">
                 <TextBlock Text="Adres"/>
@@ -117,8 +131,8 @@
                 <TextBlock Text="{Binding Establishment.City}"/>
             </StackPanel>
 
-                <Grid Grid.Row="0">
-                    <controls:AdaptiveGridView Name="AdaptiveGridViewControlPromotions"
+            <Grid Grid.Row="0">
+                <controls:AdaptiveGridView Name="AdaptiveGridViewControlPromotions"
                                    OneRowModeEnabled="True"
                                    ItemHeight="200"
                                    DesiredWidth="300"
@@ -126,8 +140,8 @@
                                    IsItemClickEnabled="True"
                                    ItemsSource="{Binding Establishment.Promotions}"
                                    ItemTemplate="{StaticResource PromotionsTemplate}"/>
-                </Grid>
-            
+            </Grid>
+
             <Grid Grid.Row="0" Grid.Column="1">
                 <controls:AdaptiveGridView Name="AdaptiveGridViewControlEvents"
                                    OneRowModeEnabled="True"
@@ -146,10 +160,10 @@
             ZoomLevel="18"
             Layers="{Binding MerchantMarkers}"
             MapServiceToken="RbezQ1rBRLOy9BrKVqBI~aNfmt8WGXe8c8De6xdkSsg~AgPkUhp73Hs6mj7dVZjFM98ci0InfdkbXgK0Tpi8XG2JqtOCeZu-dVRU68hjh0Ac">
-                
+
             </maps:MapControl>
         </Grid>
     </Grid>
 
-  
+
 </UserControl>
