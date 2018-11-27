@@ -14,13 +14,14 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Width="150"/>
-        <TextBlock>
-            Gebruikersnaam
-        </TextBlock>
-        <TextBox />
-        <TextBlock>
-            Wachtwoord
-        </TextBlock>
-        <TextBox />
+        
+        <TextBlock Text="Gebruikersnaam" />
+        <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding Gebruikersnaam, Mode=TwoWay}" />
+        
+        <TextBlock Text="Wachtwoord" />
+        <PasswordBox PlaceholderText="Wachtwoord" Password="{Binding Wachtwoord, Mode=TwoWay}"  />
+        
+        <Button Content="Meld aan" Command="{Binding SignInCommand}" />
+        <Button Content="Maak account aan" Command="{Binding NavigateToRegistrationCommand}" />
     </StackPanel>
 </UserControl>

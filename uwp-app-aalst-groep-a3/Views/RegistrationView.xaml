@@ -9,6 +9,31 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <StackPanel>
+        <Image
+            Source="/Assets/StoreLogo.png"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="150"/>
         
+        <TextBlock Text="Voornaam" />
+        <TextBox PlaceholderText="Voornaam" />
+        
+        <TextBlock Text="Achternaam" />
+        <TextBox PlaceholderText="Achternaam" />
+        
+        <TextBlock Text="E-mailadres" />
+        <TextBox PlaceholderText="E-mailadres" />
+        
+        <TextBlock Text="Gebruikersnaam" />
+        <TextBox PlaceholderText="Gebruikersnaam" />
+        
+        <TextBlock Text="Wachtwoord" />
+        <PasswordBox PlaceholderText="Wachtwoord" />
+       
+        <TextBlock Text="Herhaal wachtwoord" />
+        <PasswordBox PlaceholderText="Herhaal wachtwoord" />
+        
+        <Button Content="Maak account aan" />
+        <Button Content="Terug naar aanmelden" Command="{Binding NavigateToLoginCommand}" />
     </StackPanel>
 </UserControl>

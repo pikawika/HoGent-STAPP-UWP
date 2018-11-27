@@ -95,14 +95,14 @@
 
             <Grid Grid.Row="2">
                 <controls:AdaptiveGridView Name="AdaptiveGridViewControl"
-                                   OneRowModeEnabled="True"
-                                   ItemHeight="200"
-                                   DesiredWidth="300"
-                                   SelectionMode="Single"
-                                   IsItemClickEnabled="True"
-                                   ItemClickCommand="{Binding EstablishmentClickedCommand}"
-                                   ItemsSource="{Binding Establishments}"
-                                   ItemTemplate="{StaticResource EstablishmentsTemplate}"/>
+                    OneRowModeEnabled="True"
+                    ItemHeight="200"
+                    DesiredWidth="300"
+                    SelectionMode="Single"
+                    IsItemClickEnabled="True"
+                    ItemClickCommand="{Binding EstablishmentClickedCommand}"
+                    ItemsSource="{Binding Establishments}"
+                    ItemTemplate="{StaticResource EstablishmentsTemplate}"/>
             </Grid>
         </Grid>
 
