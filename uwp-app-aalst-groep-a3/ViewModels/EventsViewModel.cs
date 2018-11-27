@@ -8,6 +8,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class EventsViewModel : ViewModelBase
     {
+        private MainPageViewModel mainPageViewModel;
 
+        public EventsViewModel(MainPageViewModel mainPageViewModel)
+        {
+            this.mainPageViewModel = mainPageViewModel;
+        }
     }
 }
