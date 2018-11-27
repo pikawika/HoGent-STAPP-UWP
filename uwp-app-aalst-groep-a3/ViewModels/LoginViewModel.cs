@@ -12,8 +12,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
     {
         private MainPageViewModel mainPageViewModel;
 
-        public string Gebruikersnaam { get; set; } = "";
-        public string Wachtwoord { get; set; } = "";
+        public string Username { get; set; } = "";
+        public string Password { get; set; } = "";
 
         public RelayCommand SignInCommand { get; set; }
         public RelayCommand NavigateToRegistrationCommand { get; set; }
@@ -28,11 +28,13 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private void SignIn()
         {
-            if (Gebruikersnaam == "" || Wachtwoord == "")
+            if (string.IsNullOrWhiteSpace(Username)
+                || string.IsNullOrWhiteSpace(Password))
             {
                 ShowDialog("Aanmelding", "Gelieve zowel uw gebruikersnaam als uw wachtwoord in te voeren.");
                 return;
             }
+
             ShowDialog("Is 't goe?", "'t Is toch simpel hé!");
         }
 

@@ -16,10 +16,10 @@
             Width="150"/>
         
         <TextBlock Text="Gebruikersnaam" />
-        <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding Gebruikersnaam, Mode=TwoWay}" />
+        <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding Username, Mode=TwoWay}" />
         
         <TextBlock Text="Wachtwoord" />
-        <PasswordBox PlaceholderText="Wachtwoord" Password="{Binding Wachtwoord, Mode=TwoWay}"  />
+        <PasswordBox PlaceholderText="Wachtwoord" Password="{Binding Password, Mode=TwoWay}"  />
         
         <Button Content="Meld aan" Command="{Binding SignInCommand}" />
         <Button Content="Maak account aan" Command="{Binding NavigateToRegistrationCommand}" />

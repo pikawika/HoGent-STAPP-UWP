@@ -16,24 +16,24 @@
             Width="150"/>
         
         <TextBlock Text="Voornaam" />
-        <TextBox PlaceholderText="Voornaam" />
+        <TextBox PlaceholderText="Voornaam" Text="{Binding FirstName, Mode=TwoWay}" />
         
         <TextBlock Text="Achternaam" />
-        <TextBox PlaceholderText="Achternaam" />
+        <TextBox PlaceholderText="Achternaam" Text="{Binding LastName, Mode=TwoWay}" />
         
         <TextBlock Text="E-mailadres" />
-        <TextBox PlaceholderText="E-mailadres" />
+        <TextBox PlaceholderText="E-mailadres" Text="{Binding EmailAddress, Mode=TwoWay}" />
         
         <TextBlock Text="Gebruikersnaam" />
-        <TextBox PlaceholderText="Gebruikersnaam" />
+        <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding Username, Mode=TwoWay}" />
         
         <TextBlock Text="Wachtwoord" />
-        <PasswordBox PlaceholderText="Wachtwoord" />
+        <PasswordBox PlaceholderText="Wachtwoord" Password="{Binding Password, Mode=TwoWay}" />
        
         <TextBlock Text="Herhaal wachtwoord" />
-        <PasswordBox PlaceholderText="Herhaal wachtwoord" />
-        
-        <Button Content="Maak account aan" />
+        <PasswordBox PlaceholderText="Herhaal wachtwoord" Password="{Binding RepeatPassword, Mode=TwoWay}" />
+
+        <Button Content="Maak account aan" Command="{Binding RegisterCommand}" />
         <Button Content="Terug naar aanmelden" Command="{Binding NavigateToLoginCommand}" />
     </StackPanel>
 </UserControl>
