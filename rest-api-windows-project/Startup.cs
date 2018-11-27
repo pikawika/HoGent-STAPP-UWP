@@ -58,7 +58,7 @@ namespace stappBackend
 
             app.UseStaticFiles();
 
-            dummyDataInit.InitializeData();
+            //dummyDataInit.InitializeData();
         }
     }
 }
