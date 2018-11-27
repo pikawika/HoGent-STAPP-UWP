@@ -8,6 +8,8 @@
     mc:Ignorable="d"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     >
 
     <UserControl.Resources>
@@ -138,6 +140,7 @@
                                    DesiredWidth="300"
                                    SelectionMode="Single"
                                    IsItemClickEnabled="True"
+                                   ItemClickCommand="{Binding PromotionClickedCommand}"
                                    ItemsSource="{Binding Establishment.Promotions}"
                                    ItemTemplate="{StaticResource PromotionsTemplate}"/>
             </Grid>
@@ -149,6 +152,7 @@
                                    DesiredWidth="300"
                                    SelectionMode="Single"
                                    IsItemClickEnabled="True"
+                                   ItemClickCommand="{Binding EventClickedCommand}"
                                    ItemsSource="{Binding Establishment.Events}"
                                    ItemTemplate="{StaticResource EventsTemplate}"/>
             </Grid>
@@ -160,7 +164,12 @@
             ZoomLevel="18"
             Layers="{Binding MerchantMarkers}"
             MapServiceToken="RbezQ1rBRLOy9BrKVqBI~aNfmt8WGXe8c8De6xdkSsg~AgPkUhp73Hs6mj7dVZjFM98ci0InfdkbXgK0Tpi8XG2JqtOCeZu-dVRU68hjh0Ac">
-
+                <i:Interaction.Behaviors>
+                    <ic:EventTriggerBehavior EventName="MapElementClick">
+                        <ic:InvokeCommandAction
+                    Command="{Binding MapElementClickCommand}" />
+                    </ic:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
             </maps:MapControl>
         </Grid>
     </Grid>

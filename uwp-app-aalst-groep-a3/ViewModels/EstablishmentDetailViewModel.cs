@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Models.Domain;
+using uwp_app_aalst_groep_a3.Utils;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
@@ -21,6 +24,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public List<MapIcon> MapIcons { get; set; }
 
         private ObservableCollection<MapLayer> _merchantMarkers;
+
+        public RelayCommand MapElementClickCommand { get; set; }
 
         public ObservableCollection<MapLayer> MerchantMarkers
         {
@@ -35,16 +40,37 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _establishment = value; RaisePropertyChanged(nameof(Establishment)); }
         }
 
+        public RelayCommand PromotionClickedCommand { get; set; }
+        public RelayCommand EventClickedCommand { get; set; }
+
         public EstablishmentDetailViewModel(Establishment establishment)
         {
-            Image image = new Image() { Path = "img/establishments/none/empty.jpg" };
-            List<Image> images = new List<Image>();
-            images.Add(image);
+
 
             Establishment = establishment;
-            if(Establishment.Events.Count == 0)
+
+            handleEmptyEvents();
+            handleEmptyPromotions();
+
+            
+            Establishment.Description = "Maecenas imperdiet tempor nisi ut rutrum. Donec sollicitudin tortor pharetra nunc lacinia posuere. Sed nisi odio, gravida sed enim non, porta elementum mauris. Ut id est sed nunc semper sagittis non sit amet felis.";
+
+            PromotionClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
+            EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
+
+            initMap();
+        }
+
+        private void handleEmptyEvents()
+        {
+            Models.Domain.Image image = new Models.Domain.Image() { Path = "img/establishments/none/empty.jpg" };
+            List<Models.Domain.Image> images = new List<Models.Domain.Image>();
+            images.Add(image);
+
+            
+            if (Establishment.Events.Count == 0)
             {
-                
+
                 Event e = new Event()
                 {
                     Name = "Er zijn nog geen events toegevoegd",
@@ -52,8 +78,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 };
                 Establishment.Events.Add(e);
             }
+        }
 
-            if(Establishment.Promotions.Count == 0)
+        private void handleEmptyPromotions()
+        {
+            Models.Domain.Image image = new Models.Domain.Image() { Path = "img/establishments/none/empty.jpg" };
+            List<Models.Domain.Image> images = new List<Models.Domain.Image>();
+            images.Add(image);
+
+            if (Establishment.Promotions.Count == 0)
             {
                 Promotion p = new Promotion()
                 {
@@ -63,11 +96,45 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
                 Establishment.Promotions.Add(p);
             }
-            Establishment.Description = "Maecenas imperdiet tempor nisi ut rutrum. Donec sollicitudin tortor pharetra nunc lacinia posuere. Sed nisi odio, gravida sed enim non, porta elementum mauris. Ut id est sed nunc semper sagittis non sit amet felis.";
-            initMap();
         }
 
+        private async void EstablishmentClicked(object args)
+        {
+            ContentDialog contentDialog = new ContentDialog();
+            Promotion p = args as Promotion;
 
+            DateTime startDt = DateTime.ParseExact(p.StartDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+            string start = startDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+
+            DateTime endDt = DateTime.ParseExact(p.EndDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+            string end = endDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+
+            contentDialog.Title = p.Name;
+            contentDialog.Content = p.Message + "\n" + "Geldig van "+ start + " tot " + end;
+            contentDialog.CloseButtonText = "Sluiten";
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async void EventClicked(object args)
+        {
+            ContentDialog contentDialog = new ContentDialog();
+            Event e = args as Event;
+
+            /*DateTime startDt = DateTime.ParseExact(e.StartDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+            string start = startDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+
+            DateTime endDt = DateTime.ParseExact(e.EndDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+            string end = endDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            */
+            contentDialog.Title = e.Name;
+            contentDialog.Content = e.Message /*+ "\n" + "Geldig van " + e.StartDate + " tot " + e.EndDate*/;
+            contentDialog.CloseButtonText = "Sluiten";
+
+            await contentDialog.ShowAsync();
+        }
+
+        //kaart
         private void initMap()
         {
             EstablishmentPosition = new BasicGeoposition()
@@ -79,6 +146,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             EstablishmentPoint = new Geopoint(EstablishmentPosition);
 
             MerchantMarkers = new ObservableCollection<MapLayer>();
+
+            MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
+
             RetrieveMerchantLocations();
         }
 
@@ -109,6 +179,23 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             mapIcon.ZIndex = 0;
 
             return mapIcon;
+        }
+
+        private void MapElementClicked(object args)
+        {
+            string selected = (((MapElementClickEventArgs)args).MapElements.First() as MapIcon).Title;
+            ShowAdressDialogAsync();
+        }
+
+        private async void ShowAdressDialogAsync()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = Establishment.Name;
+            contentDialog.Content = Establishment.Street + " " + Establishment.HouseNumber+ "," + Establishment.PostalCode + " " + Establishment.City;
+            contentDialog.CloseButtonText = "Sluiten";
+
+            await contentDialog.ShowAsync();
         }
     }
 
