@@ -196,7 +196,7 @@ namespace stappBackend.Controllers
 
             token.Payload["userId"] = user.UserId;
             token.Payload["username"] = user.Login.Username;
-            token.Payload["role"] = user.Login.Role.Name;
+            token.Payload["customRole"] = user.Login.Role.Name;
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
