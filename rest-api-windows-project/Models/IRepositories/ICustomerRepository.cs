@@ -9,6 +9,8 @@ namespace stappBackend.Models.IRepositories
     {
         void addSubscription(int userId, EstablishmentSubscription establishmentSubscription);
 
+        void removeSubscription(int userId, EstablishmentSubscription establishmentSubscription);
+
         Customer getById(int userId);
     }
 }

@@ -26,6 +26,12 @@ namespace stappBackend.Data.Repositories
             SaveChanges();
         }
 
+        public void removeSubscription(int userId, EstablishmentSubscription establishmentSubscription)
+        {
+            _customers.FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions.Remove(establishmentSubscription);
+            SaveChanges();
+        }
+
         public Customer getById(int userId)
         {
             return _customers.Include(c => c.EstablishmentSubscriptions).FirstOrDefault(u => u.UserId == userId);

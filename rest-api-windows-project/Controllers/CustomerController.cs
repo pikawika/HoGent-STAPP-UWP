@@ -33,7 +33,7 @@ namespace stappBackend.Controllers
 
 
         [HttpPost("subscribe")]
-        public IActionResult Post([FromBody]AddSubscriptionViewModel addSubscriptionViewModel)
+        public IActionResult Post([FromBody]ModifySubscriptionViewModel addSubscriptionViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -55,6 +55,37 @@ namespace stappBackend.Controllers
                 _customerRepository.addSubscription(customer.UserId, establishmentSubscription);
 
                 return Ok(new { message = "Toegevoegd!" });
+            }
+            //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
+            string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return BadRequest(new { error = "De ingevoerde waarden zijn onvolledig of voldoen niet aan de eisen voor een login. Foutboodschap: " + errorMsg });
+        }
+
+        [HttpDelete("subscribe")]
+        public IActionResult Delete([FromBody]ModifySubscriptionViewModel addSubscriptionViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
+                    return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
+                Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.establishmentId);
+
+                if (establishment == null)
+                    return BadRequest(new { error = "Geen establishment met de meegegeven id" });
+
+                Customer customer = _customerRepository.getById(int.Parse(User.FindFirst("userId")?.Value));
+
+                EstablishmentSubscription establishmentSubscription =
+                    customer.EstablishmentSubscriptions.SingleOrDefault(
+                        es => es.EstablishmentId == establishment.EstablishmentId);
+
+                if (establishmentSubscription == null)
+                    return BadRequest(new { error = "Deze establishment staat niet in uw lijst van subscriptions" });
+
+                _customerRepository.removeSubscription(customer.UserId, establishmentSubscription);
+
+                return Ok(new { message = "Verwijderd!" });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));

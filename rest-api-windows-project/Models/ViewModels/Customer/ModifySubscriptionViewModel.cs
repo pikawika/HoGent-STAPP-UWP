@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace stappBackend.Models.ViewModels.Customer
 {
-    public class AddSubscriptionViewModel
+    public class ModifySubscriptionViewModel
     {
         [Required(ErrorMessage = "{0} is verplicht.")]
         public int establishmentId { get; set; }
