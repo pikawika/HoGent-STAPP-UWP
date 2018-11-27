@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Models.Domain;
 using uwp_app_aalst_groep_a3.Network;
-
+using uwp_app_aalst_groep_a3.Utils;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
@@ -24,6 +24,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         }
 
         private ObservableCollection<Establishment> _establishments;
+        private MainPageViewModel mainPageViewModel;
 
         public ObservableCollection<Establishment> Establishments
         {
@@ -33,8 +34,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private NetworkAPI NetworkAPI { get; set; }
 
-        public HomePageViewModel()
+        public RelayCommand EstablishmentClickedCommand { get; set; }
+
+        public HomePageViewModel(MainPageViewModel mainPageViewModel)
         {
+            this.mainPageViewModel = mainPageViewModel;
+            EstablishmentClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             NetworkAPI = new NetworkAPI();
             InitializeHomePage();
         }
@@ -44,6 +49,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             Promotions = new ObservableCollection<Promotion>(await NetworkAPI.GetAllPromotions());
             Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());
         }
+
+        private void EstablishmentClicked(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment);
 
     }
 }
