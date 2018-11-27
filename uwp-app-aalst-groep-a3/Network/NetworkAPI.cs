@@ -17,7 +17,7 @@ namespace uwp_app_aalst_groep_a3.Network
         private HttpClient client { get; }
 
         // The base URL of our backend
-        public static String baseUrl { get; } = "https://localhost:44315/";
+        public static string baseUrl { get; } = "https://localhost:44315/";
 
         public NetworkAPI()
         {
@@ -26,6 +26,29 @@ namespace uwp_app_aalst_groep_a3.Network
             HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
             client = new HttpClient(httpClientHandler);
+        }
+
+        /* AUTHENTICATIOn */
+        // Sign in
+        public async Task<string> SignIn(string username, string password)
+        {
+            var token = "";
+            var login = new { Username = username, Password = password };
+            var loginJson = JsonConvert.SerializeObject(login);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/user/login"), new StringContent(loginJson, System.Text.Encoding.UTF8, "application/json"));
+                var userToken = JsonConvert.DeserializeObject<UserToken>(res.Content.ReadAsStringAsync().Result);
+                token = userToken.Token;
+            }
+            catch (HttpRequestException e)
+            {
+                Debug.WriteLine($"Er is een error opgetreden tijdens het aanmelden: " +
+                                $"{e}");
+            }
+
+            return token;
         }
 
         /* ESTABLISHMENTS */

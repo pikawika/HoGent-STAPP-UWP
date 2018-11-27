@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.UI.Xaml.Controls;
 
@@ -11,6 +12,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         private MainPageViewModel mainPageViewModel;
+        private NetworkAPI networkAPI = new NetworkAPI();
 
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";
@@ -22,11 +24,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             this.mainPageViewModel = mainPageViewModel;
 
-            SignInCommand = new RelayCommand(_ => SignIn());
+            SignInCommand = new RelayCommand(async _ => await SignInAsync());
             NavigateToRegistrationCommand = new RelayCommand(_ => NavigateToRegistration());
         }
 
-        private void SignIn()
+        private async Task SignInAsync()
         {
             if (string.IsNullOrWhiteSpace(Username)
                 || string.IsNullOrWhiteSpace(Password))
@@ -35,7 +37,17 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 return;
             }
 
-            ShowDialog("Is 't goe?", "'t Is toch simpel hé!");
+            var token = await networkAPI.SignIn(Username, Password);
+
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                ShowDialog("Aanmelding", "Er is een fout opgetreden tijdens het aanmelden.");
+                return;
+            }
+            else
+            {
+                ShowDialog("Aanmelding", $"Tis toch simpel he: {token}");
+            }
         }
 
         private async void ShowDialog(string title, string message)
