@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Utils;
 using uwp_app_aalst_groep_a3.Views;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
@@ -79,7 +80,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         CurrentData = new MerchantsViewModel(this);
                         break;
                     case "Evenementen":
-                        CurrentData = new EventsViewModel();
+                        CurrentData = new EventsViewModel(this);
                         break;
                     case "Account":
                         CurrentData = new LoginViewModel(this);
