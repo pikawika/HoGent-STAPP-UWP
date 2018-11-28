@@ -108,7 +108,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
 
             contentDialog.Title = e.Name;
-            contentDialog.Content = "Dit is een test";
+            contentDialog.Content = e.Description;
             contentDialog.PrimaryButtonText = "Bezoek";
             contentDialog.CloseButtonText = "Terug naar kaart";
             contentDialog.DefaultButton = ContentDialogButton.Primary;
