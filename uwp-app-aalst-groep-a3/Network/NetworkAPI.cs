@@ -51,6 +51,28 @@ namespace uwp_app_aalst_groep_a3.Network
             return token;
         }
 
+        // Create an account
+        public async Task<string> CreateAccount(string firstname, string lastname, string emailaddress, string username, string password)
+        {
+            var token = "";
+            var login = new { FirstName = firstname, LastName = lastname, Email = emailaddress, Login = new { Username = username, Password = password, Role = "customer" } };
+            var loginJson = JsonConvert.SerializeObject(login);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/user/"), new StringContent(loginJson, System.Text.Encoding.UTF8, "application/json"));
+                var userToken = JsonConvert.DeserializeObject<UserToken>(res.Content.ReadAsStringAsync().Result);
+                token = userToken.Token;
+            }
+            catch (HttpRequestException e)
+            {
+                Debug.WriteLine($"Er is een error opgetreden tijdens het aanmelden: " +
+                                $"{e}");
+            }
+
+            return token;
+        }
+
         /* ESTABLISHMENTS */
         // Get all establishments
         public async Task<List<Establishment>> GetAllEstablishments()

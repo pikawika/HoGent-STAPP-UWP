@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
+using Windows.Security.Credentials;
 using Windows.UI.Xaml.Controls;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
@@ -13,6 +15,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
     {
         private MainPageViewModel mainPageViewModel;
         private NetworkAPI networkAPI = new NetworkAPI();
+        private PasswordVault passwordVault = new PasswordVault();
 
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";
@@ -33,7 +36,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             if (string.IsNullOrWhiteSpace(Username)
                 || string.IsNullOrWhiteSpace(Password))
             {
-                ShowDialog("Aanmelding", "Gelieve zowel uw gebruikersnaam als uw wachtwoord in te voeren.");
+                await ShowDialog("Aanmelden", "Gelieve zowel uw gebruikersnaam als uw wachtwoord in te voeren.");
                 return;
             }
 
@@ -41,16 +44,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                ShowDialog("Aanmelding", "Er is een fout opgetreden tijdens het aanmelden.");
+                await ShowDialog("Aanmelden", "Er is een fout opgetreden tijdens het aanmelden.");
                 return;
             }
-            else
-            {
-                ShowDialog("Aanmelding", $"Tis toch simpel he: {token}");
-            }
+
+            passwordVault.Add(new PasswordCredential("Stapp", "Token", token));
+            NavigateToHome();
+            await ShowDialog("Aanmelden", "Welkom bij Stapp!");
         }
 
-        private async void ShowDialog(string title, string message)
+        private async Task ShowDialog(string title, string message)
         {
             ContentDialog contentDialog = new ContentDialog();
 
@@ -62,5 +65,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         }
 
         private void NavigateToRegistration() => mainPageViewModel.CurrentData = new RegistrationViewModel(mainPageViewModel);
+
+        private void NavigateToHome() => mainPageViewModel.CurrentData = new HomePageViewModel(mainPageViewModel);
     }
 }
