@@ -8,12 +8,12 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
+    <StackPanel Width="600" VerticalAlignment="Center" Spacing="10">
         <Image
-            Source="/Assets/StoreLogo.png"
+            Source="/Assets/logo.png"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Width="150"/>
+            Width="400" Margin="30"/>
         
         <TextBlock Text="Voornaam" />
         <TextBox PlaceholderText="Voornaam" Text="{Binding FirstName, Mode=TwoWay}" />
@@ -33,7 +33,7 @@
         <TextBlock Text="Herhaal wachtwoord" />
         <PasswordBox PlaceholderText="Herhaal wachtwoord" Password="{Binding RepeatPassword, Mode=TwoWay}" />
 
-        <Button Content="Maak account aan" Command="{Binding RegisterCommand}" />
-        <Button Content="Terug naar aanmelden" Command="{Binding NavigateToLoginCommand}" />
+        <Button Content="Maak account aan" Command="{Binding RegisterCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
+        <Button Content="Terug naar aanmelden" Background="Transparent" Foreground="#0078d7" Command="{Binding NavigateToLoginCommand}"  HorizontalAlignment="Stretch"/>
     </StackPanel>
 </UserControl>
