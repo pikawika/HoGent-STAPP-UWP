@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Network;
+using uwp_app_aalst_groep_a3.Utils;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
@@ -22,8 +24,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private NetworkAPI NetworkAPI { get; set; }
 
-        public MerchantsViewModel()
+        public RelayCommand EstablishmentClickedCommand { get; set; }
+
+        private MainPageViewModel mainPageViewModel;
+
+        public MerchantsViewModel(MainPageViewModel mainPageViewModel)
         {
+            this.mainPageViewModel = mainPageViewModel;
+            EstablishmentClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             NetworkAPI = new NetworkAPI();
             InitializeHomePage();
         }
@@ -32,5 +40,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());
         }
+
+        private void EstablishmentClicked(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment);
     }
 }
