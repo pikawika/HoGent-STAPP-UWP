@@ -27,6 +27,12 @@
         <DataTemplate x:Key="EstablishmentDetailViewModel">
             <view:EstablishmentDetailView />
         </DataTemplate>
+        <DataTemplate x:Key="LoginViewModel">
+            <view:LoginView />
+        </DataTemplate>
+        <DataTemplate x:Key="RegistrationViewModel">
+            <view:RegistrationView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>

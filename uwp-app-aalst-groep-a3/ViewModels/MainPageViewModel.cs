@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Utils;
 using uwp_app_aalst_groep_a3.Views;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
@@ -35,7 +36,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public MainPageViewModel()
         {
-            CurrentData = new HomePageViewModel();
+            CurrentData = new HomePageViewModel(this);
 
             NavigationCommand = new RelayCommand((object args) => Navigate(args));
 
@@ -52,6 +53,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Map), Content = "Kaart", Tag = "Map" });
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.People), Content = "Handelaars", Tag = "Merchants" });
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.OutlineStar), Content = "Evenementen", Tag = "Events" });
+            items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Contact), Content = "Account", Tag = "Account" });
 
             return items;
         }
@@ -69,7 +71,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 switch (selected)
                 {
                     case "Home":
-                        CurrentData = new HomePageViewModel();
+                        CurrentData = new HomePageViewModel(this);
                         break;
                     case "Kaart":
                         CurrentData = new MapViewModel(this);
@@ -78,10 +80,10 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         CurrentData = new MerchantsViewModel(this);
                         break;
                     case "Evenementen":
-                        CurrentData = new EventsViewModel();
+                        CurrentData = new EventsViewModel(this);
                         break;
-                    default:
-                        CurrentData = new HomePageViewModel();
+                    case "Account":
+                        CurrentData = new LoginViewModel(this);
                         break;
                 }
             }

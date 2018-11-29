@@ -12,7 +12,8 @@
     <NavigationView
         x:Name="NavView"
         MenuItemsSource="{Binding NavigationViewItems}"
-        SelectedItem="{Binding SelectedItem}" >
+        SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+        IsBackButtonVisible="Collapsed">
         <i:Interaction.Behaviors>
             <ic:EventTriggerBehavior EventName="ItemInvoked">
                 <ic:InvokeCommandAction
@@ -25,7 +26,8 @@
                 Content="{Binding CurrentData}"
                 ContentTemplate="{Binding CurrentData.Template}"
                 VerticalContentAlignment="Stretch" 
-                HorizontalContentAlignment="Stretch" Margin="0,-60,0,0" />
+
+                HorizontalContentAlignment="Stretch" Margin="0,-60,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </NavigationView.Content>
     </NavigationView>
 
