@@ -8,13 +8,14 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Padding="50" Width="600" VerticalAlignment="Center">
+    <StackPanel Width="600" VerticalAlignment="Center"  Spacing="10">
         <Image
             Source="/Assets/logo.png"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Width="300" Margin="50"/>
-        
+            Width="400" Margin="30"/>
+
+
         <TextBlock Text="Gebruikersnaam" />
         <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding Username, Mode=TwoWay}" />
         
