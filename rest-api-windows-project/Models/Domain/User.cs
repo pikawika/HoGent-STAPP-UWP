@@ -13,7 +13,6 @@ namespace stappBackend.Models
         public string LastName { get; set; }
         public string Email { get; set; }
 
-        [JsonIgnore]
         public Login Login { get; set; } = new Login();
     }
 }

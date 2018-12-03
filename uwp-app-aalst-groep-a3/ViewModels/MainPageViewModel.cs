@@ -88,6 +88,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     case "Account":
                         try
                         {
+                            //var pc = passwordVault.Retrieve("Stapp", "Token");
+                            //passwordVault.Remove(pc);
+
                             passwordVault.Retrieve("Stapp", "Token");
                             CurrentData = new AccountViewModel(this);
                         }

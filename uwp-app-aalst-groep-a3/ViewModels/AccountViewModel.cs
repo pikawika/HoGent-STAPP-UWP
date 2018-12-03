@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Models;
+using uwp_app_aalst_groep_a3.Models.Domain;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.Security.Credentials;
@@ -16,10 +18,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private NetworkAPI networkAPI = new NetworkAPI();
         private PasswordVault passwordVault = new PasswordVault();
 
-        public string FirstName { get; set; } = "";
-        public string LastName { get; set; } = "";
-        public string EmailAddress { get; set; } = "";
-        public string Username { get; set; } = "";
+        private Customer _customer;
+
+        public Customer Customer
+        {
+            get { return _customer; }
+            set { _customer = value; RaisePropertyChanged(nameof(Customer)); }
+        }
+
 
         public RelayCommand SignOutCommand { get; set; }
 
@@ -27,7 +33,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             this.mainPageViewModel = mainPageViewModel;
 
+            Customer = new Customer { FirstName = "", LastName = "", Email = "", Login = new Login() { Username = "" } };
+
             SignOutCommand = new RelayCommand(async _ => await SignOutAsync());
+
+            GetCustomer();
+        }
+
+        private async void GetCustomer()
+        {
+            Customer = await networkAPI.GetCustomer();
         }
 
         private async Task SignOutAsync()
