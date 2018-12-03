@@ -8,20 +8,20 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
-        <TextBlock>
+    <StackPanel Padding="50">
+        <TextBlock FontWeight="Bold">
            Kies een thema
         </TextBlock>
         <RadioButton x:Name="LightTheme" Content="Licht thema" />
         <RadioButton x:Name="DarkTheme" Content="Donker thema" />
         <RadioButton x:Name="SystemTheme" Content="Gebruik systeeminstelling" />
 
-        <TextBlock>
+        <TextBlock FontWeight="Bold" Padding="0,20,0,0">
            Over deze applicatie
         </TextBlock>
         <TextBlock Text="{Binding LongDescription}" />
         <TextBlock Text="{Binding ShortDescription}" />
-        <TextBlock>
+        <TextBlock FontWeight="Bold"  Padding="0,20,0,0">
            Ontwikkelaars:
         </TextBlock>
         <ListView ItemsSource="{Binding Developers}">
@@ -38,11 +38,11 @@
         <TextBlock>
            Versie: 1.0.0.0
         </TextBlock>
-        <TextBlock>
+        <TextBlock FontWeight="Light">
            Privacybeleid: Nog niet beschikbaar
         </TextBlock>
 
-        <TextBlock>
+        <TextBlock FontWeight="Light">
            Copyright (c) Team Stapp. Alle rechten voorbehouden.
         </TextBlock>
     </StackPanel>
