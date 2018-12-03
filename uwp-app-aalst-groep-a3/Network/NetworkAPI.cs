@@ -143,6 +143,44 @@ namespace uwp_app_aalst_groep_a3.Network
             return establishment;
         }
 
+        /* EVENTS */
+        // Get all events
+        public async Task<List<Event>> GetAllEvents()
+        {
+            List<Event> events = new List<Event>();
+            try
+            {
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/event"));
+                events = JsonConvert.DeserializeObject<List<Event>>(json);
+            }
+            catch (HttpRequestException e)
+            {
+                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                $"ophalen van alle events uit de databank: " +
+                                $"{e}");
+            }
+            return events;
+        }
+
+        // Get event by id
+        public async Task<Event> GetEventById(int id)
+        {
+            Event ev = new Event();
+            try
+            {
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/event/{id}"));
+                ev = JsonConvert.DeserializeObject<Event>(json);
+
+            }
+            catch (HttpRequestException e)
+            {
+                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                $"ophalen van een specifiek event uit de databank: " +
+                                $"{e}");
+            }
+            return ev;
+        }
+
         /* PROMOTIONS */
         // Get all promotions
         public async Task<List<Promotion>> GetAllPromotions()

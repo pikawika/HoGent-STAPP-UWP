@@ -36,6 +36,9 @@
         <DataTemplate x:Key="AccountViewModel">
             <view:AccountView />
         </DataTemplate>
+        <DataTemplate x:Key="EventDetailViewModel">
+            <view:EventDetailView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>
