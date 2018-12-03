@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="uwp_app_aalst_groep_a3.Views.AccountView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:uwp_app_aalst_groep_a3.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel Width="600" VerticalAlignment="Center" Spacing="10">
+        <Image
+            Source="/Assets/logo.png"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="400" Margin="30"/>
+
+        <TextBlock Text="Voornaam" />
+        <TextBox PlaceholderText="Voornaam" Text="{Binding Customer.FirstName, Mode=TwoWay}" IsEnabled="False" />
+
+        <TextBlock Text="Achternaam" />
+        <TextBox PlaceholderText="Achternaam" Text="{Binding Customer.LastName, Mode=TwoWay}" IsEnabled="False"/>
+
+        <TextBlock Text="E-mailadres" />
+        <TextBox PlaceholderText="E-mailadres" Text="{Binding Customer.Email, Mode=TwoWay}" IsEnabled="False"/>
+
+        <TextBlock Text="Gebruikersnaam" />
+        <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding Customer.Login.Username, Mode=TwoWay}" IsEnabled="False"/>
+
+        <Button Content="Meld af" Command="{Binding SignOutCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
+        <TextBlock Text="HIER MOETEN DE SUBSCRIPTIONS NOG KOMEN!!!!" />
+    </StackPanel>
+</UserControl>

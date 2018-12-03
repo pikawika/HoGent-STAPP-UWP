@@ -13,6 +13,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class MerchantsViewModel : ViewModelBase
     {
+        private MainPageViewModel mainPageViewModel;
+
+        private NetworkAPI NetworkAPI = new NetworkAPI();
 
         private ObservableCollection<Establishment> _establishments;
 
@@ -22,24 +25,18 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _establishments = value; RaisePropertyChanged(nameof(Establishments)); }
         }
 
-        private NetworkAPI NetworkAPI { get; set; }
-
         public RelayCommand EstablishmentClickedCommand { get; set; }
-
-        private MainPageViewModel mainPageViewModel;
 
         public MerchantsViewModel(MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
+
             EstablishmentClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
-            NetworkAPI = new NetworkAPI();
+
             InitializeHomePage();
         }
 
-        private async void InitializeHomePage()
-        {
-            Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());
-        }
+        private async void InitializeHomePage() => Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());
 
         private void EstablishmentClicked(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment);
     }

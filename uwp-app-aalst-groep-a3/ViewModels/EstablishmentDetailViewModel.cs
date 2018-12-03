@@ -152,10 +152,10 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             RetrieveMerchantLocations();
         }
 
-        private async void RetrieveMerchantLocations()
+        private void RetrieveMerchantLocations()
         {
             MapIcons = new List<MapIcon>();
-            
+
             MapIcons.Add(CreateMerchantMarker(Establishment));
 
             var landmarkLayer = new MapElementsLayer

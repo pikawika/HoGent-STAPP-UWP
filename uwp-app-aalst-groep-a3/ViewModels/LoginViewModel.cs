@@ -49,7 +49,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
 
             passwordVault.Add(new PasswordCredential("Stapp", "Token", token));
-            NavigateToHome();
+            NavigateToAccount();
             await ShowDialog("Aanmelden", "Welkom bij Stapp!");
         }
 
@@ -66,6 +66,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private void NavigateToRegistration() => mainPageViewModel.CurrentData = new RegistrationViewModel(mainPageViewModel);
 
-        private void NavigateToHome() => mainPageViewModel.CurrentData = new HomePageViewModel(mainPageViewModel);
+        private void NavigateToAccount() => mainPageViewModel.CurrentData = new AccountViewModel(mainPageViewModel);
     }
 }

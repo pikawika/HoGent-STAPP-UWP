@@ -21,7 +21,9 @@ namespace stappBackend.Data.Repositories
 
         public User Login(string username, string hash)
         {
-            return _users.Where(u => u.Login.Username == username && u.Login.Hash == hash).Include(u => u.Login.Role).FirstOrDefault();
+            return _users.Where(u => u.Login.Username == username && u.Login.Hash == hash)
+                .Include(u => u.Login).ThenInclude(l => l.Role)
+                .FirstOrDefault();
         }
 
         public bool EmailExists(string email)
