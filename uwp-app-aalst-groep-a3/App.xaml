@@ -33,6 +33,9 @@
         <DataTemplate x:Key="RegistrationViewModel">
             <view:RegistrationView />
         </DataTemplate>
+        <DataTemplate x:Key="AccountViewModel">
+            <view:AccountView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>

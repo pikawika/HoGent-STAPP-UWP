@@ -28,7 +28,7 @@ namespace uwp_app_aalst_groep_a3.Network
             client = new HttpClient(httpClientHandler);
         }
 
-        /* AUTHENTICATIOn */
+        /* AUTHENTICATION */
         // Sign in
         public async Task<string> SignIn(string username, string password)
         {
