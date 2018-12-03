@@ -5,9 +5,11 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
+using Windows.Security.Credentials;
 
 namespace uwp_app_aalst_groep_a3.Network
 {
@@ -15,6 +17,7 @@ namespace uwp_app_aalst_groep_a3.Network
     {
         // The HttpClient used for all REST API calls
         private HttpClient client { get; }
+        private PasswordVault passwordVault = new PasswordVault();
 
         // The base URL of our backend
         public static string baseUrl { get; } = "https://localhost:44315/";
@@ -28,7 +31,7 @@ namespace uwp_app_aalst_groep_a3.Network
             client = new HttpClient(httpClientHandler);
         }
 
-        /* AUTHENTICATIOn */
+        /* AUTHENTICATION */
         // Sign in
         public async Task<string> SignIn(string username, string password)
         {
@@ -71,6 +74,35 @@ namespace uwp_app_aalst_groep_a3.Network
             }
 
             return token;
+        }
+
+        /* CUSTOMER */
+        // Get account details and subscriptions
+        public async Task<Customer> GetCustomer()
+        {
+            Customer customer = new Customer();
+            try
+            {
+                Debug.WriteLine("Controle 1");
+                var credentials = passwordVault.Retrieve("Stapp", "Token");
+                credentials.RetrievePassword();
+                Debug.WriteLine("Controle 2");
+                Debug.WriteLine(credentials.Password);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+                Debug.WriteLine("Controle 3");
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/"));
+                Debug.WriteLine("Controle 4");
+                customer = JsonConvert.DeserializeObject<Customer>(json);
+                Debug.WriteLine("Controle 5");
+                Debug.WriteLine(customer.Login.Username);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Er is een error opgetreden tijdens het ophalen van de gegevens van de gebruiker: " +
+                                $"{e}");
+            }
+            Debug.WriteLine("Controle 6");
+            return customer;
         }
 
         /* ESTABLISHMENTS */
