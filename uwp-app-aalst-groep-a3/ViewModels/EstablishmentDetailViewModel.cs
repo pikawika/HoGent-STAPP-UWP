@@ -240,7 +240,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 }
                 else
                 {
-                    await ShowDialog("Abonneren", $"Er is een fout opgetreden: {message}");
+                    await ShowDialog("Abonneren", message);
                 }
             }
             catch

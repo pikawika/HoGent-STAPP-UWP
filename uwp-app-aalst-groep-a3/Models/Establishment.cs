@@ -8,7 +8,7 @@ namespace uwp_app_aalst_groep_a3.Models
 {
     public class Establishment
     {
-        public int EstablishmentId { get; private set; }
+        public int EstablishmentId { get; set; }
 
         public string Name { get; set; }
         public string PostalCode { get; set; }

@@ -48,23 +48,23 @@ namespace stappBackend.Controllers
             if (ModelState.IsValid)
             {
                 if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
-                    return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+                    return BadRequest(new { error = "De opgegeven token is incorrect of ongeldig." });
 
                 Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.establishmentId);
 
                 if (establishment == null)
-                    return BadRequest(new { error = "Geen establishment met de meegegeven id" });
+                    return BadRequest(new { error = "Het opgegeven etablissement bestaat niet." });
 
                 Customer customer = _customerRepository.getById(int.Parse(User.FindFirst("userId")?.Value));
 
                 if (customer.EstablishmentSubscriptions.Any(es => es.EstablishmentId == establishment.EstablishmentId))
-                    return BadRequest(new { error = "U bent reeds subscribed aan deze establishment" });
+                    return BadRequest(new { error = "U bent reeds geabonneerd op dit etablissement." });
 
                 EstablishmentSubscription establishmentSubscription = new EstablishmentSubscription() { Customer = customer, Establishment = establishment, DateAdded = DateTime.Now, EstablishmentId = establishment.EstablishmentId };
 
                 _customerRepository.addSubscription(customer.UserId, establishmentSubscription);
 
-                return Ok(new { message = "Toegevoegd!" });
+                return Ok(new { message = "U bent succes geabonneerd op dit etablissement.!" });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));

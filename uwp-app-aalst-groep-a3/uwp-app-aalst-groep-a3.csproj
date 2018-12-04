@@ -101,6 +101,7 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\Establishment.cs" />
     <Compile Include="Models\EstablishmentCategory.cs" />
     <Compile Include="Models\EstablishmentSocialMedia.cs" />
