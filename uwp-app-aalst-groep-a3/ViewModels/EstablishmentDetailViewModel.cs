@@ -103,14 +103,19 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
             Promotion p = args as Promotion;
 
-            DateTime startDt = DateTime.ParseExact(p.StartDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string start = startDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            Debug.WriteLine("test lol hihi: " + p.Name);
 
-            DateTime endDt = DateTime.ParseExact(p.EndDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string end = endDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            string start = p.StartDate.ToString("d MMMM yyyy");
+            string end = p.EndDate.ToString("d MMMM yyyy");
 
             contentDialog.Title = p.Name;
-            contentDialog.Content = p.Message + "\n" + "Geldig van "+ start + " tot " + end;
+
+            if (p.Name != "Er zijn nog geen promoties toegevoegd")
+            {
+                contentDialog.Content = p.Message + "\n" + "Geldig van " + start + " tot " + end;
+            }
+
+
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
@@ -121,14 +126,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
             Event e = args as Event;
 
-            /*DateTime startDt = DateTime.ParseExact(e.StartDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string start = startDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            string start = e.StartDate.ToString("d MMMM yyyy");
+            string end = e.EndDate.ToString("d MMMM yyyy");
 
-            DateTime endDt = DateTime.ParseExact(e.EndDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string end = endDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
-            */
+            if (e.Name != "Er zijn nog geen events toegevoegd")
+            {
+                contentDialog.Content = e.Message + "\n" + "Geldig van " + start + " tot " + end;
+            }
+
             contentDialog.Title = e.Name;
-            contentDialog.Content = e.Message /*+ "\n" + "Geldig van " + e.StartDate + " tot " + e.EndDate*/;
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
