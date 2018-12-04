@@ -13,31 +13,34 @@
         <local:DateTimeConverter x:Key="DateTimeConverter"/>
     </UserControl.Resources>
 
-    <StackPanel>
-        <Image
+    <ScrollViewer>
+        <StackPanel>
+            <Image
             Source="{Binding Event.Images[0].Path}"
             Stretch="UniformToFill"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"/>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Naam: " />
-            <TextBlock Text="{Binding Event.Name}" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Naam: " />
+                <TextBlock Text="{Binding Event.Name}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Omschrijving: " />
+                <TextBlock Text="{Binding Event.Message}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Begindatum: " />
+                <TextBlock Text="{Binding Event.StartDate, Converter={StaticResource DateTimeConverter}}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Einddatum: " />
+                <TextBlock Text="{Binding Event.EndDate, Converter={StaticResource DateTimeConverter}}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Locatie: " />
+                <TextBlock Text="{Binding Event.Establishment.Name}" />
+            </StackPanel>
+            <Button Content="Voeg evenement toe aan mijn kalender" Command="{Binding AddToCalendarCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Omschrijving: " />
-            <TextBlock Text="{Binding Event.Message}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Begindatum: " />
-            <TextBlock Text="{Binding Event.StartDate, Converter={StaticResource DateTimeConverter}}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Einddatum: " />
-            <TextBlock Text="{Binding Event.EndDate, Converter={StaticResource DateTimeConverter}}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Locatie: " />
-            <TextBlock Text="{Binding Event.Establishment.Name}" />
-        </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>
