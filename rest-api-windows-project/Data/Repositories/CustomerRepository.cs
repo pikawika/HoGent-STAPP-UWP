@@ -53,7 +53,7 @@ namespace stappBackend.Data.Repositories
                 .FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions
                 .Select(es => es.Establishment).ToList();
 
-            foreach (var establishment in establishments)
+            foreach (Establishment establishment in establishments)
             {
                 establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now);
                 establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now);
