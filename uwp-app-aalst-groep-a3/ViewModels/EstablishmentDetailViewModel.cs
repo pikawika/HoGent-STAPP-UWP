@@ -242,6 +242,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 }
             }
 
+            if(Establishment.ExceptionalDays.Count != 0)
+            {
+                days += "\nUitzonderlijk gesloten: \n";
+                foreach(ExceptionalDay exceptionalDay in Establishment.ExceptionalDays)
+                {
+                    days+= exceptionalDay.Day.ToString("d MMMM yyyy") + ": " + exceptionalDay.Message + "\n";
+                }
+            }
+
             contentDialog.Content = days;
             contentDialog.CloseButtonText = "Sluiten";
 
