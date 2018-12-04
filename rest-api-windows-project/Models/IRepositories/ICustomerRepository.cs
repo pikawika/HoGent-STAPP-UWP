@@ -12,5 +12,6 @@ namespace stappBackend.Models.IRepositories
         void removeSubscription(int userId, EstablishmentSubscription establishmentSubscription);
 
         Customer getById(int userId);
+
     }
 }

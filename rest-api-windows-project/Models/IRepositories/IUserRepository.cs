@@ -12,7 +12,10 @@ namespace stappBackend.Models.IRepositories
         Boolean EmailExists(string email);
 
         Boolean UsernameExists(string username);
-        
+
+        User getById(int id);
+
+
         void Register(User user);
 
         void ChangePassword(int userId, byte[] newSalt, string newHash);

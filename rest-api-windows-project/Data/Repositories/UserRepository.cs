@@ -26,6 +26,13 @@ namespace stappBackend.Data.Repositories
                 .FirstOrDefault();
         }
 
+        public User getById(int id)
+        {
+            return _users.Where(u => u.UserId == id)
+                .Include(u => u.Login)
+                .FirstOrDefault();
+        }
+
         public bool EmailExists(string email)
         {
             return _users.Any(g => g.Email == email);

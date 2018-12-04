@@ -34,16 +34,7 @@ namespace stappBackend.Data.Repositories
 
         public Customer getById(int userId)
         {
-            return _customers
-                .Include(c => c.Login)
-                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
-                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
-                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Images)
-                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
-                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.ExceptionalDays)
-                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Promotions).ThenInclude(p => p.Images)
-                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Events)
-                .FirstOrDefault(u => u.UserId == userId);
+            return _customers.Include(c => c.EstablishmentSubscriptions).FirstOrDefault(u => u.UserId == userId);
         }
 
         private void SaveChanges()

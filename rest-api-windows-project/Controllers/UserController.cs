@@ -31,6 +31,21 @@ namespace stappBackend.Controllers
             _roleRepository = roleRepository;
         }
 
+        //returnt alle gegevens van een USER
+        [HttpGet]
+        public IActionResult Get()
+        {
+            if (User.FindFirst("userId")?.Value == null)
+                return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
+            User user =_userRepository.getById(int.Parse(User.FindFirst("userId")?.Value));
+
+            if (user != null){
+                return Ok(user);
+            }
+            return BadRequest(new { error = "Geen user gevonden met de opgegeven id." });
+        }
+
         [HttpPost("CheckEmailExists")]
         [AllowAnonymous]
         public IActionResult CheckEmailExists([FromBody]CheckEmailViewModel checkRequest)
