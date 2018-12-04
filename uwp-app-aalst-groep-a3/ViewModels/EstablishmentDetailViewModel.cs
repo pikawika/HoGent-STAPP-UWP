@@ -211,18 +211,35 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
 
             string[] dagNamen = { "Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag" };
+
             contentDialog.Title = "Openingsuren";
 
             string days = "";
 
             foreach(OpenDay day in Establishment.OpenDays)
             {
-                days += "\n" + dagNamen[day.DayOfTheWeek]+"\n";
-
+                days += "\n" + dagNamen[day.DayOfTheWeek]+":\n";
+                if(day.OpenHours.Count == 0)
+                {
+                    days += "Gesloten\n";
+                }
                 foreach(OpenHour hour in day.OpenHours)
                 {
-                    days += hour.StartHour + ":" + hour.Startminute + " - " + hour.EndHour + ":" + hour.EndMinute + "\n";
-                } 
+                    //int is soms = 0, moet dan 00 worden
+                    string startMinute = hour.Startminute.ToString();
+                    if(startMinute.Length == 1)
+                    {
+                        startMinute += "0";
+                    }
+
+                    //int is soms = 0, moet dan 00 worden
+                    string endMinute = hour.Startminute.ToString();
+                    if (endMinute.Length == 1)
+                    {
+                        endMinute += "0";
+                    }
+                    days += hour.StartHour + ":" + startMinute + " - " + hour.EndHour + ":" + endMinute + "\n";
+                }
             }
 
             contentDialog.Content = days;
