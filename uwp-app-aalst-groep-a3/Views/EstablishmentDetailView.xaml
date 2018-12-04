@@ -166,7 +166,15 @@
             <TextBlock Grid.Row="0" Text="{Binding Establishment.Name}" FocusVisualPrimaryBrush="White" FontSize="75" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="30">
                 <Button Style="{StaticResource ButtonRemoveHover}" Background="#0078d7" Width="300" HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="White" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}">Volgen</Button>
-                <Button Style="{StaticResource ButtonRemoveHover}" Background="White" Width="300"  HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="#0078d7" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}">Openingsuren</Button>
+                <Button Style="{StaticResource ButtonRemoveHover}" Background="White" Width="300"  HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="#0078d7" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}">
+                    <Button.Content>Openingsuren</Button.Content>
+                    <i:Interaction.Behaviors>
+                        <ic:EventTriggerBehavior EventName="Click">
+                            <ic:InvokeCommandAction
+                    Command="{Binding OpeningsurenCommand}" />
+                        </ic:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </Button>
             </StackPanel>
         </StackPanel>
 

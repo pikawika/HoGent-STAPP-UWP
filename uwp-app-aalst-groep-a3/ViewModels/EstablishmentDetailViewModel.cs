@@ -42,6 +42,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public RelayCommand PromotionClickedCommand { get; set; }
         public RelayCommand EventClickedCommand { get; set; }
+        public RelayCommand OpeningsurenCommand { get; set; }
 
         public EstablishmentDetailViewModel(Establishment establishment)
         {
@@ -57,6 +58,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             PromotionClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
+            OpeningsurenCommand = new RelayCommand((args) => ShowOpeningHoursAsync());
 
             initMap();
         }
@@ -203,6 +205,32 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             await contentDialog.ShowAsync();
         }
+
+        private async void ShowOpeningHoursAsync()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            string[] dagNamen = { "Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag" };
+            contentDialog.Title = "Openingsuren";
+
+            string days = "";
+
+            foreach(OpenDay day in Establishment.OpenDays)
+            {
+                days += "\n" + dagNamen[day.DayOfTheWeek]+"\n";
+
+                foreach(OpenHour hour in day.OpenHours)
+                {
+                    days += hour.StartHour + ":" + hour.Startminute + " - " + hour.EndHour + ":" + hour.EndMinute + "\n";
+                } 
+            }
+
+            contentDialog.Content = days;
+            contentDialog.CloseButtonText = "Sluiten";
+
+            await contentDialog.ShowAsync();
+        }
+
     }
 
 }
