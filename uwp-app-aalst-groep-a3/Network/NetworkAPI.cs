@@ -83,26 +83,52 @@ namespace uwp_app_aalst_groep_a3.Network
             Customer customer = new Customer();
             try
             {
-                Debug.WriteLine("Controle 1");
                 var credentials = passwordVault.Retrieve("Stapp", "Token");
                 credentials.RetrievePassword();
-                Debug.WriteLine("Controle 2");
-                Debug.WriteLine(credentials.Password);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
-                Debug.WriteLine("Controle 3");
                 var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/"));
-                Debug.WriteLine("Controle 4");
                 customer = JsonConvert.DeserializeObject<Customer>(json);
-                Debug.WriteLine("Controle 5");
-                Debug.WriteLine(customer.Login.Username);
             }
             catch (Exception e)
             {
                 Debug.WriteLine($"Er is een error opgetreden tijdens het ophalen van de gegevens van de gebruiker: " +
                                 $"{e}");
             }
-            Debug.WriteLine("Controle 6");
             return customer;
+        }
+
+        // Subscribe to an establishment
+        public async Task<string> Subscribe(int establishmentId)
+        {
+            var data = new { EstablishmentId = establishmentId };
+            var dataJson = JsonConvert.SerializeObject(data);
+            string errorMessage = null;
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/customer"), new StringContent(dataJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK) throw new Exception("Er is een fout opgetreden bij het subscriben op een establishment.");
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+            return errorMessage;
+        }
+
+        // Unsubscribe to an establishment
+        public async Task<string> Unsubscribe(int establishmentId)
+        {
+            string errorMessage = null;
+            try
+            {
+                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/customer/{establishmentId}"));
+                if (res.StatusCode == System.Net.HttpStatusCode.BadRequest) throw new Exception("Er is een fout opgetreden bij het unsubscriben op een establishment.");
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+            return errorMessage;
         }
 
         /* ESTABLISHMENTS */

@@ -35,7 +35,7 @@
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Te beleven in Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+        <TextBlock Text="Handelaars van Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
 
         <Grid Grid.Row="2">
             <controls:AdaptiveGridView

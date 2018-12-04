@@ -8,9 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Models.Domain;
+using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
+using Windows.Security.Credentials;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 
@@ -18,14 +20,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class EstablishmentDetailViewModel : ViewModelBase
     {
+        private NetworkAPI networkAPI = new NetworkAPI();
+        private PasswordVault passwordVault = new PasswordVault();
+
         public BasicGeoposition EstablishmentPosition { get; set; }
         public Geopoint EstablishmentPoint { get; set; }
 
         public List<MapIcon> MapIcons { get; set; }
 
         private ObservableCollection<MapLayer> _merchantMarkers;
-
-        public RelayCommand MapElementClickCommand { get; set; }
 
         public ObservableCollection<MapLayer> MerchantMarkers
         {
@@ -40,28 +43,30 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _establishment = value; RaisePropertyChanged(nameof(Establishment)); }
         }
 
+        private MainPageViewModel mainPageViewModel;
+
         public RelayCommand PromotionClickedCommand { get; set; }
         public RelayCommand EventClickedCommand { get; set; }
+        public RelayCommand MapElementClickCommand { get; set; }
+        public RelayCommand SubscribeCommand { get; set; }
 
-        public EstablishmentDetailViewModel(Establishment establishment)
+        public EstablishmentDetailViewModel(Establishment establishment, MainPageViewModel mainPageViewModel)
         {
-
-
             Establishment = establishment;
+            this.mainPageViewModel = mainPageViewModel;
 
-            handleEmptyEvents();
-            handleEmptyPromotions();
-
-            
-            Establishment.Description = "Maecenas imperdiet tempor nisi ut rutrum. Donec sollicitudin tortor pharetra nunc lacinia posuere. Sed nisi odio, gravida sed enim non, porta elementum mauris. Ut id est sed nunc semper sagittis non sit amet felis.";
+            HandleEmptyEvents();
+            HandleEmptyPromotions();
 
             PromotionClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
+            MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
+            SubscribeCommand = new RelayCommand(async _ => await Subscribe());
 
             initMap();
         }
 
-        private void handleEmptyEvents()
+        private void HandleEmptyEvents()
         {
             Models.Domain.Image image = new Models.Domain.Image() { Path = "img/establishments/none/empty.jpg" };
             List<Models.Domain.Image> images = new List<Models.Domain.Image>();
@@ -80,7 +85,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
         }
 
-        private void handleEmptyPromotions()
+        private void HandleEmptyPromotions()
         {
             Models.Domain.Image image = new Models.Domain.Image() { Path = "img/establishments/none/empty.jpg" };
             List<Models.Domain.Image> images = new List<Models.Domain.Image>();
@@ -147,8 +152,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             MerchantMarkers = new ObservableCollection<MapLayer>();
 
-            MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
-
             RetrieveMerchantLocations();
         }
 
@@ -196,6 +199,54 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
+        }
+
+        private async Task ShowNotSignedInDialog(string title, string message)
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = title;
+            contentDialog.Content = message;
+            contentDialog.PrimaryButtonText = "Naar accountpagina";
+            contentDialog.DefaultButton = ContentDialogButton.Primary;
+            contentDialog.PrimaryButtonCommand = new RelayCommand(_ => NavigateToLogin());
+            contentDialog.SecondaryButtonText = "Annuleren";
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async Task ShowDialog(string title, string message)
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = title;
+            contentDialog.Content = message;
+            contentDialog.PrimaryButtonText = "Oké";
+
+            await contentDialog.ShowAsync();
+        }
+
+        private void NavigateToLogin() => mainPageViewModel.CurrentData = new LoginViewModel(mainPageViewModel);
+
+        private async Task Subscribe()
+        {
+            try
+            {
+                var token = passwordVault.Retrieve("Stapp", "Token");
+                var message = await networkAPI.Subscribe(Establishment.EstablishmentId);
+                if (string.IsNullOrEmpty(message))
+                {
+                    await ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
+                }
+                else
+                {
+                    await ShowDialog("Abonneren", $"Er is een fout opgetreden: {message}");
+                }
+            }
+            catch
+            {
+                await ShowNotSignedInDialog("Abonneren", "U bent momenteel niet aangemeld. Om te kunnen abonneren op handelaars, heeft u een account nodig. Aanmelden of een account aanmaken kan u doen op de accountpagina.");
+            }
         }
     }
 

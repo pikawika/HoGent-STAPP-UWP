@@ -119,7 +119,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             await contentDialog.ShowAsync();
         }
 
-        private void NavigateToEstablishmentDetail(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment);
+        private void NavigateToEstablishmentDetail(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel);
         
     }
 }

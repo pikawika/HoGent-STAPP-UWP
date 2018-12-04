@@ -42,7 +42,7 @@ namespace stappBackend.Controllers
         }
 
 
-        [HttpPost("subscribe")]
+        [HttpPost]
         public IActionResult Post([FromBody]ModifySubscriptionViewModel addSubscriptionViewModel)
         {
             if (ModelState.IsValid)
@@ -71,15 +71,15 @@ namespace stappBackend.Controllers
             return BadRequest(new { error = "De ingevoerde waarden zijn onvolledig of voldoen niet aan de eisen voor een login. Foutboodschap: " + errorMsg });
         }
 
-        [HttpDelete("subscribe")]
-        public IActionResult Delete([FromBody]ModifySubscriptionViewModel addSubscriptionViewModel)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
             if (ModelState.IsValid)
             {
                 if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
-                Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.establishmentId);
+                Establishment establishment = _establishmentRepository.getById(id);
 
                 if (establishment == null)
                     return BadRequest(new { error = "Geen establishment met de meegegeven id" });
