@@ -61,6 +61,17 @@ namespace stappBackend.Data.Repositories
             }
         }
 
+        public void ChangeUsername(int userId, string newUsername)
+        {
+            User user = _users.Where(u => u.UserId == userId).Include(u => u.Login).FirstOrDefault();
+
+            if (user != null && !UsernameExists(newUsername))
+            {
+                user.Login.Username = newUsername;
+                SaveChanges();
+            }
+        }
+
         public byte[] GetSalt(string username)
         {
             return _users.Where(u => u.Login.Username == username).Include(u => u.Login).FirstOrDefault()?.Login.Salt;

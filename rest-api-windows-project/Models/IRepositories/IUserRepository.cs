@@ -20,6 +20,8 @@ namespace stappBackend.Models.IRepositories
 
         void ChangePassword(int userId, byte[] newSalt, string newHash);
 
+        void ChangeUsername(int userId, string newUsername);
+
         byte[] GetSalt(string username);
     }
 }

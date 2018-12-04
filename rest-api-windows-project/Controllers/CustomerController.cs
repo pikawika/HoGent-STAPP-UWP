@@ -18,17 +18,13 @@ namespace stappBackend.Controllers
     [Authorize]
     public class CustomerController : ControllerBase
     {
-        private IConfiguration _config;
         private ICustomerRepository _customerRepository;
-        private IUserRepository _userRepository;
         private IEstablishmentRepository _establishmentRepository;
 
-        public CustomerController(IConfiguration config, ICustomerRepository customerRepository, IEstablishmentRepository establishmentRepository, IUserRepository iUserRepository)
+        public CustomerController(ICustomerRepository customerRepository, IEstablishmentRepository establishmentRepository)
         {
-            _config = config;
             _customerRepository = customerRepository;
             _establishmentRepository = establishmentRepository;
-            _userRepository = iUserRepository;
         }
 
         [HttpPost("subscribe")]

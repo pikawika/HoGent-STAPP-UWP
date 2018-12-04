@@ -146,7 +146,30 @@ namespace stappBackend.Controllers
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-            return BadRequest(new { error = "De ingevoerde waarden zijn onvolledig of voldoen niet aan de eisen voor een login. Foutboodschap: " + errorMsg });
+            return BadRequest(new { error = "De ingevoerde waarden zijn onvolledig of voldoen niet aan de eisen voor het wijzigen van uw wachwoord. Foutboodschap: " + errorMsg });
+        }
+
+        [HttpPost("ChangeUsername")]
+        public IActionResult ChangeUsername([FromBody]ChangeUsernameViewModel changeRequest)
+        {
+            if (ModelState.IsValid)
+            {
+                //token heeft geen id => fout met token!!
+                if (User.FindFirst("userId")?.Value == null)
+                    return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
+                if (CheckUsernameExists(changeRequest.Username))
+                {
+                    return BadRequest(new { error = "Gebruikersnaam reeds in gebruik." });
+                }
+
+                ChangeUsername(int.Parse(User.FindFirst("userId")?.Value), changeRequest.Username);
+
+                return Ok(new { bericht = "Uw username is succesvol gewijzigd." });
+            }
+            //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
+            string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return BadRequest(new { error = "De ingevoerde waarden zijn onvolledig of voldoen niet aan de eisen voor het wijzigen van uw gebruikersnaam. Foutboodschap: " + errorMsg });
         }
 
         private IActionResult RegisterCustomer(RegisterUserViewModel customerRequest)
@@ -239,6 +262,11 @@ namespace stappBackend.Controllers
             string newHash = MakeHash(newPassword, newSalt);
 
             _userRepository.ChangePassword(userId, newSalt, newHash);
+        }
+
+        private void ChangeUsername(int userId, string newUsername)
+        {
+            _userRepository.ChangeUsername(userId, newUsername);
         }
 
         private byte[] MakeSalt()
