@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,30 @@ namespace stappBackend.Data.Repositories
         public Customer getById(int userId)
         {
             return _customers.Include(c => c.EstablishmentSubscriptions).FirstOrDefault(u => u.UserId == userId);
+        }
+
+        public List<Establishment> GetEstablishmentSubscriptions(int userId)
+        {
+            List<Establishment> establishments =  _customers
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Images)
+
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.ExceptionalDays)
+
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Promotions).ThenInclude(p => p.Images)
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Events).ThenInclude(e => e.Images)
+                .FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions
+                .Select(es => es.Establishment).ToList();
+
+            foreach (var establishment in establishments)
+            {
+                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now);
+                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now);
+            }
+
+            return establishments;
         }
 
         private void SaveChanges()

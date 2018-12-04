@@ -13,5 +13,7 @@ namespace stappBackend.Models.IRepositories
 
         Customer getById(int userId);
 
+        List<Establishment> GetEstablishmentSubscriptions(int userId);
+
     }
 }

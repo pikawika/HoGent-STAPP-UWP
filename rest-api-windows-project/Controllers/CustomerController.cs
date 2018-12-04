@@ -91,5 +91,18 @@ namespace stappBackend.Controllers
             return BadRequest(new { error = "De ingevoerde waarden zijn onvolledig of voldoen niet aan de eisen voor een login. Foutboodschap: " + errorMsg });
         }
 
+        //returnt alle events en promotions van een customer zijn subscriptions 
+        [HttpGet("subscriptions")]
+        public IActionResult Get()
+        {
+            if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
+                return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
+
+            List<Establishment> subscriptions = _customerRepository.GetEstablishmentSubscriptions(int.Parse(User.FindFirst("userId")?.Value));
+
+            return Ok(subscriptions);
+        }
+
     }
 }
