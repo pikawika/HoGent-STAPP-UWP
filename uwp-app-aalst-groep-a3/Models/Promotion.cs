@@ -7,7 +7,7 @@ namespace uwp_app_aalst_groep_a3.Models
 {
     public class Promotion
     {
-        public int PromotionId { get; private set; }
+        public int PromotionId { get; set; }
         public string Name { get; set; }
         public string Message { get; set; }
         public List<Image> Images { get; set; } = new List<Image>();

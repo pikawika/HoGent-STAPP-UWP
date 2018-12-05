@@ -55,6 +55,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Home), Content = "Home", Tag = "Home" });
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Map), Content = "Kaart", Tag = "Map" });
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.People), Content = "Handelaars", Tag = "Merchants" });
+            items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Shop), Content = "Promoties", Tag = "Promotions" });
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.OutlineStar), Content = "Evenementen", Tag = "Events" });
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Contact), Content = "Account", Tag = "Account" });
 
@@ -81,6 +82,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         break;
                     case "Handelaars":
                         CurrentData = new MerchantsViewModel(this);
+                        break;
+                    case "Promoties":
+                        CurrentData = new PromotionsViewModel(this);
                         break;
                     case "Evenementen":
                         CurrentData = new EventsViewModel(this);
