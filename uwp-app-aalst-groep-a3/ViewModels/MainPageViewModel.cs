@@ -74,9 +74,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Home), Content = "Home", Tag = "Home" });
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Map), Content = "Kaart", Tag = "Map" });
-            items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.People), Content = "Handelaars", Tag = "Merchants" });
-            items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Shop), Content = "Promoties", Tag = "Promotions" });
-            items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.OutlineStar), Content = "Evenementen", Tag = "Events" });
+            items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.People), Content = "Handelaars", Tag = "Merchant" });
+            items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Shop), Content = "Promoties", Tag = "Promotion" });
+            items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.OutlineStar), Content = "Evenementen", Tag = "Event" });
             items.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Contact), Content = "Account", Tag = "Account" });
 
             return items;
@@ -146,6 +146,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 var index = NavigationHistoryItems.Count - 1;
                 CurrentData = NavigationHistoryItems[index - 1];
                 NavigationHistoryItems.RemoveAt(index);
+                AdjustSelectedItem();
                 e.Handled = true;
             }
         }
@@ -161,7 +162,19 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 var index = NavigationHistoryItems.Count;
                 NavigationHistoryItems.Add(viewModel);
                 CurrentData = NavigationHistoryItems[index];
+                AdjustSelectedItem();
             }
+        }
+
+        // Deze functie zorgt ervoor dat bij navigeren steeds het juiste incoontje geselecteerd is
+        private void AdjustSelectedItem()
+        {
+            var current = CurrentData.GetType().ToString().ToLower();
+
+            if (current.Contains("establishment")) { current = "merchants"; }
+            else if (current.Contains("login") || current.Contains("registration")) { current = "account"; }
+
+            SelectedItem = NavigationViewItems.SingleOrDefault(n => current.Contains(n.Tag.ToString().ToLower()));
         }
 
     }

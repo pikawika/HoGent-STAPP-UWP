@@ -50,6 +50,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             PasswordCredential pc = passwordVault.Retrieve("Stapp", "Token");
             passwordVault.Remove(pc);
             NavigateToLogin();
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel));
             await ShowDialog("Afmelden", "U bent succesvol afgemeld.");
         }
 

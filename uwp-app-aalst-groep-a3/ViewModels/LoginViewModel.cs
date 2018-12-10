@@ -51,6 +51,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             passwordVault.Add(new PasswordCredential("Stapp", "Token", token));
             NavigateToAccount();
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(LoginViewModel) || v.GetType() == typeof(RegistrationViewModel));
             await ShowDialog("Aanmelden", "Welkom bij Stapp!");
         }
 
