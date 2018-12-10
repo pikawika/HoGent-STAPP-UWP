@@ -20,6 +20,17 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class EstablishmentDetailViewModel : ViewModelBase
     {
+
+        public bool isSubscribed = false;
+
+        private string _subscriptionButtonText = "Abonneren";
+
+        public string SubscriptionButtonText
+        {
+            get { return _subscriptionButtonText; }
+            set { _subscriptionButtonText = value; RaisePropertyChanged(nameof(SubscriptionButtonText)); }
+        }
+
         private NetworkAPI networkAPI = new NetworkAPI();
         private PasswordVault passwordVault = new PasswordVault();
 
@@ -65,7 +76,28 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
             SubscribeCommand = new RelayCommand(async _ => await Subscribe());
 
+            SetupSubscriptionButtonAsync();
             initMap();
+        }
+
+        private async Task SetupSubscriptionButtonAsync()
+        {
+            List<Establishment> establishments_subscribed = await networkAPI.GetSubscriptions();
+
+
+            if (establishments_subscribed.Where(e => e.EstablishmentId == Establishment.EstablishmentId).ToList().Count != 0)
+            {
+                isSubscribed = true;
+            }
+
+            if (isSubscribed)
+            {
+                SubscriptionButtonText = "Niet meer volgen";
+            }
+            else
+            {
+                SubscriptionButtonText = "Abonneren";
+            }
         }
 
         private void HandleEmptyEvents()
@@ -74,7 +106,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             List<Models.Domain.Image> images = new List<Models.Domain.Image>();
             images.Add(image);
 
-            
+
             if (Establishment.Events.Count == 0)
             {
 
@@ -203,7 +235,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
 
             contentDialog.Title = Establishment.Name;
-            contentDialog.Content = Establishment.Street + " " + Establishment.HouseNumber+ "," + Establishment.PostalCode + " " + Establishment.City;
+            contentDialog.Content = Establishment.Street + " " + Establishment.HouseNumber + "," + Establishment.PostalCode + " " + Establishment.City;
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
@@ -213,24 +245,24 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             ContentDialog contentDialog = new ContentDialog();
 
-            string[] dagNamen = { "Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag" };
+            string[] dagNamen = { "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag" };
 
             contentDialog.Title = "Openingsuren";
 
             string days = "";
 
-            foreach(OpenDay day in Establishment.OpenDays)
+            foreach (OpenDay day in Establishment.OpenDays)
             {
-                days += "\n" + dagNamen[day.DayOfTheWeek]+":\n";
-                if(day.OpenHours.Count == 0)
+                days += "\n" + dagNamen[day.DayOfTheWeek] + ":\n";
+                if (day.OpenHours.Count == 0)
                 {
                     days += "Gesloten\n";
                 }
-                foreach(OpenHour hour in day.OpenHours)
+                foreach (OpenHour hour in day.OpenHours)
                 {
                     //int is soms = 0, moet dan 00 worden
                     string startMinute = hour.Startminute.ToString();
-                    if(startMinute.Length == 1)
+                    if (startMinute.Length == 1)
                     {
                         startMinute += "0";
                     }
@@ -245,12 +277,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 }
             }
 
-            if(Establishment.ExceptionalDays.Count != 0)
+            if (Establishment.ExceptionalDays.Count != 0)
             {
                 days += "\nUitzonderlijk gesloten: \n";
-                foreach(ExceptionalDay exceptionalDay in Establishment.ExceptionalDays)
+                foreach (ExceptionalDay exceptionalDay in Establishment.ExceptionalDays)
                 {
-                    days+= exceptionalDay.Day.ToString("d MMMM yyyy") + ": " + exceptionalDay.Message + "\n";
+                    days += exceptionalDay.Day.ToString("d MMMM yyyy") + ": " + exceptionalDay.Message + "\n";
                 }
             }
 
@@ -289,22 +321,41 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async Task Subscribe()
         {
-            try
+            if (isSubscribed)
             {
-                var token = passwordVault.Retrieve("Stapp", "Token");
-                var message = await networkAPI.Subscribe(Establishment.EstablishmentId);
+                var message = await networkAPI.Unsubscribe(Establishment.EstablishmentId);
                 if (string.IsNullOrEmpty(message))
                 {
-                    await ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
+                    await ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
+                    SubscriptionButtonText = "Abonneren";
+                    isSubscribed = false;
                 }
                 else
                 {
                     await ShowDialog("Abonneren", message);
                 }
             }
-            catch
+            else
             {
-                await ShowNotSignedInDialog("Abonneren", "U bent momenteel niet aangemeld. Om te kunnen abonneren op handelaars, heeft u een account nodig. Aanmelden of een account aanmaken kan u doen op de accountpagina.");
+                try
+                {
+                    var token = passwordVault.Retrieve("Stapp", "Token");
+                    var message = await networkAPI.Subscribe(Establishment.EstablishmentId);
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        await ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
+                        isSubscribed = true;
+                        SubscriptionButtonText = "Niet meer volgen";
+                    }
+                    else
+                    {
+                        await ShowDialog("Abonneren", message);
+                    }
+                }
+                catch
+                {
+                    await ShowNotSignedInDialog("Abonneren", "U bent momenteel niet aangemeld. Om te kunnen abonneren op handelaars, heeft u een account nodig. Aanmelden of een account aanmaken kan u doen op de accountpagina.");
+                }
             }
         }
     }
