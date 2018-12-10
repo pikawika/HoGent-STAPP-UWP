@@ -42,6 +42,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public RelayCommand PromotionClickedCommand { get; set; }
         public RelayCommand EventClickedCommand { get; set; }
+        public RelayCommand OpeningsurenCommand { get; set; }
 
         public EstablishmentDetailViewModel(Establishment establishment)
         {
@@ -57,6 +58,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             PromotionClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
+            OpeningsurenCommand = new RelayCommand((args) => ShowOpeningHoursAsync());
 
             initMap();
         }
@@ -203,6 +205,58 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             await contentDialog.ShowAsync();
         }
+
+        private async void ShowOpeningHoursAsync()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            string[] dagNamen = { "Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag" };
+
+            contentDialog.Title = "Openingsuren";
+
+            string days = "";
+
+            foreach(OpenDay day in Establishment.OpenDays)
+            {
+                days += "\n" + dagNamen[day.DayOfTheWeek]+":\n";
+                if(day.OpenHours.Count == 0)
+                {
+                    days += "Gesloten\n";
+                }
+                foreach(OpenHour hour in day.OpenHours)
+                {
+                    //int is soms = 0, moet dan 00 worden
+                    string startMinute = hour.Startminute.ToString();
+                    if(startMinute.Length == 1)
+                    {
+                        startMinute += "0";
+                    }
+
+                    //int is soms = 0, moet dan 00 worden
+                    string endMinute = hour.Startminute.ToString();
+                    if (endMinute.Length == 1)
+                    {
+                        endMinute += "0";
+                    }
+                    days += hour.StartHour + ":" + startMinute + " - " + hour.EndHour + ":" + endMinute + "\n";
+                }
+            }
+
+            if(Establishment.ExceptionalDays.Count != 0)
+            {
+                days += "\nUitzonderlijk gesloten: \n";
+                foreach(ExceptionalDay exceptionalDay in Establishment.ExceptionalDays)
+                {
+                    days+= exceptionalDay.Day.ToString("d MMMM yyyy") + ": " + exceptionalDay.Message + "\n";
+                }
+            }
+
+            contentDialog.Content = days;
+            contentDialog.CloseButtonText = "Sluiten";
+
+            await contentDialog.ShowAsync();
+        }
+
     }
 
 }
