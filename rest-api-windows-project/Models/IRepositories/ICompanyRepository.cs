@@ -9,9 +9,9 @@ namespace stappBackend.Models.IRepositories
     {
         void addCompany(int userId, Company company);
 
-        Company getById(int userId, int companyId);
+        Company getById(int companyId);
 
-        void removeCompany(int userId, int companyId);
+        void removeCompany(int companyId);
 
         void SaveChanges();
     }

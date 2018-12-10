@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace stappBackend.Models
 {
@@ -14,5 +15,10 @@ namespace stappBackend.Models
         public bool isDeleted { get; set; } = false;
 
         public List<Establishment> Establishments { get; set; } = new List<Establishment>();
+
+        [JsonIgnore]
+        public Merchant Merchant { get; set; }
+        [JsonIgnore]
+        public int MerchantId { get; set; }
     }
 }

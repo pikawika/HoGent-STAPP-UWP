@@ -53,10 +53,13 @@ namespace stappBackend.Controllers
 
             if (ModelState.IsValid)
             {
-                Company company = _companyRepository.getById(int.Parse(User.FindFirst("userId")?.Value), id);
+                Company company = _companyRepository.getById(id);
 
                 if (company == null)
-                    return BadRequest(new { error = "Company niet gevonden of behoord niet tot uw companies" });
+                    return BadRequest(new { error = "Company niet gevonden" });
+
+                if (company.Merchant.UserId != int.Parse(User.FindFirst("userId")?.Value))
+                    return BadRequest(new { error = "Company behoord niet tot uw companies" });
 
                 if (!string.IsNullOrEmpty(editedCompany.Name))
                     company.Name = editedCompany.Name;
@@ -77,12 +80,15 @@ namespace stappBackend.Controllers
 
             if (ModelState.IsValid)
             {
-                Company company = _companyRepository.getById(int.Parse(User.FindFirst("userId")?.Value), id);
+                Company company = _companyRepository.getById(id);
 
                 if (company == null)
-                    return BadRequest(new { error = "Company niet gevonden of behoord niet tot uw companies" });
+                    return BadRequest(new { error = "Company niet gevonden" });
 
-                _companyRepository.removeCompany(int.Parse(User.FindFirst("userId")?.Value), id);
+                if (company.Merchant.UserId != int.Parse(User.FindFirst("userId")?.Value))
+                    return BadRequest(new { error = "Company behoord niet tot uw companies" });
+
+                _companyRepository.removeCompany(id);
 
                 _companyRepository.SaveChanges();
                 return Ok(new { bericht = "De company werd succesvol bijgewerkt." });

@@ -85,6 +85,13 @@ namespace stappBackend.Data
                 .WithMany(e => e.EstablishmentSubscriptions)
                 .HasForeignKey(es => es.EstablishmentId);
             //EINDE CUSTOMER ESTABLISHMENT
+
+            //BEGIN MERCHANT COMPANY
+            modelBuilder.Entity<Company>()
+                .HasOne(c => c.Merchant)
+                .WithMany(m => m.Companies)
+                .HasForeignKey(c => c.MerchantId);
+            //EINDE CUSTOMER ESTABLISHMENT
         }
     }
 }
