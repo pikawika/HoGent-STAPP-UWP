@@ -7,7 +7,7 @@ namespace uwp_app_aalst_groep_a3.Models
 {
     public class Event
     {
-        public int EventId { get; private set; }
+        public int EventId { get; set; }
         public string Name { get; set; }
         public string Message { get; set; }
         public List<Image> Images { get; set; } = new List<Image>();

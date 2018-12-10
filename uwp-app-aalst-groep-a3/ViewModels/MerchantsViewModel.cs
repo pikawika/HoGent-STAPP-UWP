@@ -73,6 +73,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             Establishment_Names = new ObservableCollection<string>(Establishments.Select(e => e.Name).ToList());
         }
 
-        private void EstablishmentClicked(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment);
+        private void EstablishmentClicked(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel);
     }
 }

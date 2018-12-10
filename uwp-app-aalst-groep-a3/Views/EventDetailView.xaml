@@ -37,5 +37,4 @@
             <Button Content="Toon handelaar"  HorizontalAlignment="Center" Width="300" Margin="20" Command="{Binding ShowEstbalishmentCommandClicked}"></Button>
         </StackPanel>
     </Grid>
-    
 </UserControl>

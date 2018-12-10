@@ -21,6 +21,9 @@
         <DataTemplate x:Key="EventsViewModel">
             <view:EventsView />
         </DataTemplate>
+        <DataTemplate x:Key="PromotionsViewModel">
+            <view:PromotionsView />
+        </DataTemplate>
         <DataTemplate x:Key="SettingsViewModel">
             <view:SettingsView />
         </DataTemplate>
