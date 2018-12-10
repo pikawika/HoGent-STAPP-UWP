@@ -148,10 +148,6 @@ namespace uwp_app_aalst_groep_a3.Network
             {
                 var json = await client.GetStringAsync(new Uri($"{baseUrl}api/event"));
                 events = JsonConvert.DeserializeObject<List<Event>>(json);
-                foreach(Event e in events)
-                {
-                    Debug.WriteLine("establishment id lol: "+e.Establishment.EstablishmentId);
-                }
             }
             catch (HttpRequestException e)
             {

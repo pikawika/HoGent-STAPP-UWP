@@ -27,7 +27,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async Task ShowEstablishmentAsync() {
             NetworkAPI networkAPI = new NetworkAPI();
-            Debug.WriteLine("hei why " + Event.Establishment.EstablishmentId);
             Establishment establishment = await networkAPI.GetEstablishmentById(Event.Establishment.EstablishmentId);
             mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(establishment);
         }
