@@ -27,17 +27,6 @@ namespace stappBackend.Controllers
             _establishmentRepository = establishmentRepository;
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
-                return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
-
-            Customer customer = _customerRepository.getById(int.Parse(User.FindFirst("userId")?.Value));
-            return Ok(customer);
-        }
-
-
         [HttpPost]
         public IActionResult Post([FromBody]ModifySubscriptionViewModel addSubscriptionViewModel)
         {
