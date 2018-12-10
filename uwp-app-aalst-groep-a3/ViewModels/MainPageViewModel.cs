@@ -87,7 +87,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             if (((NavigationViewItemInvokedEventArgs)args).IsSettingsInvoked)
             {
-                CurrentData = new SettingsViewModel();
+                NavigateTo(new SettingsViewModel());
             }
             else
             {

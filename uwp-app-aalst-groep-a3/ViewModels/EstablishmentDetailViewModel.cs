@@ -328,9 +328,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 var message = await networkAPI.Unsubscribe(Establishment.EstablishmentId);
                 if (string.IsNullOrEmpty(message))
                 {
-                    await ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
                     SubscriptionButtonText = is_not_subbed_text;
                     isSubscribed = false;
+                    await ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
                 }
                 else
                 {
@@ -345,9 +345,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     var message = await networkAPI.Subscribe(Establishment.EstablishmentId);
                     if (string.IsNullOrEmpty(message))
                     {
-                        await ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
                         isSubscribed = true;
                         SubscriptionButtonText = is_subbed_text;
+                        await ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
                     }
                     else
                     {
