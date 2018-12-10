@@ -16,18 +16,17 @@
             Width="400" Margin="30"/>
 
         <TextBlock Text="Voornaam" />
-        <TextBox PlaceholderText="Voornaam" Text="{Binding Customer.FirstName, Mode=TwoWay}" IsEnabled="False" />
+        <TextBox PlaceholderText="Voornaam" Text="{Binding User.FirstName, Mode=TwoWay}" IsEnabled="False" />
 
         <TextBlock Text="Achternaam" />
-        <TextBox PlaceholderText="Achternaam" Text="{Binding Customer.LastName, Mode=TwoWay}" IsEnabled="False"/>
+        <TextBox PlaceholderText="Achternaam" Text="{Binding User.LastName, Mode=TwoWay}" IsEnabled="False"/>
 
         <TextBlock Text="E-mailadres" />
-        <TextBox PlaceholderText="E-mailadres" Text="{Binding Customer.Email, Mode=TwoWay}" IsEnabled="False"/>
+        <TextBox PlaceholderText="E-mailadres" Text="{Binding User.Email, Mode=TwoWay}" IsEnabled="False"/>
 
         <TextBlock Text="Gebruikersnaam" />
-        <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding Customer.Login.Username, Mode=TwoWay}" IsEnabled="False"/>
+        <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding User.Login.Username, Mode=TwoWay}" IsEnabled="False"/>
 
         <Button Content="Meld af" Command="{Binding SignOutCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
-        <TextBlock Text="HIER MOETEN DE SUBSCRIPTIONS NOG KOMEN!!!!" />
     </StackPanel>
 </UserControl>

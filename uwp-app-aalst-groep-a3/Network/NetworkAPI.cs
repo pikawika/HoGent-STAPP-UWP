@@ -76,33 +76,29 @@ namespace uwp_app_aalst_groep_a3.Network
             return token;
         }
 
-        /* CUSTOMER */
-        // Get account details and subscriptions
-        public async Task<Customer> GetCustomer()
+        /* USER */
+        // Get account details
+        public async Task<User> GetUser()
         {
-            Customer customer = new Customer();
+            User user = new User();
             try
             {
-                Debug.WriteLine("Controle 1");
                 var credentials = passwordVault.Retrieve("Stapp", "Token");
                 credentials.RetrievePassword();
-                Debug.WriteLine("Controle 2");
+
                 Debug.WriteLine(credentials.Password);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
-                Debug.WriteLine("Controle 3");
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/"));
-                Debug.WriteLine("Controle 4");
-                customer = JsonConvert.DeserializeObject<Customer>(json);
-                Debug.WriteLine("Controle 5");
-                Debug.WriteLine(customer.Login.Username);
+
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/user/"));
+
+                user = JsonConvert.DeserializeObject<User>(json);
             }
             catch (Exception e)
             {
                 Debug.WriteLine($"Er is een error opgetreden tijdens het ophalen van de gegevens van de gebruiker: " +
                                 $"{e}");
             }
-            Debug.WriteLine("Controle 6");
-            return customer;
+            return user;
         }
 
         /* ESTABLISHMENTS */

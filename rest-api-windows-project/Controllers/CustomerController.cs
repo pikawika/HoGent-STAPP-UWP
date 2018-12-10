@@ -18,29 +18,14 @@ namespace stappBackend.Controllers
     [Authorize]
     public class CustomerController : ControllerBase
     {
-        private IConfiguration _config;
         private ICustomerRepository _customerRepository;
-        private IUserRepository _userRepository;
         private IEstablishmentRepository _establishmentRepository;
 
-        public CustomerController(IConfiguration config, ICustomerRepository customerRepository, IEstablishmentRepository establishmentRepository, IUserRepository iUserRepository)
+        public CustomerController(ICustomerRepository customerRepository, IEstablishmentRepository establishmentRepository)
         {
-            _config = config;
             _customerRepository = customerRepository;
             _establishmentRepository = establishmentRepository;
-            _userRepository = iUserRepository;
         }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
-                return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
-
-            Customer customer = _customerRepository.getById(int.Parse(User.FindFirst("userId")?.Value));
-            return Ok(customer);
-        }
-
 
         [HttpPost("subscribe")]
         public IActionResult Post([FromBody]ModifySubscriptionViewModel addSubscriptionViewModel)
@@ -100,6 +85,19 @@ namespace stappBackend.Controllers
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             return BadRequest(new { error = "De ingevoerde waarden zijn onvolledig of voldoen niet aan de eisen voor een login. Foutboodschap: " + errorMsg });
+        }
+
+        //returnt alle events en promotions van een customer zijn subscriptions 
+        [HttpGet("subscriptions")]
+        public IActionResult Get()
+        {
+            if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
+                return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
+
+            List<Establishment> subscriptions = _customerRepository.GetEstablishmentSubscriptions(int.Parse(User.FindFirst("userId")?.Value));
+
+            return Ok(subscriptions);
         }
 
     }

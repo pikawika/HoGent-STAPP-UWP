@@ -42,6 +42,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public RelayCommand PromotionClickedCommand { get; set; }
         public RelayCommand EventClickedCommand { get; set; }
+        public RelayCommand OpeningsurenCommand { get; set; }
 
         public EstablishmentDetailViewModel(Establishment establishment)
         {
@@ -57,6 +58,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             PromotionClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
+            OpeningsurenCommand = new RelayCommand((args) => ShowOpeningHoursAsync());
 
             initMap();
         }
@@ -103,14 +105,19 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
             Promotion p = args as Promotion;
 
-            DateTime startDt = DateTime.ParseExact(p.StartDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string start = startDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            Debug.WriteLine("test lol hihi: " + p.Name);
 
-            DateTime endDt = DateTime.ParseExact(p.EndDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string end = endDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            string start = p.StartDate.ToString("d MMMM yyyy");
+            string end = p.EndDate.ToString("d MMMM yyyy");
 
             contentDialog.Title = p.Name;
-            contentDialog.Content = p.Message + "\n" + "Geldig van "+ start + " tot " + end;
+
+            if (p.Name != "Er zijn nog geen promoties toegevoegd")
+            {
+                contentDialog.Content = p.Message + "\n" + "Geldig van " + start + " tot " + end;
+            }
+
+
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
@@ -121,14 +128,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
             Event e = args as Event;
 
-            /*DateTime startDt = DateTime.ParseExact(e.StartDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string start = startDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
+            string start = e.StartDate.ToString("d MMMM yyyy");
+            string end = e.EndDate.ToString("d MMMM yyyy");
 
-            DateTime endDt = DateTime.ParseExact(e.EndDate.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string end = endDt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture);
-            */
+            if (e.Name != "Er zijn nog geen events toegevoegd")
+            {
+                contentDialog.Content = e.Message + "\n" + "Geldig van " + start + " tot " + end;
+            }
+
             contentDialog.Title = e.Name;
-            contentDialog.Content = e.Message /*+ "\n" + "Geldig van " + e.StartDate + " tot " + e.EndDate*/;
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
@@ -197,6 +205,58 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             await contentDialog.ShowAsync();
         }
+
+        private async void ShowOpeningHoursAsync()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            string[] dagNamen = { "Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag" };
+
+            contentDialog.Title = "Openingsuren";
+
+            string days = "";
+
+            foreach(OpenDay day in Establishment.OpenDays)
+            {
+                days += "\n" + dagNamen[day.DayOfTheWeek]+":\n";
+                if(day.OpenHours.Count == 0)
+                {
+                    days += "Gesloten\n";
+                }
+                foreach(OpenHour hour in day.OpenHours)
+                {
+                    //int is soms = 0, moet dan 00 worden
+                    string startMinute = hour.Startminute.ToString();
+                    if(startMinute.Length == 1)
+                    {
+                        startMinute += "0";
+                    }
+
+                    //int is soms = 0, moet dan 00 worden
+                    string endMinute = hour.Startminute.ToString();
+                    if (endMinute.Length == 1)
+                    {
+                        endMinute += "0";
+                    }
+                    days += hour.StartHour + ":" + startMinute + " - " + hour.EndHour + ":" + endMinute + "\n";
+                }
+            }
+
+            if(Establishment.ExceptionalDays.Count != 0)
+            {
+                days += "\nUitzonderlijk gesloten: \n";
+                foreach(ExceptionalDay exceptionalDay in Establishment.ExceptionalDays)
+                {
+                    days+= exceptionalDay.Day.ToString("d MMMM yyyy") + ": " + exceptionalDay.Message + "\n";
+                }
+            }
+
+            contentDialog.Content = days;
+            contentDialog.CloseButtonText = "Sluiten";
+
+            await contentDialog.ShowAsync();
+        }
+
     }
 
 }

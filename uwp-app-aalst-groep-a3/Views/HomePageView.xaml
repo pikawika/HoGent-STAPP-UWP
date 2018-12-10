@@ -60,16 +60,7 @@
                         HorizontalAlignment="Center" 
                         VerticalAlignment="Center" Opacity="0.6"/>
 
-
                         <TextBlock Text="{Binding Name}" FocusVisualPrimaryBrush="White" FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-
-                        <AutoSuggestBox PlaceholderText="Search" QueryIcon="Find" Width="200"
-                                TextChanged="Search_TextChanged"
-                                QuerySubmitted="AutoSuggestBox_QuerySubmitted"
-                                SuggestionChosen="AutoSuggestBox_SuggestionChosen" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="650,100,650,0"/>
-
-
-
                     </Grid>
 
 
