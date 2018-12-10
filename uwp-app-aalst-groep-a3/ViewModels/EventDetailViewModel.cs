@@ -22,20 +22,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public Event Event { get; set; }
         private MainPageViewModel mainPageViewModel;
         public RelayCommand ShowEstbalishmentCommandClicked { get; set; }
-        public EventDetailViewModel(Event Event, MainPageViewModel mainPageViewModel)
         public RelayCommand AddToCalendarCommand { get; set; }
 
+        public EventDetailViewModel(Event Event, MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
             this.Event = Event;
 
-            ShowEstbalishmentCommandClicked = new RelayCommand((object args) => ShowEstablishmentAsync());
+            ShowEstbalishmentCommandClicked = new RelayCommand(async (object args) => await ShowEstablishmentAsync());
         }
 
         private async Task ShowEstablishmentAsync() {
             NetworkAPI networkAPI = new NetworkAPI();
             Establishment establishment = await networkAPI.GetEstablishmentById(Event.Establishment.EstablishmentId);
-            mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(establishment);
+            mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(establishment, mainPageViewModel);
             AddToCalendarCommand = new RelayCommand((object args) => AddEventToCalendar(args));
         }
 
