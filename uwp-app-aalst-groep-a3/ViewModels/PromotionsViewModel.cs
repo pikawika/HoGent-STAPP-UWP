@@ -37,6 +37,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async void InitializeHomePage() => Promotions = new ObservableCollection<Promotion>(await NetworkAPI.GetAllPromotions());
 
-        private void PromotionClicked(object args) => mainPageViewModel.CurrentData = new EventDetailViewModel(args as Event);
+        private void PromotionClicked(object args) => mainPageViewModel.CurrentData = new EventDetailViewModel(args as Event, mainPageViewModel);
     }
 }
