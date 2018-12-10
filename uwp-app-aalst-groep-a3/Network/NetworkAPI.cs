@@ -76,25 +76,28 @@ namespace uwp_app_aalst_groep_a3.Network
             return token;
         }
 
-        /* CUSTOMER */
-        // Get account details and subscriptions
-        public async Task<Customer> GetCustomer()
+        /* USER */
+        // Get account details
+        public async Task<User> GetUser()
         {
-            Customer customer = new Customer();
+            User user = new User();
             try
             {
                 var credentials = passwordVault.Retrieve("Stapp", "Token");
                 credentials.RetrievePassword();
+
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/"));
-                customer = JsonConvert.DeserializeObject<Customer>(json);
+
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/user/"));
+
+                user = JsonConvert.DeserializeObject<User>(json);
             }
             catch (Exception e)
             {
                 Debug.WriteLine($"Er is een error opgetreden tijdens het ophalen van de gegevens van de gebruiker: " +
                                 $"{e}");
             }
-            return customer;
+            return user;
         }
 
         // Subscribe to an establishment
