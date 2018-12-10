@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.Security.Credentials;
@@ -50,6 +51,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             passwordVault.Add(new PasswordCredential("Stapp", "Token", token));
             NavigateToAccount();
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(LoginViewModel) || v.GetType() == typeof(RegistrationViewModel));
             await ShowDialog("Aanmelden", "Welkom bij Stapp!");
         }
 
@@ -64,8 +66,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             await contentDialog.ShowAsync();
         }
 
-        private void NavigateToRegistration() => mainPageViewModel.CurrentData = new RegistrationViewModel(mainPageViewModel);
+        private void NavigateToRegistration() => mainPageViewModel.NavigateTo(new RegistrationViewModel(mainPageViewModel));
 
-        private void NavigateToAccount() => mainPageViewModel.CurrentData = new AccountViewModel(mainPageViewModel);
+        private void NavigateToAccount() => mainPageViewModel.NavigateTo(new AccountViewModel(mainPageViewModel));
     }
 }

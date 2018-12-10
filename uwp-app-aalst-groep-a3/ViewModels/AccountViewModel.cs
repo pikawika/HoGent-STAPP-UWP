@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Models.Domain;
 using uwp_app_aalst_groep_a3.Network;
@@ -49,6 +50,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             PasswordCredential pc = passwordVault.Retrieve("Stapp", "Token");
             passwordVault.Remove(pc);
             NavigateToLogin();
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel));
             await ShowDialog("Afmelden", "U bent succesvol afgemeld.");
         }
 
@@ -63,6 +65,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             await contentDialog.ShowAsync();
         }
 
-        private void NavigateToLogin() => mainPageViewModel.CurrentData = new LoginViewModel(mainPageViewModel);
+        private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
     }
 }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
@@ -35,7 +36,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private async Task ShowEstablishmentAsync() {
             NetworkAPI networkAPI = new NetworkAPI();
             Establishment establishment = await networkAPI.GetEstablishmentById(Event.Establishment.EstablishmentId);
-            mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(establishment, mainPageViewModel);
+            mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(establishment, mainPageViewModel));
             AddToCalendarCommand = new RelayCommand((object args) => AddEventToCalendar(args));
         }
 
