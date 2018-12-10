@@ -59,6 +59,7 @@ namespace stappBackend
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,7 +80,7 @@ namespace stappBackend
 
             app.UseStaticFiles();
 
-            //dummyDataInit.InitializeData();
+            dummyDataInit.InitializeData();
         }
     }
 }
