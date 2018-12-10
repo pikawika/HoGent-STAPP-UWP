@@ -5,39 +5,37 @@
     xmlns:local="using:uwp_app_aalst_groep_a3.Utils"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    mc:Ignorable="d">
 
     <UserControl.Resources>
         <local:DateTimeConverter x:Key="DateTimeConverter"/>
     </UserControl.Resources>
 
-    <StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Image
             Source="{Binding Event.Images[0].Path}"
             Stretch="UniformToFill"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"/>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Naam: " />
-            <TextBlock Text="{Binding Event.Name}" />
+        
+        <StackPanel Grid.Row="1" Padding="20" HorizontalAlignment="Center" Width="700" VerticalAlignment="Center">
+
+            <TextBlock Text="{Binding Event.Name}" TextAlignment="Center" FontSize="40" FontWeight="Bold" Margin="10"/>
+            <Line Height="2" Width="100"/>
+            <TextBlock Text="{Binding Event.Message}" TextAlignment="Center" TextWrapping="Wrap" Margin="10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Geldig van"  FontWeight="Bold" Margin="0,0,7,0" FontSize="15"/>
+                <TextBlock Text="{Binding Event.StartDate, Converter={StaticResource DateTimeConverter}}"  FontWeight="Bold" FontSize="15"/>
+                <TextBlock Text=" tot en met "  FontWeight="Bold" Margin="3,0,7,0" FontSize="15"/>
+                <TextBlock Text="{Binding Event.EndDate, Converter={StaticResource DateTimeConverter}}"  FontWeight="Bold"  FontSize="15"/>
+            </StackPanel>
+
+            <Button Content="Toon handelaar"  HorizontalAlignment="Center" Width="300" Margin="20" Command="{Binding ShowEstbalishmentCommandClicked}"></Button>
         </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Omschrijving: " />
-            <TextBlock Text="{Binding Event.Message}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Begindatum: " />
-            <TextBlock Text="{Binding Event.StartDate, Converter={StaticResource DateTimeConverter}}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Einddatum: " />
-            <TextBlock Text="{Binding Event.EndDate, Converter={StaticResource DateTimeConverter}}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Locatie: " />
-            <TextBlock Text="{Binding Event.Establishment.Name}" />
-        </StackPanel>
-    </StackPanel>
+    </Grid>
+    
 </UserControl>
