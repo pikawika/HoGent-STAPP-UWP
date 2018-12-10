@@ -20,9 +20,10 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class EstablishmentDetailViewModel : ViewModelBase
     {
+        private readonly string is_subbed_text = "Niet meer volgen";
+        private readonly string is_not_subbed_text = "Abonneren";
 
         public bool isSubscribed = false;
-
         private string _subscriptionButtonText = "Abonneren";
 
         public string SubscriptionButtonText
@@ -92,11 +93,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (isSubscribed)
             {
-                SubscriptionButtonText = "Niet meer volgen";
+                SubscriptionButtonText = is_subbed_text;
             }
             else
             {
-                SubscriptionButtonText = "Abonneren";
+                SubscriptionButtonText = is_not_subbed_text;
             }
         }
 
@@ -327,7 +328,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 if (string.IsNullOrEmpty(message))
                 {
                     await ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
-                    SubscriptionButtonText = "Abonneren";
+                    SubscriptionButtonText = is_not_subbed_text;
                     isSubscribed = false;
                 }
                 else
@@ -345,7 +346,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     {
                         await ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
                         isSubscribed = true;
-                        SubscriptionButtonText = "Niet meer volgen";
+                        SubscriptionButtonText = is_subbed_text;
                     }
                     else
                     {
