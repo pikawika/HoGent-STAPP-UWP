@@ -38,6 +38,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async void InitializeHomePage() => Events = new ObservableCollection<Event>(await NetworkAPI.GetAllEvents());
 
-        private void EventClicked(object args) => mainPageViewModel.CurrentData = new EventDetailViewModel(args as Event, mainPageViewModel);
+        private void EventClicked(object args) => mainPageViewModel.NavigateTo(new EventDetailViewModel(args as Event, mainPageViewModel));
     }
 }

@@ -51,7 +51,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());
         }
 
-        private void EstablishmentClicked(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel);
+        private void EstablishmentClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));
 
     }
 }

@@ -36,7 +36,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private async Task ShowEstablishmentAsync() {
             NetworkAPI networkAPI = new NetworkAPI();
             Establishment establishment = await networkAPI.GetEstablishmentById(Event.Establishment.EstablishmentId);
-            mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(establishment, mainPageViewModel);
+            mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(establishment, mainPageViewModel));
             AddToCalendarCommand = new RelayCommand((object args) => AddEventToCalendar(args));
         }
 

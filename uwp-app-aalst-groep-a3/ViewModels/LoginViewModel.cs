@@ -65,8 +65,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             await contentDialog.ShowAsync();
         }
 
-        private void NavigateToRegistration() => mainPageViewModel.CurrentData = new RegistrationViewModel(mainPageViewModel);
+        private void NavigateToRegistration() => mainPageViewModel.NavigateTo(new RegistrationViewModel(mainPageViewModel));
 
-        private void NavigateToAccount() => mainPageViewModel.CurrentData = new AccountViewModel(mainPageViewModel);
+        private void NavigateToAccount() => mainPageViewModel.NavigateTo(new AccountViewModel(mainPageViewModel));
     }
 }
