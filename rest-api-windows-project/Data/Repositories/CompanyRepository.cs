@@ -32,7 +32,9 @@ namespace stappBackend.Data.Repositories
 
         public void removeCompany(int userId, int companyId)
         {
-            throw new NotImplementedException();
+            Company companyToDelete = _merchants.Include(m => m.Companies).FirstOrDefault(m => m.UserId == userId)?.Companies.FirstOrDefault(c => c.CompanyId == companyId);
+            if (companyToDelete != null)
+                companyToDelete.isDeleted = true;
         }
 
         public void SaveChanges()

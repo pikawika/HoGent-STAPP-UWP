@@ -56,12 +56,33 @@ namespace stappBackend.Controllers
                 Company company = _companyRepository.getById(int.Parse(User.FindFirst("userId")?.Value), id);
 
                 if (company == null)
-                {
                     return BadRequest(new { error = "Company niet gevonden of behoord niet tot uw companies" });
-                }
 
                 if (!string.IsNullOrEmpty(editedCompany.Name))
                     company.Name = editedCompany.Name;
+
+                _companyRepository.SaveChanges();
+                return Ok(new { bericht = "De company werd succesvol bijgewerkt." });
+            }
+            //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
+            string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return BadRequest(new { error = errorMsg });
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (isMerchant())
+                return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
+            if (ModelState.IsValid)
+            {
+                Company company = _companyRepository.getById(int.Parse(User.FindFirst("userId")?.Value), id);
+
+                if (company == null)
+                    return BadRequest(new { error = "Company niet gevonden of behoord niet tot uw companies" });
+
+                _companyRepository.removeCompany(int.Parse(User.FindFirst("userId")?.Value), id);
 
                 _companyRepository.SaveChanges();
                 return Ok(new { bericht = "De company werd succesvol bijgewerkt." });
