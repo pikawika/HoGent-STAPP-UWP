@@ -18,14 +18,13 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private NetworkAPI networkAPI = new NetworkAPI();
         private PasswordVault passwordVault = new PasswordVault();
 
-        private Customer _customer;
+        private User _user;
 
-        public Customer Customer
+        public User User
         {
-            get { return _customer; }
-            set { _customer = value; RaisePropertyChanged(nameof(Customer)); }
+            get => _user;
+            set { _user = value; RaisePropertyChanged(nameof(User)); }
         }
-
 
         public RelayCommand SignOutCommand { get; set; }
 
@@ -33,16 +32,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             this.mainPageViewModel = mainPageViewModel;
 
-            Customer = new Customer { FirstName = "", LastName = "", Email = "", Login = new Login() { Username = "" } };
+            User = new User { FirstName = "", LastName = "", Email = "", Login = new Login() { Username = "" } };
 
             SignOutCommand = new RelayCommand(async _ => await SignOutAsync());
 
-            GetCustomer();
+            GetUser();
         }
 
-        private async void GetCustomer()
+        private async void GetUser()
         {
-            Customer = await networkAPI.GetCustomer();
+            User = await networkAPI.GetUser();
         }
 
         private async Task SignOutAsync()

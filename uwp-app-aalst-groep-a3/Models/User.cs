@@ -5,7 +5,7 @@ using uwp_app_aalst_groep_a3.Models.Domain;
 
 namespace uwp_app_aalst_groep_a3.Models
 {
-    public abstract class User
+    public class User
     {
         public int UserId { get; private set; }
         public string FirstName { get; set; }
