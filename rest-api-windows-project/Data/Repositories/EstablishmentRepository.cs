@@ -58,6 +58,11 @@ namespace stappBackend.Data.Repositories
                 establishmentToDelete.isDeleted = true;
         }
 
+        public bool isOwnerOfEstablishment(int userId, int establishmentId)
+        {
+            return _establishments.Any(c => c.Company.MerchantId == userId && c.EstablishmentId == establishmentId);
+        }
+
         public void SaveChanges()
         {
             _context.SaveChanges();

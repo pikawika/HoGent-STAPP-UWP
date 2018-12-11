@@ -33,8 +33,7 @@ namespace stappBackend.Controllers
             {
                 Company newCompany = new Company
                 {
-                    Name =  companyToAdd.Name
-                        
+                    Name = companyToAdd.Name
                 };
 
                 _companyRepository.addCompany(int.Parse(User.FindFirst("userId")?.Value), newCompany);
@@ -48,18 +47,18 @@ namespace stappBackend.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]ModifyCompanyViewModel editedCompany)
         {
-            if (isMerchant())
-                return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
-
             if (ModelState.IsValid)
             {
+                if (isMerchant())
+                    return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
                 Company company = _companyRepository.getById(id);
 
                 if (company == null)
                     return BadRequest(new { error = "Company niet gevonden" });
 
-                //if (company.Merchant.UserId != int.Parse(User.FindFirst("userId")?.Value))
-                //    return BadRequest(new { error = "Company behoord niet tot uw companies" });
+                if (_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), id))
+                    return BadRequest(new { error = "Company behoord niet tot uw companies" });
 
                 if (!string.IsNullOrEmpty(editedCompany.Name))
                     company.Name = editedCompany.Name;
@@ -78,24 +77,18 @@ namespace stappBackend.Controllers
             if (isMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
-            if (ModelState.IsValid)
-            {
-                Company company = _companyRepository.getById(id);
+            Company company = _companyRepository.getById(id);
 
-                if (company == null)
-                    return BadRequest(new { error = "Company niet gevonden" });
+            if (company == null)
+                return BadRequest(new { error = "Company niet gevonden" });
 
-                if (company.Merchant.UserId != int.Parse(User.FindFirst("userId")?.Value))
-                    return BadRequest(new { error = "Company behoord niet tot uw companies" });
+            if (!_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), id))
+                return BadRequest(new { error = "Company behoord niet tot uw companies" });
 
-                _companyRepository.removeCompany(id);
+            _companyRepository.removeCompany(id);
 
-                _companyRepository.SaveChanges();
-                return Ok(new { bericht = "De company werd succesvol bijgewerkt." });
-            }
-            //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
-            string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-            return BadRequest(new { error = errorMsg });
+            _companyRepository.SaveChanges();
+            return Ok(new { bericht = "De company werd succesvol verwijderd." });
         }
 
         private bool isMerchant()

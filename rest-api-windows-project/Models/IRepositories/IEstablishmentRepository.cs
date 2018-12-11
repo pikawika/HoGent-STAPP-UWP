@@ -15,6 +15,8 @@ namespace stappBackend.Models.IRepositories
 
         void removeEstablishment(int establishmentId);
 
+        bool isOwnerOfEstablishment(int userId, int establishmentId);
+
         void SaveChanges();
     }
 }

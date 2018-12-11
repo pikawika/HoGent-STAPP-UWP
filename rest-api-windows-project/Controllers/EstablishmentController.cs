@@ -62,19 +62,19 @@ namespace stappBackend.Controllers
                     return BadRequest(new { error = "U bent geen handelaar." });
 
                 //modelstate werkt niet op lijsten :-D
-                if (!establishmentToAdd.Categories.Any())
+                if (establishmentToAdd.Categories == null || !establishmentToAdd.Categories.Any())
                     return BadRequest(new { error = "geen categories meegeven." });
 
                 //modelstate werkt niet op lijsten :-D
-                if (!establishmentToAdd.SocialMedias.Any())
+                if (establishmentToAdd.SocialMedias == null || !establishmentToAdd.SocialMedias.Any())
                     return BadRequest(new { error = "geen SocialMedias meegeven." });
 
                 //modelstate werkt niet op lijsten :-D
-                if (!establishmentToAdd.OpenDays.Any())
+                if (establishmentToAdd.OpenDays == null || !establishmentToAdd.OpenDays.Any())
                     return BadRequest(new { error = "geen OpenDays meegeven." });
 
                 //modelstate werkt niet op lijsten :-D
-                if (!establishmentToAdd.Images.Files.Any())
+                if (establishmentToAdd.Images.Files == null || !establishmentToAdd.Images.Files.Any())
                     return BadRequest(new { error = "geen Images meegeven." });
 
                 if (!_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), establishmentToAdd.CompanyId ?? 0))
@@ -120,23 +120,93 @@ namespace stappBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromForm]ModifyEstablishmentViewModel editedEstablishment)
+        public async Task<IActionResult> Put(int id, [FromForm]ModifyEstablishmentViewModel editedEstablishment)
         {
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                if (isMerchant())
+                    return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
+                Establishment establishment = _establishmentRepository.getById(id);
+
+                if (establishment == null)
+                    return BadRequest(new { error = "Establishment niet gevonden" });
+
+                if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), id))
+                    return BadRequest(new { error = "Establishment behoord niet tot uw establishments" });
+
+                //alles ok, mag editen 
+
+                if (!string.IsNullOrEmpty(editedEstablishment.Name))
+                    establishment.Name = editedEstablishment.Name;
+
+                if (!string.IsNullOrEmpty(editedEstablishment.Description))
+                    establishment.Description = editedEstablishment.Description;
+
+                if (!string.IsNullOrEmpty(editedEstablishment.PostalCode))
+                    establishment.PostalCode = editedEstablishment.PostalCode;
+
+                if (!string.IsNullOrEmpty(editedEstablishment.City))
+                    establishment.City = editedEstablishment.City;
+
+                if (!string.IsNullOrEmpty(editedEstablishment.Street))
+                    establishment.Street = editedEstablishment.Street;
+
+                if (!string.IsNullOrEmpty(editedEstablishment.HouseNumber))
+                    establishment.HouseNumber = editedEstablishment.HouseNumber;
+
+                if (editedEstablishment.Categories != null && editedEstablishment.Categories.Any())
+                    establishment.EstablishmentCategories = ConvertCategoryViewModelsToCategory(editedEstablishment.Categories);
+
+                if (editedEstablishment.SocialMedias != null && editedEstablishment.SocialMedias.Any())
+                    establishment.EstablishmentSocialMedias =
+                        ConvertEstablishmentSocialMediasViewModelsToEstablishmentSocialMedias(editedEstablishment
+                            .SocialMedias);
+
+                if (editedEstablishment.OpenDays != null && editedEstablishment.OpenDays.Any())
+                    establishment.OpenDays =  ConvertOpenDaysViewModelsToOpenDays(editedEstablishment.OpenDays);
+
+                if (editedEstablishment.ExceptionalDays != null && editedEstablishment.ExceptionalDays.Any())
+                    establishment.ExceptionalDays = ConvertExceptionalDaysViewModelsToExceptionalDays(editedEstablishment.ExceptionalDays);
+
+                if (editedEstablishment.Images != null && editedEstablishment.Images.Files.Any())
+                    establishment.Images = await ConvertFormFilesToImagesAsync(editedEstablishment.Images.Files.ToList(), id);
+
+
+                _companyRepository.SaveChanges();
+                return Ok(new { bericht = "De company werd succesvol bijgewerkt." });
+            }
+            //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
+            string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return BadRequest(new { error = errorMsg });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return Ok();
+            if (isMerchant())
+                return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
+
+            Establishment establishment = _establishmentRepository.getById(id);
+
+            if (establishment == null)
+                return BadRequest(new { error = "Establishment niet gevonden" });
+
+            if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), id))
+                return BadRequest(new { error = "Establishment behoord niet tot uw Establishments" });
+
+            _establishmentRepository.removeEstablishment(id);
+
+            _establishmentRepository.SaveChanges();
+            return Ok(new { bericht = "De establishment werd succesvol verwijderd." });
         }
 
+        #region Helper Functies
         private bool isMerchant()
         {
             return User.FindFirst("role")?.Value == "Merchant" && User.FindFirst("userId")?.Value != null;
         }
 
-        #region Helper Functies
         private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int establishmentId)
         {
             List<Image> images = new List<Image>();
