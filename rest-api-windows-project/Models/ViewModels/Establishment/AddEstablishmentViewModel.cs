@@ -10,7 +10,7 @@ namespace stappBackend.Models.ViewModels.Establishment
     public class AddEstablishmentViewModel
     {
         [Required(ErrorMessage = "{0} is verplicht.")]
-        public int EstablishmentId { get; set; }
+        public int CompanyId { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         public string Name { get; set; }

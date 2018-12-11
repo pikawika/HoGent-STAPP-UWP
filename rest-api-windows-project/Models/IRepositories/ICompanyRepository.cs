@@ -13,6 +13,8 @@ namespace stappBackend.Models.IRepositories
 
         void removeCompany(int companyId);
 
+        Boolean isOwnerOfCompany(int userId, int companyId);
+
         void SaveChanges();
     }
 }

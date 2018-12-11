@@ -39,6 +39,11 @@ namespace stappBackend.Data.Repositories
                 companyToDelete.isDeleted = true;
         }
 
+        public bool isOwnerOfCompany(int userId, int companyId)
+        {
+            return _companies.Any(c => c.MerchantId == userId && c.CompanyId == companyId);
+        }
+
         public void SaveChanges()
         {
             _context.SaveChanges();

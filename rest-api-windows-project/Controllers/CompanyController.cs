@@ -31,7 +31,7 @@ namespace stappBackend.Controllers
 
             if (ModelState.IsValid)
             {
-                Company newCompany = new Company()
+                Company newCompany = new Company
                 {
                     Name =  companyToAdd.Name
                         
@@ -58,8 +58,8 @@ namespace stappBackend.Controllers
                 if (company == null)
                     return BadRequest(new { error = "Company niet gevonden" });
 
-                if (company.Merchant.UserId != int.Parse(User.FindFirst("userId")?.Value))
-                    return BadRequest(new { error = "Company behoord niet tot uw companies" });
+                //if (company.Merchant.UserId != int.Parse(User.FindFirst("userId")?.Value))
+                //    return BadRequest(new { error = "Company behoord niet tot uw companies" });
 
                 if (!string.IsNullOrEmpty(editedCompany.Name))
                     company.Name = editedCompany.Name;

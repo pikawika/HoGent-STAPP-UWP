@@ -78,12 +78,14 @@ namespace stappBackend.Data
             modelBuilder.Entity<EstablishmentSubscription>()
                 .HasOne(es => es.Customer)
                 .WithMany(c => c.EstablishmentSubscriptions)
-                .HasForeignKey(es => es.UserId);
+                .HasForeignKey(es => es.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<EstablishmentSubscription>()
                 .HasOne(es => es.Establishment)
                 .WithMany(e => e.EstablishmentSubscriptions)
-                .HasForeignKey(es => es.EstablishmentId);
+                .HasForeignKey(es => es.EstablishmentId)
+                .OnDelete(DeleteBehavior.Restrict);
             //EINDE CUSTOMER ESTABLISHMENT
 
             //BEGIN MERCHANT COMPANY
@@ -91,7 +93,14 @@ namespace stappBackend.Data
                 .HasOne(c => c.Merchant)
                 .WithMany(m => m.Companies)
                 .HasForeignKey(c => c.MerchantId);
-            //EINDE CUSTOMER ESTABLISHMENT
+            //EINDE MERCHANT COMPANY
+
+            //BEGIN COMPANY ESTABLISHMENT
+            modelBuilder.Entity<Establishment>()
+                .HasOne(c => c.Company)
+                .WithMany(m => m.Establishments)
+                .HasForeignKey(c => c.CompanyId);
+            //EINDE COMPANY ESTABLISHMENT
         }
     }
 }
