@@ -134,7 +134,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private void InitializeBackButton()
         {
             var currentView = SystemNavigationManager.GetForCurrentView();
-            currentView.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            currentView.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Disabled;
             currentView.BackRequested += OnBackRequested;
         }
 
@@ -147,6 +147,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 CurrentData = NavigationHistoryItems[index - 1];
                 NavigationHistoryItems.RemoveAt(index);
                 AdjustSelectedItem();
+                AdjustBackButtonVisibility();
                 e.Handled = true;
             }
         }
@@ -163,6 +164,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 NavigationHistoryItems.Add(viewModel);
                 CurrentData = NavigationHistoryItems[index];
                 AdjustSelectedItem();
+                AdjustBackButtonVisibility();
             }
         }
 
@@ -171,10 +173,17 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             var current = CurrentData.GetType().ToString().ToLower();
 
-            if (current.Contains("establishment")) { current = "merchants"; }
-            else if (current.Contains("login") || current.Contains("registration")) { current = "account"; }
+            if (current.Contains("establishment")) current = "merchants";
+            else if (current.Contains("login") || current.Contains("registration")) current = "account";
 
             SelectedItem = NavigationViewItems.SingleOrDefault(n => current.Contains(n.Tag.ToString().ToLower()));
+        }
+
+        private void AdjustBackButtonVisibility()
+        {
+            var currentView = SystemNavigationManager.GetForCurrentView();
+            if (NavigationHistoryItems.Count > 1) currentView.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            else currentView.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Disabled;
         }
 
     }

@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Padding="50">
+    <StackPanel Padding="50" HorizontalAlignment="Left" MaxWidth="780">
         <TextBlock FontWeight="Bold">
            Kies een thema
         </TextBlock>
@@ -16,13 +16,13 @@
         <RadioButton x:Name="DarkTheme" Content="Donker thema" />
         <RadioButton x:Name="SystemTheme" Content="Gebruik systeeminstelling" />
 
-        <TextBlock FontWeight="Bold" Padding="0,20,0,0">
+        <TextBlock FontWeight="Bold" Padding="0,30,0,0">
            Over deze applicatie
         </TextBlock>
-        <TextBlock Text="{Binding LongDescription}" />
-        <TextBlock Text="{Binding ShortDescription}" />
-        <TextBlock FontWeight="Bold"  Padding="0,20,0,0">
-           Ontwikkelaars:
+        <TextBlock Text="{Binding LongDescription}" TextWrapping="Wrap" />
+        <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Padding="0,20,0,0" />
+        <TextBlock FontWeight="Bold"  Padding="0,30,0,0">
+           Ontwikkelaars
         </TextBlock>
         <ListView ItemsSource="{Binding Developers}">
             <ListView.ItemTemplate>
@@ -31,11 +31,11 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
-        <TextBlock>
+
+        <TextBlock Padding="0,30,0,0" TextWrapping="Wrap" MaxWidth="600" HorizontalAlignment="Left">
             <Span xml:space="preserve"><Run>Deze applicatie is een open-source project. De broncode kan teruggevonden worden op </Run><Hyperlink NavigateUri="https://github.com/BramDC3/uwp-app-aalst-groep-a3">de Stapp GitHub repository</Hyperlink><Run>.</Run></Span>
         </TextBlock>
-        <TextBlock>
+        <TextBlock Padding="0,20,0,0">
            Versie: 1.0.0.0
         </TextBlock>
         <TextBlock FontWeight="Light">
