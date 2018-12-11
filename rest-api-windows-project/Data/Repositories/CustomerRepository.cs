@@ -49,7 +49,9 @@ namespace stappBackend.Data.Repositories
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.ExceptionalDays)
 
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Promotions).ThenInclude(p => p.Images)
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Promotions).ThenInclude(p => p.Attachments)
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Events).ThenInclude(e => e.Images)
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Events).ThenInclude(e => e.Attachments)
                 .FirstOrDefault(c => c.UserId == userId)
                 ?.EstablishmentSubscriptions
                 .Select(es => es.Establishment)

@@ -24,6 +24,7 @@ namespace stappBackend.Data.Repositories
             return _events
                 .Where(e => e.EndDate >= DateTime.Today && !e.Establishment.isDeleted)
                 .Include(e => e.Images)
+                .Include(e => e.Attachments)
                 .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(e => e.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
@@ -35,6 +36,7 @@ namespace stappBackend.Data.Repositories
         {
             return _events.Where(e => e.EventId == id && e.EndDate >= DateTime.Today && !e.Establishment.isDeleted)
                 .Include(e => e.Images)
+                .Include(e => e.Attachments)
                 .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(e => e.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)

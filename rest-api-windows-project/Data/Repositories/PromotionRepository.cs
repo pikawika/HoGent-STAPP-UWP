@@ -24,6 +24,7 @@ namespace stappBackend.Data.Repositories
             return _promotions
                 .Where(p => !p.Establishment.isDeleted)
                 .Include(p => p.Images)
+                .Include(p => p.Attachments)
                 .Include(p => p.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(p => p.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(p => p.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
@@ -35,6 +36,7 @@ namespace stappBackend.Data.Repositories
         {
             return _promotions.Where(p => p.PromotionId == id && !p.Establishment.isDeleted)
                 .Include(p => p.Images)
+                .Include(p => p.Attachments)
                 .Include(p => p.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(p => p.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(p => p.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)

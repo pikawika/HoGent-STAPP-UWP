@@ -159,7 +159,8 @@ namespace stappBackend.Data
                 mrspaghettiAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(10).AddHours(5),
                     Name = "€5 korting op een spaghetti naar keuze",
                     Message = "5€ korting op een spaghetti naar keuze bij het vermelden van de couponcode 'Spaghet5'.",
-                    Images = new List<Image>() { new Image() { Path = "img/promotions/1/1.jpg" }, new Image() { Path = "img/promotions/1/2.jpg" } }
+                    Images = new List<Image>() { new Image() { Path = "img/promotions/1/1.jpg" }, new Image() { Path = "img/promotions/1/2.jpg" } },
+                    Attachments = new List<File>() { new File() { Name = "QR-code", Path = "files/promotions/1/1.pdf" } }
                 });
 
                 mrspaghettiCompany.Establishments.Add(mrspaghettiAalstEstablishment);
@@ -244,7 +245,8 @@ namespace stappBackend.Data
                     Name = "Open lessen dagen!",
                     Message =
                         "Een goede manier om een toekomstige opleiding te kiezen, is gewoon komen proeven. Proeven van de leerstof, van de manier van lesgeven, van de sfeer op de campus. Gewoon een échte les meemaken tussen onze huidige studenten. Het aanbod aan Live! lessen is zeer divers. Pik eventueel ook een les mee uit een richting die je minder bekend in de oren klinkt.",
-                    Images = new List<Image>() { new Image() { Path = "img/events/3/1.jpg" }, new Image() { Path = "img/events/3/2.jpg" } }
+                    Images = new List<Image>() { new Image() { Path = "img/events/3/1.jpg" }, new Image() { Path = "img/events/3/2.jpg" } },
+                    Attachments = new List<File>() { new File() { Name = "Brochure Toegepaste Informatica", Path = "files/promotions/3/1.pdf" }, new File(){Name = "Brochure bedrijfsmanagement", Path = "files/promotions/3/2.pdf" } }
                 });
 
                 hogentCompany.Establishments.Add(hogentAalstEstablishment);
