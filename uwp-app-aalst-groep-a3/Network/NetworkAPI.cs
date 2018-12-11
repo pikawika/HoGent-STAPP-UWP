@@ -55,10 +55,10 @@ namespace uwp_app_aalst_groep_a3.Network
         }
 
         // Create an account
-        public async Task<string> CreateAccount(string firstname, string lastname, string emailaddress, string username, string password)
+        public async Task<string> CreateAccount(string firstname, string lastname, string emailaddress, string username, string password, string role)
         {
             var token = "";
-            var login = new { FirstName = firstname, LastName = lastname, Email = emailaddress, Login = new { Username = username, Password = password, Role = "customer" } };
+            var login = new { FirstName = firstname, LastName = lastname, Email = emailaddress, Login = new { Username = username, Password = password, Role = role } };
             var loginJson = JsonConvert.SerializeObject(login);
 
             try

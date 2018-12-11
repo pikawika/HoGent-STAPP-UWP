@@ -42,6 +42,9 @@
         <DataTemplate x:Key="EventDetailViewModel">
             <view:EventDetailView />
         </DataTemplate>
+        <DataTemplate x:Key="MerchantRegistrationViewModel">
+            <view:MerchantRegistrationView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>

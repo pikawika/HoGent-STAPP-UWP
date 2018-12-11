@@ -37,7 +37,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             if (string.IsNullOrWhiteSpace(Username)
                 || string.IsNullOrWhiteSpace(Password))
             {
-                await ShowDialog("Aanmelden", "Gelieve zowel uw gebruikersnaam als uw wachtwoord in te voeren.");
+                await MessageUtils.ShowDialog("Aanmelden", "Gelieve zowel uw gebruikersnaam als uw wachtwoord in te voeren.");
                 return;
             }
 
@@ -45,25 +45,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                await ShowDialog("Aanmelden", "Er is een fout opgetreden tijdens het aanmelden.");
+                await MessageUtils.ShowDialog("Aanmelden", "Er is een fout opgetreden tijdens het aanmelden.");
                 return;
             }
 
             passwordVault.Add(new PasswordCredential("Stapp", "Token", token));
             NavigateToAccount();
-            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(LoginViewModel) || v.GetType() == typeof(RegistrationViewModel));
-            await ShowDialog("Aanmelden", "Welkom bij Stapp!");
-        }
-
-        private async Task ShowDialog(string title, string message)
-        {
-            ContentDialog contentDialog = new ContentDialog();
-
-            contentDialog.Title = title;
-            contentDialog.Content = message;
-            contentDialog.PrimaryButtonText = "Oké";
-
-            await contentDialog.ShowAsync();
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(LoginViewModel) || v.GetType() == typeof(RegistrationViewModel) || v.GetType() == typeof(MerchantRegistrationViewModel));
+            await MessageUtils.ShowDialog("Aanmelden", "Welkom bij Stapp!");
         }
 
         private void NavigateToRegistration() => mainPageViewModel.NavigateTo(new RegistrationViewModel(mainPageViewModel));

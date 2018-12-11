@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
-using Windows.Security.Credentials;
 using Windows.UI.Xaml.Controls;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
-    public class RegistrationViewModel : ViewModelBase
+    public class MerchantRegistrationViewModel : ViewModelBase
     {
         private MainPageViewModel mainPageViewModel;
         private NetworkAPI networkAPI = new NetworkAPI();
@@ -24,17 +23,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public string Password { get; set; } = "";
         public string RepeatPassword { get; set; } = "";
 
-        public RelayCommand RegisterCommand { get; set; }
+        public RelayCommand RegisterAsMerchantCommand { get; set; }
         public RelayCommand NavigateToLoginCommand { get; set; }
-        public RelayCommand NavigateToMerchantRegistrationCommand { get; set; }
 
-        public RegistrationViewModel(MainPageViewModel mainPageViewModel)
+        public MerchantRegistrationViewModel(MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
 
-            RegisterCommand = new RelayCommand(async _ => await CreateAccountAsync());
+            RegisterAsMerchantCommand = new RelayCommand(async _ => await CreateAccountAsync());
             NavigateToLoginCommand = new RelayCommand(_ => NavigateToLogin());
-            NavigateToMerchantRegistrationCommand = new RelayCommand(_ => NavigateToMerchantRegistration());
         }
 
         private async Task CreateAccountAsync()
@@ -46,36 +43,34 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 || string.IsNullOrWhiteSpace(Password)
                 || string.IsNullOrWhiteSpace(RepeatPassword))
             {
-                await MessageUtils.ShowDialog("Account aanmaken", "Gelieve in ieder veld een waarde in te voeren.");
+                await MessageUtils.ShowDialog("Handelaar account aanmaken", "Gelieve in ieder veld een waarde in te voeren.");
                 return;
             }
 
             if (!Regex.IsMatch(EmailAddress, @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"))
             {
-                await MessageUtils.ShowDialog("Account aanmaken", "Gelieve een geldig e-mailadres in te voeren.");
+                await MessageUtils.ShowDialog("Handelaar account aanmaken", "Gelieve een geldig e-mailadres in te voeren.");
                 return;
             }
 
             if (Password != RepeatPassword)
             {
-                await MessageUtils.ShowDialog("Account aanmaken", "Wachtwoord en herhaal wachtwoord komen niet overeen.");
+                await MessageUtils.ShowDialog("Handelaar account aanmaken", "Wachtwoord en herhaal wachtwoord komen niet overeen.");
                 return;
             }
 
-            var token = await networkAPI.CreateAccount(FirstName, LastName, EmailAddress, Username, Password, "customer");
+            var token = await networkAPI.CreateAccount(FirstName, LastName, EmailAddress, Username, Password, "merchant");
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                await MessageUtils.ShowDialog("Account aanmaken", "Er is een fout opgetreden tijdens het aanmaken van een account.");
+                await MessageUtils.ShowDialog("Handelaar account aanmaken", "Er is een fout opgetreden tijdens het aanmaken van een account.");
                 return;
             }
 
             NavigateToLogin();
-            await MessageUtils.ShowDialog("Account aanmaken", "Uw account werd succesvol aangemaakt. Welkom bij Stapp!");
+            await MessageUtils.ShowDialog("Handelaar account aanmaken", "Uw account werd succesvol aangemaakt. Welkom bij Stapp!");
         }
 
         private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
-
-        private void NavigateToMerchantRegistration() => mainPageViewModel.NavigateTo(new MerchantRegistrationViewModel(mainPageViewModel));
     }
 }

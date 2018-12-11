@@ -237,7 +237,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
 
             contentDialog.Title = Establishment.Name;
-            contentDialog.Content = Establishment.Street + " " + Establishment.HouseNumber + "," + Establishment.PostalCode + " " + Establishment.City;
+            contentDialog.Content = $"{Establishment.Street} {Establishment.HouseNumber}\n{Establishment.PostalCode} {Establishment.City}";
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
@@ -308,19 +308,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             await contentDialog.ShowAsync();
         }
 
-        private async Task ShowDialog(string title, string message)
-        {
-            ContentDialog contentDialog = new ContentDialog();
-
-            contentDialog.Title = title;
-            contentDialog.Content = message;
-            contentDialog.PrimaryButtonText = "Oké";
-
-            await contentDialog.ShowAsync();
-        }
-
-        private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
-
         private async Task Subscribe()
         {
             if (isSubscribed)
@@ -330,11 +317,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     SubscriptionButtonText = is_not_subbed_text;
                     isSubscribed = false;
-                    await ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
+                    await MessageUtils.ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
                 }
                 else
                 {
-                    await ShowDialog("Abonneren", message);
+                    await MessageUtils.ShowDialog("Abonneren", message);
                 }
             }
             else
@@ -347,11 +334,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     {
                         isSubscribed = true;
                         SubscriptionButtonText = is_subbed_text;
-                        await ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
+                        await MessageUtils.ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
                     }
                     else
                     {
-                        await ShowDialog("Abonneren", message);
+                        await MessageUtils.ShowDialog("Abonneren", message);
                     }
                 }
                 catch
@@ -360,6 +347,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 }
             }
         }
+
+        private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
+
     }
 
 }
