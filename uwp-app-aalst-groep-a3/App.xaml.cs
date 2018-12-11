@@ -84,6 +84,22 @@ namespace uwp_app_aalst_groep_a3
 
             if (args.Kind == ActivationKind.VoiceCommand)
             {
+                Frame rootFrame = Window.Current.Content as Frame;
+
+                if (rootFrame == null)
+                {
+                    rootFrame = new Frame();
+
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+
+                    Window.Current.Content = rootFrame;
+                }
+                if (rootFrame.Content == null)
+                {
+                    rootFrame.Navigate(typeof(MainPage));
+                }
+                Window.Current.Activate();
+
                 CortanaFunctions.RunCommand(args as VoiceCommandActivatedEventArgs);
             }
         }
