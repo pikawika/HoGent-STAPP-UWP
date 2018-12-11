@@ -26,44 +26,9 @@ namespace uwp_app_aalst_groep_a3.Views
     /// </summary>
     public sealed partial class HomePageView : UserControl
     {
-
-        public ObservableCollection<Establishment> Establishments { get; set; }
-
         public HomePageView()
         {
             this.InitializeComponent();
-        }
-
-        private void Search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-            {
-                sender.ItemsSource = Establishments;
-            }
-        }
-
-        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            // Set sender.Text. You can use args.SelectedItem to build your text string.
-        }
-
-
-        private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
-        {
-            if (args.SelectedItem != null)
-            {
-                // User selected an item from the suggestion list, take an action on it here.
-            }
-            else
-            {
-                // Use args.QueryText to determine what to do.
-            }
-        }
-
-        private async void InitDataAsync()
-        {
-            NetworkAPI api = new NetworkAPI();
-            Establishments = new ObservableCollection<Establishment>(await api.GetAllEstablishments());
         }
     }
 }
