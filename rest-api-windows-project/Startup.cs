@@ -61,6 +61,7 @@ namespace stappBackend
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ISocialMediaRepository, SocialMediaRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

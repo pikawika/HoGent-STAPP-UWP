@@ -8,6 +8,6 @@ namespace stappBackend.Models
         [Key]
         public int OpenDayId { get; set; }
         public int DayOfTheWeek { get; set; }
-        public List<OpenHour> OpenHours { get; set; }
+        public List<OpenHour> OpenHours { get; set; } = new List<OpenHour>();
     }
 }
