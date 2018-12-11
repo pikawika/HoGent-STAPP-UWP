@@ -86,8 +86,6 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "Company behoord niet tot uw companies" });
 
             _companyRepository.removeCompany(id);
-
-            _companyRepository.SaveChanges();
             return Ok(new { bericht = "De company werd succesvol verwijderd." });
         }
 

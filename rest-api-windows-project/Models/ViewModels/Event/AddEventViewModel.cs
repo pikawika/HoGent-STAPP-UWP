@@ -20,14 +20,10 @@ namespace stappBackend.Models.ViewModels.Event
         public string Message { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        public DateTime EndDate { get; set; }
-
-        [Required(ErrorMessage = "{0} is verplicht.")]
-        [DataType(DataType.Upload)]
-        public IFormCollection Images { set; get; }
+        public DateTime? EndDate { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Upload)]

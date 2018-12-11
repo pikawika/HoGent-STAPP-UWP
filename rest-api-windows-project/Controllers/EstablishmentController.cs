@@ -196,8 +196,6 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "Establishment behoord niet tot uw Establishments" });
 
             _establishmentRepository.removeEstablishment(id);
-
-            _establishmentRepository.SaveChanges();
             return Ok(new { bericht = "De establishment werd succesvol verwijderd." });
         }
 

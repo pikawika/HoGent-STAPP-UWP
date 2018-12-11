@@ -13,12 +13,9 @@ namespace stappBackend.Models.ViewModels.Promotion
 
         public string Message { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
-
-        [DataType(DataType.Upload)]
-        public IFormCollection Images { set; get; }
+        public DateTime? EndDate { get; set; }
 
         [DataType(DataType.Upload)]
         public IFormCollection Attachments { set; get; }
