@@ -12,6 +12,6 @@ namespace stappBackend.Models
         public string Name { get; set; }
         public string LogoPath { get; set; }
         [JsonIgnore]
-        public List<EstablishmentSocialMedia> EstablishmentSocialMedias { get; set; }
+        public List<EstablishmentSocialMedia> EstablishmentSocialMedias { get; set; } = new List<EstablishmentSocialMedia>();
     }
 }
