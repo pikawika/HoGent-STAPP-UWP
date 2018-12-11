@@ -29,19 +29,23 @@ namespace stappBackend.Data.Repositories
 
         public Company getById(int companyId)
         {
-            return _companies.Include(c => c.Merchant).SingleOrDefault(c => c.CompanyId == companyId);
+            return _companies.Include(c => c.Merchant).SingleOrDefault(c => c.CompanyId == companyId && !c.isDeleted);
         }
 
         public void removeCompany(int companyId)
         {
-            Company companyToDelete = _companies.FirstOrDefault(c => c.CompanyId == companyId);
+            Company companyToDelete = _companies.Include(c => c.Establishments).FirstOrDefault(c => c.CompanyId == companyId);
             if (companyToDelete != null)
+            {
                 companyToDelete.isDeleted = true;
+                companyToDelete.Establishments.ForEach(e => e.isDeleted = true);
+                SaveChanges();
+            }
         }
 
         public bool isOwnerOfCompany(int userId, int companyId)
         {
-            return _companies.Any(c => c.MerchantId == userId && c.CompanyId == companyId);
+            return _companies.Any(c => c.MerchantId == userId && c.CompanyId == companyId && !c.isDeleted);
         }
 
         public void SaveChanges()

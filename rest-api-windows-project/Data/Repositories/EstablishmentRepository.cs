@@ -21,7 +21,9 @@ namespace stappBackend.Data.Repositories
 
         public IEnumerable<Establishment> GetAll()
         {
-            return _establishments.OrderBy(e => (e.Promotions.Count() + e.Events.Count()))
+            return _establishments
+                .Where(e => !e.isDeleted)
+                .OrderBy(e => (e.Promotions.Count() + e.Events.Count()))
                 .Include(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(e => e.OpenDays).ThenInclude(od => od.OpenHours)
@@ -34,7 +36,7 @@ namespace stappBackend.Data.Repositories
 
         public Establishment getById(int id)
         {
-            return _establishments.Where(e => e.EstablishmentId == id)
+            return _establishments.Where(e => e.EstablishmentId == id && !e.isDeleted)
                 .Include(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(e => e.OpenDays).ThenInclude(od => od.OpenHours)
@@ -56,11 +58,12 @@ namespace stappBackend.Data.Repositories
             Establishment establishmentToDelete = _establishments.FirstOrDefault(c => c.EstablishmentId == establishmentId);
             if (establishmentToDelete != null)
                 establishmentToDelete.isDeleted = true;
+            SaveChanges();
         }
 
         public bool isOwnerOfEstablishment(int userId, int establishmentId)
         {
-            return _establishments.Any(c => c.Company.MerchantId == userId && c.EstablishmentId == establishmentId);
+            return _establishments.Any(e => e.Company.MerchantId == userId && e.EstablishmentId == establishmentId && !e.isDeleted);
         }
 
         public void SaveChanges()

@@ -11,12 +11,9 @@ namespace stappBackend.Data.Repositories
     public class SocialMediaRepository : ISocialMediaRepository
     {
         private readonly DbSet<SocialMedia> _socialMedias;
-        
-        private readonly ApplicationDbContext _context;
 
         public SocialMediaRepository(ApplicationDbContext context)
         {
-            _context = context;
             _socialMedias = context.SocialMedias;
         }
 
