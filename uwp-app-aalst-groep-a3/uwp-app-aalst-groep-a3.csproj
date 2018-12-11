@@ -131,6 +131,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MapViewModel.cs" />
+    <Compile Include="ViewModels\MerchantRegistrationViewModel.cs" />
     <Compile Include="ViewModels\MerchantsViewModel.cs" />
     <Compile Include="ViewModels\PromotionsViewModel.cs" />
     <Compile Include="ViewModels\RegistrationViewModel.cs" />
@@ -158,6 +159,9 @@
     </Compile>
     <Compile Include="Views\MapView.xaml.cs">
       <DependentUpon>MapView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MerchantRegistrationView.xaml.cs">
+      <DependentUpon>MerchantRegistrationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MerchantsView.xaml.cs">
       <DependentUpon>MerchantsView.xaml</DependentUpon>
@@ -227,6 +231,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MapView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MerchantRegistrationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

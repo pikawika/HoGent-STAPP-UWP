@@ -32,6 +32,9 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "merchant")
+                    return BadRequest(new { error = "Handelaars kunnen zich niet abonneren op andere handelaars." });
+
                 if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
                     return BadRequest(new { error = "De opgegeven token is incorrect of ongeldig." });
 
