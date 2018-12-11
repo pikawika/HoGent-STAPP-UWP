@@ -93,7 +93,7 @@ namespace stappBackend.Controllers
                     return BadRequest(new { error = "Promotion niet gevonden" });
 
                 if (_promotionRepository.isOwnerOfPromotion(int.Parse(User.FindFirst("userId")?.Value), id))
-                    return BadRequest(new { error = "promotion behoord niet tot uw companies" });
+                    return BadRequest(new { error = "promotion behoord niet tot uw promotions" });
 
                 if (!string.IsNullOrEmpty(editedPromotion.Name))
                     promotion.Name = editedPromotion.Name;
@@ -128,7 +128,7 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             if (!_promotionRepository.isOwnerOfPromotion(int.Parse(User.FindFirst("userId")?.Value), id))
-                return BadRequest(new { error = "promotion behoord niet tot uw companies" });
+                return BadRequest(new { error = "promotion behoord niet tot uw promotions" });
 
             Promotion promotion = _promotionRepository.getById(id);
 
