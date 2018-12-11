@@ -57,8 +57,10 @@ namespace stappBackend.Data.Repositories
         {
             Establishment establishmentToDelete = _establishments.FirstOrDefault(c => c.EstablishmentId == establishmentId);
             if (establishmentToDelete != null)
+            {
                 establishmentToDelete.isDeleted = true;
-            SaveChanges();
+                SaveChanges();
+            }
         }
 
         public bool isOwnerOfEstablishment(int userId, int establishmentId)

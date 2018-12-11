@@ -11,12 +11,14 @@ namespace stappBackend.Data.Repositories
     public class PromotionRepository : IPromotionRepository
     {
         private readonly DbSet<Promotion> _promotions;
+        private readonly DbSet<Establishment> _establishments;
         private readonly ApplicationDbContext _context;
 
         public PromotionRepository(ApplicationDbContext context)
         {
             _context = context;
             _promotions = context.Promotions;
+            _establishments = context.Establishments;
         }
 
         public IEnumerable<Promotion> GetAll()
@@ -42,6 +44,32 @@ namespace stappBackend.Data.Repositories
                 .Include(p => p.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
                 .Include(p => p.Establishment).ThenInclude(e => e.ExceptionalDays)
                 .FirstOrDefault();
+        }
+
+        public void addPromotion(int establishmentId, Promotion newPromotion)
+        {
+            _establishments.FirstOrDefault(e => e.EstablishmentId == establishmentId)?.Promotions.Add(newPromotion);
+            SaveChanges();
+        }
+
+        public void removePromotion(int promotionId)
+        {
+            Promotion promotionToDelete = _promotions.FirstOrDefault(c => c.PromotionId == promotionId);
+            if (promotionToDelete != null)
+            {
+                promotionToDelete.isDeleted = true;
+                SaveChanges();
+            }
+        }
+
+        public bool isOwnerOfPromotion(int userId, int promotionId)
+        {
+            return _promotions.Any(p => !p.isDeleted && p.PromotionId == promotionId && p.Establishment.Company.Merchant.UserId == userId);
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
     }
 }

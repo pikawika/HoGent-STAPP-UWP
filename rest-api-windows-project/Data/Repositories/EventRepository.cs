@@ -11,12 +11,14 @@ namespace stappBackend.Data.Repositories
     public class EventRepository : IEventRepository
     {
         private readonly DbSet<Event> _events;
+        private readonly DbSet<Establishment> _establishments;
         private readonly ApplicationDbContext _context;
 
         public EventRepository(ApplicationDbContext context)
         {
             _context = context;
             _events = context.Events;
+            _establishments = context.Establishments;
         }
 
         public IEnumerable<Event> GetAll()
@@ -42,6 +44,32 @@ namespace stappBackend.Data.Repositories
                 .Include(e => e.Establishment).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
                 .Include(e => e.Establishment).ThenInclude(e => e.ExceptionalDays)
                 .FirstOrDefault();
+        }
+
+        public void addEvent(int establishmentId, Event newEvent)
+        {
+            _establishments.FirstOrDefault(e => e.EstablishmentId == establishmentId)?.Events.Add(newEvent);
+            SaveChanges();
+        }
+
+        public void removeEvent(int eventId)
+        {
+            Event eventToDelete = _events.FirstOrDefault(c => c.EventId == eventId);
+            if (eventToDelete != null)
+            {
+                eventToDelete.isDeleted = true;
+                SaveChanges();
+            }
+        }
+
+        public bool isOwnerOfEvent(int userId, int eventId)
+        {
+            return _events.Any(e => !e.isDeleted && e.EventId == eventId && e.Establishment.Company.Merchant.UserId == userId);
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
     }
 }
