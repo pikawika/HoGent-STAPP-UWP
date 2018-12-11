@@ -82,7 +82,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             initMap();
         }
 
-        private async Task SetupSubscriptionButtonAsync()
+        private async void SetupSubscriptionButtonAsync()
         {
             List<Establishment> establishments_subscribed = await networkAPI.GetSubscriptions();
 
