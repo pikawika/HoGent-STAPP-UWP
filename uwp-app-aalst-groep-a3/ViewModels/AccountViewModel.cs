@@ -51,18 +51,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             passwordVault.Remove(pc);
             NavigateToLogin();
             mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel));
-            await ShowDialog("Afmelden", "U bent succesvol afgemeld.");
-        }
-
-        private async Task ShowDialog(string title, string message)
-        {
-            ContentDialog contentDialog = new ContentDialog();
-
-            contentDialog.Title = title;
-            contentDialog.Content = message;
-            contentDialog.PrimaryButtonText = "Oké";
-
-            await contentDialog.ShowAsync();
+            await MessageUtils.ShowDialog("Afmelden", "U bent succesvol afgemeld.");
         }
 
         private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));

@@ -43,19 +43,19 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 || string.IsNullOrWhiteSpace(Password)
                 || string.IsNullOrWhiteSpace(RepeatPassword))
             {
-                await ShowDialog("Handelaar account aanmaken", "Gelieve in ieder veld een waarde in te voeren.");
+                await MessageUtils.ShowDialog("Handelaar account aanmaken", "Gelieve in ieder veld een waarde in te voeren.");
                 return;
             }
 
             if (!Regex.IsMatch(EmailAddress, @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"))
             {
-                await ShowDialog("Handelaar account aanmaken", "Gelieve een geldig e-mailadres in te voeren.");
+                await MessageUtils.ShowDialog("Handelaar account aanmaken", "Gelieve een geldig e-mailadres in te voeren.");
                 return;
             }
 
             if (Password != RepeatPassword)
             {
-                await ShowDialog("Handelaar account aanmaken", "Wachtwoord en herhaal wachtwoord komen niet overeen.");
+                await MessageUtils.ShowDialog("Handelaar account aanmaken", "Wachtwoord en herhaal wachtwoord komen niet overeen.");
                 return;
             }
 
@@ -63,23 +63,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                await ShowDialog("Handelaar account aanmaken", "Er is een fout opgetreden tijdens het aanmaken van een account.");
+                await MessageUtils.ShowDialog("Handelaar account aanmaken", "Er is een fout opgetreden tijdens het aanmaken van een account.");
                 return;
             }
 
             NavigateToLogin();
-            await ShowDialog("Handelaar account aanmaken", "Uw account werd succesvol aangemaakt. Welkom bij Stapp!");
-        }
-
-        private async Task ShowDialog(string title, string message)
-        {
-            ContentDialog contentDialog = new ContentDialog();
-
-            contentDialog.Title = title;
-            contentDialog.Content = message;
-            contentDialog.PrimaryButtonText = "Oké";
-
-            await contentDialog.ShowAsync();
+            await MessageUtils.ShowDialog("Handelaar account aanmaken", "Uw account werd succesvol aangemaakt. Welkom bij Stapp!");
         }
 
         private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
