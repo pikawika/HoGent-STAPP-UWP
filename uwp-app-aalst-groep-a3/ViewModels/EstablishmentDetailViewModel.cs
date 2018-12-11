@@ -237,7 +237,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
 
             contentDialog.Title = Establishment.Name;
-            contentDialog.Content = Establishment.Street + " " + Establishment.HouseNumber + "," + Establishment.PostalCode + " " + Establishment.City;
+            contentDialog.Content = $"{Establishment.Street} {Establishment.HouseNumber}\n{Establishment.PostalCode} {Establishment.City}";
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
