@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using uwp_app_aalst_groep_a3.Cortana;
 using uwp_app_aalst_groep_a3.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.SpeechRecognition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -70,6 +72,36 @@ namespace uwp_app_aalst_groep_a3
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 // Ensure the current window is active
+                Window.Current.Activate();
+
+                CortanaFunctions.RegisterVCD();
+            }
+        }
+
+        // Extra code voor het gebruik van Cortana
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
+
+            if (args.Kind == ActivationKind.VoiceCommand)
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
+
+                if (rootFrame == null)
+                {
+                    rootFrame = new Frame();
+
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+
+                    Window.Current.Content = rootFrame;
+                }
+                if (rootFrame.Content == null)
+                {
+                    SpeechRecognitionResult result = (args as VoiceCommandActivatedEventArgs).Result;
+                    string commandName = result.RulePath[0];
+
+                    rootFrame.Navigate(typeof(MainPage), commandName);
+                }
                 Window.Current.Activate();
             }
         }
