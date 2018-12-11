@@ -32,7 +32,7 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "merchant")
+                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() == "merchant")
                     return BadRequest(new { error = "Handelaars kunnen zich niet abonneren op andere handelaars." });
 
                 if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
@@ -64,6 +64,9 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() == "merchant")
+                    return BadRequest(new { error = "Handelaars kunnen zich niet abonneren op andere handelaars." });
+
                 if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 

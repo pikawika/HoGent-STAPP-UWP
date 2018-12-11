@@ -62,7 +62,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 return;
             }
 
-            var token = await networkAPI.CreateAccount(FirstName, LastName, EmailAddress, Username, Password);
+            var token = await networkAPI.CreateAccount(FirstName, LastName, EmailAddress, Username, Password, "customer");
 
             if (string.IsNullOrWhiteSpace(token))
             {

@@ -55,32 +55,10 @@ namespace uwp_app_aalst_groep_a3.Network
         }
 
         // Create an account
-        public async Task<string> CreateAccount(string firstname, string lastname, string emailaddress, string username, string password)
+        public async Task<string> CreateAccount(string firstname, string lastname, string emailaddress, string username, string password, string role)
         {
             var token = "";
-            var login = new { FirstName = firstname, LastName = lastname, Email = emailaddress, Login = new { Username = username, Password = password, Role = "customer" } };
-            var loginJson = JsonConvert.SerializeObject(login);
-
-            try
-            {
-                var res = await client.PostAsync(new Uri($"{baseUrl}api/user/"), new StringContent(loginJson, System.Text.Encoding.UTF8, "application/json"));
-                var userToken = JsonConvert.DeserializeObject<UserToken>(res.Content.ReadAsStringAsync().Result);
-                token = userToken.Token;
-            }
-            catch (HttpRequestException e)
-            {
-                Debug.WriteLine($"Er is een error opgetreden tijdens het aanmelden: " +
-                                $"{e}");
-            }
-
-            return token;
-        }
-
-        // Create a merchant account
-        public async Task<string> CreateMerchantAccount(string firstname, string lastname, string emailaddress, string username, string password)
-        {
-            var token = "";
-            var login = new { FirstName = firstname, LastName = lastname, Email = emailaddress, Login = new { Username = username, Password = password, Role = "merchant" } };
+            var login = new { FirstName = firstname, LastName = lastname, Email = emailaddress, Login = new { Username = username, Password = password, Role = role } };
             var loginJson = JsonConvert.SerializeObject(login);
 
             try
