@@ -12,6 +12,34 @@
       <Navigate/>          
     </Command>
 
+    <Command Name="ShowHomePage">
+      <Example> Show homepage </Example>
+      <ListenFor> Show homepage </ListenFor>
+      <Feedback> Opening Stapp to show you the homepage </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="ShowPromotions">
+      <Example> Show promotions </Example>
+      <ListenFor> Show promotions </ListenFor>
+      <Feedback> Opening Stapp to show you the promotions </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="ShowEvents">
+      <Example> Show events </Example>
+      <ListenFor> Show events </ListenFor>
+      <Feedback> Opening Stapp to show you the events </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="ShowMap">
+      <Example> Show the map </Example>
+      <ListenFor> Show the map </ListenFor>
+      <Feedback> Opening Stapp to show you the map </Feedback>
+      <Navigate/>
+    </Command>
+
   </CommandSet>  
 
 </VoiceCommands>

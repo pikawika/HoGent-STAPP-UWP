@@ -9,6 +9,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.SpeechRecognition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -96,11 +97,12 @@ namespace uwp_app_aalst_groep_a3
                 }
                 if (rootFrame.Content == null)
                 {
-                    rootFrame.Navigate(typeof(MainPage));
+                    SpeechRecognitionResult result = (args as VoiceCommandActivatedEventArgs).Result;
+                    string commandName = result.RulePath[0];
+
+                    rootFrame.Navigate(typeof(MainPage), commandName);
                 }
                 Window.Current.Activate();
-
-                CortanaFunctions.RunCommand(args as VoiceCommandActivatedEventArgs);
             }
         }
 

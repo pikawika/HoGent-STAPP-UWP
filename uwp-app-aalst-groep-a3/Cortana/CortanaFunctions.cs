@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.ViewModels;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.VoiceCommands;
@@ -14,20 +15,12 @@ namespace uwp_app_aalst_groep_a3.Cortana
 {
     public class CortanaFunctions
     {
-        private readonly static IReadOnlyDictionary<string, Delegate> vcdLookup = new Dictionary<string, Delegate>{
+        private MainPageViewModel mainPageViewModel;
 
-            /*
-            {<command name from VCD>, (Action)(async () => {
-                 <code that runs when that commmand is called>
-            })}
-            */
-
-            {"ShowMerchants", (Action)(async () => {
-                 Uri website = new Uri(@"https://www.bramdeconinck.com");
-                 await Launcher.LaunchUriAsync(website);
-             })},
-
-        };
+        public CortanaFunctions(MainPageViewModel mainPageViewModel)
+        {
+            this.mainPageViewModel = mainPageViewModel;
+        }
 
         // Register Custom Cortana Commands from VCD file
         public static async void RegisterVCD()
@@ -38,11 +31,34 @@ namespace uwp_app_aalst_groep_a3.Cortana
         }
 
         // Look up the spoken command and execute its corresponding action
-        public static void RunCommand(VoiceCommandActivatedEventArgs cmd)
+        public void RunCommand(string commandName)
         {
-            SpeechRecognitionResult result = cmd.Result;
-            string commandName = result.RulePath[0];
-            vcdLookup[commandName].DynamicInvoke();
+            switch(commandName)
+            {
+                case "ShowMerchants":
+                    ShowMerchants();
+                    break;
+                case "ShowEvents":
+                    ShowEvents();
+                    break;
+                case "ShowPromotions":
+                    ShowPromotions();
+                    break;
+                case "ShowMap":
+                    ShowMap();
+                    break;
+                default:
+                    break;
+            }
         }
+
+        private void ShowMerchants() => mainPageViewModel.NavigateTo(new MerchantsViewModel(mainPageViewModel));
+
+        private void ShowEvents() => mainPageViewModel.NavigateTo(new EventsViewModel(mainPageViewModel));
+
+        private void ShowPromotions() => mainPageViewModel.NavigateTo(new PromotionsViewModel(mainPageViewModel));
+
+        private void ShowMap() => mainPageViewModel.NavigateTo(new MapViewModel(mainPageViewModel));
+
     }
 }
