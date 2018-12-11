@@ -39,7 +39,7 @@
            Versie: 1.0.0.0
         </TextBlock>
         <TextBlock FontWeight="Light">
-           Privacybeleid: Nog niet beschikbaar
+           <Span xml:space="preserve"><Run>Privacybeleid: Het privacybeleid vindt u </Run><Hyperlink NavigateUri="https://technology-salesman-toolkit.firebaseapp.com/privacy_policy_stapp.html">hier</Hyperlink><Run>.</Run></Span>
         </TextBlock>
 
         <TextBlock FontWeight="Light">
