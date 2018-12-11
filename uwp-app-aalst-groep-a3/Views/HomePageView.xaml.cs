@@ -17,6 +17,7 @@ using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Network;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Windows.ApplicationModel.UserActivities;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace uwp_app_aalst_groep_a3.Views
@@ -26,9 +27,31 @@ namespace uwp_app_aalst_groep_a3.Views
     /// </summary>
     public sealed partial class HomePageView : UserControl
     {
+        UserActivitySession _currentActivity;
+
         public HomePageView()
         {
             this.InitializeComponent();
+            GenerateActivityAsync();
+        }
+
+        private async void GenerateActivityAsync()
+        {
+            // Get the default UserActivityChannel and query it for our UserActivity. If the activity doesn't exist, one is created.
+            UserActivityChannel channel = UserActivityChannel.GetDefault();
+            UserActivity userActivity = await channel.GetOrCreateUserActivityAsync("ShowHomePage");
+
+            // Populate required properties
+            userActivity.VisualElements.DisplayText = "Hoofdpagina";
+            userActivity.VisualElements.Description = "Bekijk de hoofdpagina";
+            userActivity.ActivationUri = new Uri("stapp://ShowHomePage");
+
+            //Save
+            await userActivity.SaveAsync(); //save the new metadata
+
+            // Dispose of any current UserActivitySession, and create a new one.
+            _currentActivity?.Dispose();
+            _currentActivity = userActivity.CreateSession();
         }
     }
 }
