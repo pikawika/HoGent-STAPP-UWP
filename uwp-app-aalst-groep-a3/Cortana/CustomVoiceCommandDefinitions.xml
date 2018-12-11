@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.2">
+  <CommandSet xml:lang="en-us" Name="CustomCommands">
+   <CommandPrefix> Listen up </CommandPrefix>
+    <Example> Show Merchants </Example>
+    
+    <Command Name="ShowMerchants">
+      <Example> Show merchants </Example>          
+      <ListenFor> Show merchants </ListenFor>    
+      <Feedback> Opening Stapp to show you the merchants </Feedback>
+      <Navigate/>          
+    </Command>
+
+  </CommandSet>  
+
+</VoiceCommands>

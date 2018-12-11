@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using uwp_app_aalst_groep_a3.Cortana;
 using uwp_app_aalst_groep_a3.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -71,6 +72,19 @@ namespace uwp_app_aalst_groep_a3
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
+
+                CortanaFunctions.RegisterVCD();
+            }
+        }
+
+        // Extra code voor het gebruik van Cortana
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
+
+            if (args.Kind == ActivationKind.VoiceCommand)
+            {
+                CortanaFunctions.RunCommand(args as VoiceCommandActivatedEventArgs);
             }
         }
 
