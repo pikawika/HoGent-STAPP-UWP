@@ -24,7 +24,7 @@ namespace stappBackend.Data.Repositories
         public IEnumerable<Promotion> GetAll()
         {
             return _promotions
-                .Where(p => !p.Establishment.isDeleted)
+                .Where(p => !p.isDeleted)
                 .Include(p => p.Images)
                 .Include(p => p.Attachments)
                 .Include(p => p.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
@@ -36,7 +36,7 @@ namespace stappBackend.Data.Repositories
 
         public Promotion getById(int id)
         {
-            return _promotions.Where(p => p.PromotionId == id && !p.Establishment.isDeleted)
+            return _promotions.Where(p => p.PromotionId == id && !p.isDeleted)
                 .Include(p => p.Images)
                 .Include(p => p.Attachments)
                 .Include(p => p.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)

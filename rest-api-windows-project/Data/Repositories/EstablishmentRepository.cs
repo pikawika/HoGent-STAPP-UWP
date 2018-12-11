@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using stappBackend.Models;
 using stappBackend.Models.IRepositories;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace stappBackend.Data.Repositories
 
         public IEnumerable<Establishment> GetAll()
         {
-            return _establishments
+            var establishments = _establishments
                 .Where(e => !e.isDeleted)
                 .OrderBy(e => (e.Promotions.Count() + e.Events.Count()))
                 .Include(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
@@ -32,11 +33,22 @@ namespace stappBackend.Data.Repositories
                 .Include(e => e.Promotions).ThenInclude(p => p.Images)
                 .Include(e => e.Events).ThenInclude(e => e.Images)
                 .ToList();
+
+            if (establishments != null)
+            {
+                foreach (Establishment establishment in establishments)
+                {
+                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
+                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
+                }
+            }
+
+            return establishments;
         }
 
         public Establishment getById(int id)
         {
-            return _establishments.Where(e => e.EstablishmentId == id && !e.isDeleted)
+            var establishment = _establishments.Where(e => e.EstablishmentId == id && !e.isDeleted)
                 .Include(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(e => e.OpenDays).ThenInclude(od => od.OpenHours)
@@ -45,6 +57,14 @@ namespace stappBackend.Data.Repositories
                 .Include(e => e.Promotions).ThenInclude(p => p.Images)
                 .Include(e => e.Events).ThenInclude(e => e.Images)
                 .FirstOrDefault();
+
+            if (establishment != null)
+            {
+                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
+                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
+            }
+
+            return establishment;
         }
 
         public void addEstablishment(int companyId, Establishment establishment)
@@ -59,6 +79,8 @@ namespace stappBackend.Data.Repositories
             if (establishmentToDelete != null)
             {
                 establishmentToDelete.isDeleted = true;
+                establishmentToDelete.Promotions.ForEach(p => p.isDeleted = true);
+                establishmentToDelete.Events.ForEach(e => e.isDeleted = true);
                 SaveChanges();
             }
         }

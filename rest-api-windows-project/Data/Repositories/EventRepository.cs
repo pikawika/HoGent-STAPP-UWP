@@ -24,7 +24,7 @@ namespace stappBackend.Data.Repositories
         public IEnumerable<Event> GetAll()
         {
             return _events
-                .Where(e => e.EndDate >= DateTime.Today && !e.Establishment.isDeleted)
+                .Where(e => e.EndDate >= DateTime.Today && !e.isDeleted)
                 .Include(e => e.Images)
                 .Include(e => e.Attachments)
                 .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
@@ -36,7 +36,7 @@ namespace stappBackend.Data.Repositories
 
         public Event getById(int id)
         {
-            return _events.Where(e => e.EventId == id && e.EndDate >= DateTime.Today && !e.Establishment.isDeleted)
+            return _events.Where(e => e.EventId == id && e.EndDate >= DateTime.Today && !e.isDeleted)
                 .Include(e => e.Images)
                 .Include(e => e.Attachments)
                 .Include(e => e.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)

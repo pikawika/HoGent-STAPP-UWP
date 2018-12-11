@@ -62,8 +62,8 @@ namespace stappBackend.Data.Repositories
             {
                 foreach (Establishment establishment in establishments)
                 {
-                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now);
-                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now);
+                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
+                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
                 }
             }
 

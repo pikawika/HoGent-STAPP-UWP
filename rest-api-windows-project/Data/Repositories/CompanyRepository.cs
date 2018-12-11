@@ -39,6 +39,8 @@ namespace stappBackend.Data.Repositories
             {
                 companyToDelete.isDeleted = true;
                 companyToDelete.Establishments.ForEach(e => e.isDeleted = true);
+                companyToDelete.Establishments.ForEach(e => e.Promotions.ForEach(p => p.isDeleted = true));
+                companyToDelete.Establishments.ForEach(est => est.Events.ForEach(eve => eve.isDeleted = true));
                 SaveChanges();
             }
         }
