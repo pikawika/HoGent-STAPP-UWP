@@ -23,13 +23,13 @@ namespace stappBackend.Data.Repositories
 
         public void addSubscription(int userId, EstablishmentSubscription establishmentSubscription)
         {
-            _customers.FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions.Add(establishmentSubscription);
+            _customers.FirstOrDefault(c => c.UserId == userId)?.EstablishmentSubscriptions.Add(establishmentSubscription);
             SaveChanges();
         }
 
         public void removeSubscription(int userId, EstablishmentSubscription establishmentSubscription)
         {
-            _customers.FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions.Remove(establishmentSubscription);
+            _customers.FirstOrDefault(c => c.UserId == userId)?.EstablishmentSubscriptions.Remove(establishmentSubscription);
             SaveChanges();
         }
 
@@ -50,13 +50,19 @@ namespace stappBackend.Data.Repositories
 
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Promotions).ThenInclude(p => p.Images)
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Events).ThenInclude(e => e.Images)
-                .FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions
-                .Select(es => es.Establishment).ToList();
+                .FirstOrDefault(c => c.UserId == userId)
+                ?.EstablishmentSubscriptions
+                .Select(es => es.Establishment)
+                .Where(e => !e.isDeleted)
+                .ToList();
 
-            foreach (Establishment establishment in establishments)
+            if (establishments != null)
             {
-                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now);
-                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now);
+                foreach (Establishment establishment in establishments)
+                {
+                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now);
+                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now);
+                }
             }
 
             return establishments;

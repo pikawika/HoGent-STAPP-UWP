@@ -59,7 +59,7 @@ namespace stappBackend.Controllers
             return BadRequest(new { error = errorMsg });
         }
 
-        [HttpPost("CheckUsernameExist")]
+        [HttpPost("CheckUsernameExists")]
         [AllowAnonymous]
         public IActionResult CheckUsernameExist([FromBody]CheckUsernameViewModel checkRequest)
         {
@@ -194,7 +194,7 @@ namespace stappBackend.Controllers
 
         private IActionResult RegisterMerchant(RegisterUserViewModel merchantRequest)
         {
-            Customer newMerchant = new Customer();
+            Merchant newMerchant = new Merchant();
 
             newMerchant.Email = merchantRequest.Email;
             newMerchant.FirstName = merchantRequest.FirstName;
