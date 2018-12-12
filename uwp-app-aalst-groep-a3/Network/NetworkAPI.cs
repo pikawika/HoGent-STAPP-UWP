@@ -167,21 +167,28 @@ namespace uwp_app_aalst_groep_a3.Network
         public async Task<List<Establishment>> GetSubscriptions()
         {
             List<Establishment> establishments = new List<Establishment>();
-            var credentials = passwordVault.Retrieve("Stapp", "Token");
-            credentials.RetrievePassword();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
             try
             {
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/subscriptions"));
-                establishments = JsonConvert.DeserializeObject<List<Establishment>>(json);
+                var credentials = passwordVault.Retrieve("Stapp", "Token");
+                credentials.RetrievePassword();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+                try
+                {
+                    var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/subscriptions"));
+                    establishments = JsonConvert.DeserializeObject<List<Establishment>>(json);
+                }
+                catch (HttpRequestException e)
+                {
+                    Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                    $"ophalen van alle subscriptions uit de databank: " +
+                                    $"{e}");
+                }
+                return establishments;
             }
-            catch (HttpRequestException e)
+            catch
             {
-                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
-                                $"ophalen van alle subscriptions uit de databank: " +
-                                $"{e}");
+                return establishments;
             }
-            return establishments;
         }
 
         #endregion
