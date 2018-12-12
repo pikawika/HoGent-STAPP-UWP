@@ -33,7 +33,7 @@ namespace uwp_app_aalst_groep_a3
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if ((e.Parameter as string) != null || (e.Parameter as string) != "")
+            if ((e.Parameter as string) != null && (e.Parameter as string) != "")
             {
                 CortanaFunctions cortanaFunctions = new CortanaFunctions(mainPageViewModel);
 

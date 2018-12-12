@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -74,7 +75,16 @@ namespace uwp_app_aalst_groep_a3
                 // Ensure the current window is active
                 Window.Current.Activate();
 
-                CortanaFunctions.RegisterVCD();
+                try
+                {
+                    CortanaFunctions.RegisterVCD();
+                }
+                catch
+                {
+                    Debug.WriteLine("Er is iets fout gegaan tijdens het installeren van" +
+                        "de voice commands definitions van de Stapp app." +
+                        "Mogelijks is Cortana niet geïnstalleerd op het toestel.");
+                }
             }
         }
 

@@ -27,15 +27,7 @@ namespace uwp_app_aalst_groep_a3.Cortana
         {
             StorageFile vcd = await Package.Current.InstalledLocation.GetFileAsync(@"Cortana\CustomVoiceCommandDefinitions.xml");
 
-            try
-            {
-                await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(vcd);
-            }
-            catch (Exception e)
-            {
-                //Silently fail
-            }
-            
+            await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(vcd);
         }
 
         // Look up the spoken command and execute its corresponding action
