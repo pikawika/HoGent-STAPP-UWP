@@ -62,10 +62,10 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 return;
             }
 
-            await ShowEstablishmentDialogAsync();
+            await ShowGDPRDialogAsync();
         }
 
-        private async Task ShowEstablishmentDialogAsync()
+        private async Task ShowGDPRDialogAsync()
         {
             ContentDialog contentDialog = new ContentDialog();
 
