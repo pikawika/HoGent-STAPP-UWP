@@ -58,7 +58,7 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (isMerchant())
+                if (!isMerchant())
                     return BadRequest(new { error = "U bent geen handelaar." });
 
                 //modelstate werkt niet op lijsten :-D
@@ -77,13 +77,14 @@ namespace stappBackend.Controllers
                 if (establishmentToAdd.Images.Files == null || !establishmentToAdd.Images.Files.Any())
                     return BadRequest(new { error = "geen Images meegeven." });
 
+                if (!containsJpgs(establishmentToAdd.Images.Files.ToList()))
+                    return BadRequest(new { error = "geen jpg images gevonden" });
+
                 if (!_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), establishmentToAdd.CompanyId ?? 0))
                     return BadRequest(new { error = "De company waaraan u deze establishment wilt toevoegen is niet van u." });
 
                 // Ophalen van Latitude en Longitude op basis van het meegegeven adres
                 var adress = $"{establishmentToAdd.Street}+{establishmentToAdd.HouseNumber},+{establishmentToAdd.PostalCode}+{establishmentToAdd.City},+België";
-
-                Debug.WriteLine("HALLO", "lol " + establishmentToAdd.Categories[0].Name);
 
                 List<double> latAndLong = await GetLatAndLongFromAddressAsync(adress);
 
@@ -124,7 +125,7 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (isMerchant())
+                if (!isMerchant())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Establishment establishment = _establishmentRepository.getById(id);
@@ -170,8 +171,11 @@ namespace stappBackend.Controllers
                     establishment.ExceptionalDays = ConvertExceptionalDaysViewModelsToExceptionalDays(editedEstablishment.ExceptionalDays);
 
                 if (editedEstablishment.Images != null && editedEstablishment.Images.Files.Any())
-                    establishment.Images = await ConvertFormFilesToImagesAsync(editedEstablishment.Images.Files.ToList(), id);
-
+                {
+                    var images = await ConvertFormFilesToImagesAsync(editedEstablishment.Images.Files.ToList(), id);
+                    if (images.Any())
+                        establishment.Images = images;
+                }
 
                 _companyRepository.SaveChanges();
                 return Ok(new { bericht = "De company werd succesvol bijgewerkt." });
@@ -184,7 +188,7 @@ namespace stappBackend.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (isMerchant())
+            if (!isMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             Establishment establishment = _establishmentRepository.getById(id);
@@ -196,30 +200,34 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "Establishment behoord niet tot uw Establishments" });
 
             _establishmentRepository.removeEstablishment(id);
-
-            _establishmentRepository.SaveChanges();
             return Ok(new { bericht = "De establishment werd succesvol verwijderd." });
         }
 
         #region Helper Functies
         private bool isMerchant()
         {
-            return User.FindFirst("role")?.Value == "Merchant" && User.FindFirst("userId")?.Value != null;
+            return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
 
-        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int establishmentId)
+        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int promotionId)
         {
             List<Image> images = new List<Image>();
 
+            if (imageFiles == null)
+                return images;
+
             for (int i = 1; i <= imageFiles.Count; i++)
             {
-                string imagePath = "img/establishments/" + establishmentId + "/" + i + ".jpg";
-                images.Add(new Image { Path = imagePath });
-                string filePath = @"wwwroot/" + imagePath;
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                await imageFiles[(i - 1)].CopyToAsync(fileStream);
-                fileStream.Close();
+                if (Path.GetExtension(imageFiles[(i - 1)].FileName) == ".jpg")
+                {
+                    string imagePath = "img/promotions/" + promotionId + "/" + i + ".jpg";
+                    images.Add(new Image { Path = imagePath });
+                    string filePath = @"wwwroot/" + imagePath;
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    FileStream fileStream = new FileStream(filePath, FileMode.Create);
+                    await imageFiles[(i - 1)].CopyToAsync(fileStream);
+                    fileStream.Close();
+                }
             }
 
             return images;
@@ -308,6 +316,11 @@ namespace stappBackend.Controllers
                     establishmentSocialMedia.Add(new EstablishmentSocialMedia{SocialMedia = socialMedia, Url = socialVm.Url});
             }
             return establishmentSocialMedia;
+        }
+
+        private bool containsJpgs(List<IFormFile> files)
+        {
+            return files.Any(f => Path.GetExtension(f.FileName) == ".jpg");
         }
         #endregion
     }

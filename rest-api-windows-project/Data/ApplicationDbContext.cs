@@ -16,6 +16,7 @@ namespace stappBackend.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<ExceptionalDay> ExceptionalDays { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<File> Files { get; set; }
         public DbSet<Login> Logins { get; set; }
         public DbSet<Merchant> Merchants { get; set; }
         public DbSet<OpenDay> OpenDays { get; set; }
