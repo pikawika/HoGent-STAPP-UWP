@@ -11,7 +11,9 @@ namespace stappBackend.Models
         public int PromotionId { get; private set; }
         public string Name { get; set; }
         public string Message { get; set; }
+        public bool isDeleted { get; set; } = false;
         public List<Image> Images { get; set; } = new List<Image>();
+        public List<File> Attachments { get; set; } = new List<File>();
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 

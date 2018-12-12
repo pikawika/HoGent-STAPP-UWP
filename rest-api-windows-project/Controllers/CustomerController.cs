@@ -32,11 +32,11 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() == "merchant")
+                if (isMerchant())
                     return BadRequest(new { error = "Handelaars kunnen zich niet abonneren op andere handelaars." });
-
-                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
-                    return BadRequest(new { error = "De opgegeven token is incorrect of ongeldig." });
+                    
+                if (!isCustomer())
+                    return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.establishmentId);
 
@@ -64,10 +64,10 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() == "merchant")
+                if (isMerchant())
                     return BadRequest(new { error = "Handelaars kunnen zich niet abonneren op andere handelaars." });
-
-                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
+                    
+                if (!isCustomer())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Establishment establishment = _establishmentRepository.getById(id);
@@ -97,13 +97,25 @@ namespace stappBackend.Controllers
         [HttpGet("subscriptions")]
         public IActionResult Get()
         {
-            if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
+            if (!isCustomer())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
 
             List<Establishment> subscriptions = _customerRepository.GetEstablishmentSubscriptions(int.Parse(User.FindFirst("userId")?.Value));
 
             return Ok(subscriptions);
+        }
+
+        private bool isCustomer()
+        {
+            return User.FindFirst("userId")?.Value != null &&
+                   User.FindFirst("customRole")?.Value.ToLower() == "customer";
+        }
+        
+        private bool isMerchant()
+        {
+            return User.FindFirst("userId")?.Value != null &&
+                   User.FindFirst("customRole")?.Value.ToLower() == "merchant";
         }
 
     }

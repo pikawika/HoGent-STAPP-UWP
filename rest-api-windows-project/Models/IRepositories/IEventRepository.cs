@@ -9,5 +9,13 @@ namespace stappBackend.Models.IRepositories
     {
         IEnumerable<Event> GetAll();
         Event getById(int id);
+
+        void addEvent(int establishmentId, Event newEvent);
+
+        void removeEvent(int eventId);
+
+        Boolean isOwnerOfEvent(int userId, int eventId);
+
+        void SaveChanges();
     }
 }

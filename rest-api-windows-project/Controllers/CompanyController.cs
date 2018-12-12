@@ -26,7 +26,7 @@ namespace stappBackend.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]AddCompanyViewModel companyToAdd)
         {
-            if (isMerchant())
+            if (!isMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             if (ModelState.IsValid)
@@ -49,7 +49,7 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (isMerchant())
+                if (!isMerchant())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Company company = _companyRepository.getById(id);
@@ -74,7 +74,7 @@ namespace stappBackend.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (isMerchant())
+            if (!isMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             Company company = _companyRepository.getById(id);
@@ -86,14 +86,12 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "Company behoord niet tot uw companies" });
 
             _companyRepository.removeCompany(id);
-
-            _companyRepository.SaveChanges();
             return Ok(new { bericht = "De company werd succesvol verwijderd." });
         }
 
         private bool isMerchant()
         {
-            return User.FindFirst("role")?.Value == "Merchant" && User.FindFirst("userId")?.Value != null;
+            return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
     }
 }

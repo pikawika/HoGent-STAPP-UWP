@@ -58,7 +58,7 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (isMerchant())
+                if (!isMerchant())
                     return BadRequest(new { error = "U bent geen handelaar." });
 
                 //modelstate werkt niet op lijsten :-D
@@ -124,7 +124,7 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (isMerchant())
+                if (!isMerchant())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Establishment establishment = _establishmentRepository.getById(id);
@@ -184,7 +184,7 @@ namespace stappBackend.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (isMerchant())
+            if (!isMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             Establishment establishment = _establishmentRepository.getById(id);
@@ -196,30 +196,34 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "Establishment behoord niet tot uw Establishments" });
 
             _establishmentRepository.removeEstablishment(id);
-
-            _establishmentRepository.SaveChanges();
             return Ok(new { bericht = "De establishment werd succesvol verwijderd." });
         }
 
         #region Helper Functies
         private bool isMerchant()
         {
-            return User.FindFirst("role")?.Value == "Merchant" && User.FindFirst("userId")?.Value != null;
+            return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
 
-        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int establishmentId)
+        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int promotionId)
         {
             List<Image> images = new List<Image>();
 
+            if (imageFiles == null)
+                return images;
+
             for (int i = 1; i <= imageFiles.Count; i++)
             {
-                string imagePath = "img/establishments/" + establishmentId + "/" + i + ".jpg";
-                images.Add(new Image { Path = imagePath });
-                string filePath = @"wwwroot/" + imagePath;
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                await imageFiles[(i - 1)].CopyToAsync(fileStream);
-                fileStream.Close();
+                if (Path.GetExtension(imageFiles[(i - 1)].FileName) == ".jpg")
+                {
+                    string imagePath = "img/promotions/" + promotionId + "/" + i + ".jpg";
+                    images.Add(new Image { Path = imagePath });
+                    string filePath = @"wwwroot/" + imagePath;
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    FileStream fileStream = new FileStream(filePath, FileMode.Create);
+                    await imageFiles[(i - 1)].CopyToAsync(fileStream);
+                    fileStream.Close();
+                }
             }
 
             return images;
