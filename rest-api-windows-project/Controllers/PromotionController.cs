@@ -109,8 +109,12 @@ namespace stappBackend.Controllers
 
                 if (editedPromotion.Attachments != null && editedPromotion.Attachments.Files.Any())
                 {
-                    promotion.Images = await ConvertFormFilesToImagesAsync(editedPromotion.Attachments.Files.ToList(), id);
-                    promotion.Attachments = await ConvertFormFilesToAttachmentsAsync(editedPromotion.Attachments.Files.ToList(), id);
+                    var images = await ConvertFormFilesToImagesAsync(editedPromotion.Attachments.Files.ToList(), id);
+                    var attachments = await ConvertFormFilesToAttachmentsAsync(editedPromotion.Attachments.Files.ToList(), id);
+                    if (images.Any())
+                        promotion.Images = images;
+                    if (attachments.Any())
+                        promotion.Attachments = attachments;
                 }
 
                 _promotionRepository.SaveChanges();
@@ -148,8 +152,6 @@ namespace stappBackend.Controllers
         private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int promotionId)
         {
             List<Image> images = new List<Image>();
-
-            imageFiles.RemoveAll(i => Path.GetExtension(i.FileName) != ".jpg");
 
             if (imageFiles == null)
                 return images;

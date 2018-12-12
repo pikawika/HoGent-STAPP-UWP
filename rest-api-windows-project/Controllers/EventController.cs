@@ -109,8 +109,12 @@ namespace stappBackend.Controllers
 
                 if (editedEvent.Attachments != null && editedEvent.Attachments.Files.Any())
                 {
-                    eventFromDb.Images = await ConvertFormFilesToImagesAsync(editedEvent.Attachments.Files.ToList(), id);
-                    eventFromDb.Attachments = await ConvertFormFilesToAttachmentsAsync(editedEvent.Attachments.Files.ToList(), id);
+                    var images = await ConvertFormFilesToImagesAsync(editedEvent.Attachments.Files.ToList(), id);
+                    var attachments = await ConvertFormFilesToAttachmentsAsync(editedEvent.Attachments.Files.ToList(), id);
+                    if (images.Any())
+                        eventFromDb.Images = images;
+                    if (attachments.Any())
+                        eventFromDb.Attachments = attachments;
                 }
 
                 _eventRepository.SaveChanges();
@@ -148,8 +152,6 @@ namespace stappBackend.Controllers
         private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int eventId)
         {
             List<Image> images = new List<Image>();
-
-            imageFiles.RemoveAll(i => Path.GetExtension(i.FileName) != ".jpg");
 
             if (imageFiles == null)
                 return images;

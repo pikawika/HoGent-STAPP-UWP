@@ -205,19 +205,25 @@ namespace stappBackend.Controllers
             return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
 
-        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int establishmentId)
+        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int promotionId)
         {
             List<Image> images = new List<Image>();
 
+            if (imageFiles == null)
+                return images;
+
             for (int i = 1; i <= imageFiles.Count; i++)
             {
-                string imagePath = "img/establishments/" + establishmentId + "/" + i + ".jpg";
-                images.Add(new Image { Path = imagePath });
-                string filePath = @"wwwroot/" + imagePath;
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                await imageFiles[(i - 1)].CopyToAsync(fileStream);
-                fileStream.Close();
+                if (Path.GetExtension(imageFiles[(i - 1)].FileName) == ".jpg")
+                {
+                    string imagePath = "img/promotions/" + promotionId + "/" + i + ".jpg";
+                    images.Add(new Image { Path = imagePath });
+                    string filePath = @"wwwroot/" + imagePath;
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    FileStream fileStream = new FileStream(filePath, FileMode.Create);
+                    await imageFiles[(i - 1)].CopyToAsync(fileStream);
+                    fileStream.Close();
+                }
             }
 
             return images;
