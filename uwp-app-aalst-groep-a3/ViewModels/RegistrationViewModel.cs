@@ -32,12 +32,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             this.mainPageViewModel = mainPageViewModel;
 
-            RegisterCommand = new RelayCommand(async _ => await CreateAccountAsync());
+            RegisterCommand = new RelayCommand(async _ => await ValidateRegistrationForm());
             NavigateToLoginCommand = new RelayCommand(_ => NavigateToLogin());
             NavigateToMerchantRegistrationCommand = new RelayCommand(_ => NavigateToMerchantRegistration());
         }
 
-        private async Task CreateAccountAsync()
+        private async Task ValidateRegistrationForm()
         {
             if (string.IsNullOrWhiteSpace(FirstName)
                 || string.IsNullOrWhiteSpace(LastName)
@@ -62,6 +62,28 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 return;
             }
 
+            await ShowEstablishmentDialogAsync();
+        }
+
+        private async Task ShowEstablishmentDialogAsync()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = "Account aanmaken";
+            contentDialog.Content = "Door op de knop 'Bevestigen' te drukken, bevestigt u dat u het privacybeleid van Stapp gelezen en goedgekeurd heeft en wordt uw account aangemaakt.";
+            contentDialog.PrimaryButtonText = "Bevestigen";
+            contentDialog.SecondaryButtonText = "Bekijk privacybeleid";
+            contentDialog.CloseButtonText = "Annuleren";
+            contentDialog.DefaultButton = ContentDialogButton.Primary;
+
+            contentDialog.PrimaryButtonCommand = new RelayCommand(async _ => await CreateAccount());
+            contentDialog.SecondaryButtonCommand = new RelayCommand(async _ => await ShowPrivacyPolicy());
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async Task CreateAccount()
+        {
             var token = await networkAPI.CreateAccount(FirstName, LastName, EmailAddress, Username, Password, "customer");
 
             if (string.IsNullOrWhiteSpace(token))
@@ -72,6 +94,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             NavigateToLogin();
             await MessageUtils.ShowDialog("Account aanmaken", "Uw account werd succesvol aangemaakt. Welkom bij Stapp!");
+        }
+
+        private async Task ShowPrivacyPolicy()
+        {
+            string uriToLaunch = @"https://technology-salesman-toolkit.firebaseapp.com/privacy_policy_stapp.html";
+            var uri = new Uri(uriToLaunch);
+
+            await Windows.System.Launcher.LaunchUriAsync(uri);
         }
 
         private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
