@@ -110,6 +110,7 @@
     <Compile Include="Models\EstablishmentSubscription.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\ExceptionalDay.cs" />
+    <Compile Include="Models\File.cs" />
     <Compile Include="Models\Image.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Merchant.cs" />

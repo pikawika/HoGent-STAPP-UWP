@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 using uwp_app_aalst_groep_a3.Models.Domain;
 
 namespace uwp_app_aalst_groep_a3.Models
@@ -10,15 +7,16 @@ namespace uwp_app_aalst_groep_a3.Models
     {
         public int EstablishmentId { get; set; }
 
+        public bool isDeleted { get; set; } = false;
+
         public string Name { get; set; }
+        public string Description { get; set; }
         public string PostalCode { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string HouseNumber { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-
-        public string Description { get; set; }
 
         public List<EstablishmentCategory> EstablishmentCategories { get; set; } = new List<EstablishmentCategory>();
         public List<EstablishmentSocialMedia> EstablishmentSocialMedias { get; set; } = new List<EstablishmentSocialMedia>();
@@ -29,7 +27,5 @@ namespace uwp_app_aalst_groep_a3.Models
 
         public List<Promotion> Promotions { get; set; } = new List<Promotion>();
         public List<Event> Events { get; set; } = new List<Event>();
-
-        public List<EstablishmentSubscription> EstablishmentSubscriptions { get; set; }
     }
 }

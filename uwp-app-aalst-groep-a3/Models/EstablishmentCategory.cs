@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace uwp_app_aalst_groep_a3.Models
+﻿namespace uwp_app_aalst_groep_a3.Models
 {
     public class EstablishmentCategory
     {
