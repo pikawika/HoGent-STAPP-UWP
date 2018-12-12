@@ -92,7 +92,7 @@ namespace stappBackend.Controllers
                 if (promotion == null)
                     return BadRequest(new { error = "Promotion niet gevonden" });
 
-                if (_promotionRepository.isOwnerOfPromotion(int.Parse(User.FindFirst("userId")?.Value), id))
+                if (!_promotionRepository.isOwnerOfPromotion(int.Parse(User.FindFirst("userId")?.Value), id))
                     return BadRequest(new { error = "promotion behoord niet tot uw promotions" });
 
                 if (!string.IsNullOrEmpty(editedPromotion.Name))

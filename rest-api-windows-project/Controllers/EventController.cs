@@ -92,7 +92,7 @@ namespace stappBackend.Controllers
                 if (eventFromDb == null)
                     return BadRequest(new { error = "Event niet gevonden" });
 
-                if (_eventRepository.isOwnerOfEvent(int.Parse(User.FindFirst("userId")?.Value), id))
+                if (!_eventRepository.isOwnerOfEvent(int.Parse(User.FindFirst("userId")?.Value), id))
                     return BadRequest(new { error = "Event behoord niet tot uw events" });
 
                 if (!string.IsNullOrEmpty(editedEvent.Name))
