@@ -44,6 +44,7 @@ namespace stappBackend.Data.Repositories
 
             if (company?.Establishments != null)
             {
+                company.Establishments.RemoveAll(e => e.isDeleted);
                 foreach (Establishment establishment in company.Establishments)
                 {
                     establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
@@ -76,6 +77,7 @@ namespace stappBackend.Data.Repositories
             {
                 foreach (Company company in companies)
                 {
+                    company.Establishments.RemoveAll(e => e.isDeleted);
                     if (company.Establishments != null)
                     {
                         foreach (Establishment establishment in company.Establishments)
