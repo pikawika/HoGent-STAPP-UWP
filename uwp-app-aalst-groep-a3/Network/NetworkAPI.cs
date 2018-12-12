@@ -311,5 +311,25 @@ namespace uwp_app_aalst_groep_a3.Network
 
         #endregion
 
+        #region MERCHANT
+
+        #region MERCHANT COMPANIES
+
+        #endregion
+
+        #region MERCHANT ESTABLISHMENTS
+
+        #endregion
+
+        #region MERCHANT PROMOTIONS
+
+        #endregion
+
+        #region MERCHANT EVENTS
+
+        #endregion
+
+        #endregion
+
     }
 }
