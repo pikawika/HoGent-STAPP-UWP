@@ -53,7 +53,7 @@ namespace stappBackend.Controllers
 
         private bool isMerchant()
         {
-            return User.FindFirst("customRole")?.Value == "Merchant" && User.FindFirst("userId")?.Value != null;
+            return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
     }
 }

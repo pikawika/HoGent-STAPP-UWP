@@ -202,7 +202,7 @@ namespace stappBackend.Controllers
         #region Helper Functies
         private bool isMerchant()
         {
-            return User.FindFirst("customRole")?.Value == "Merchant" && User.FindFirst("userId")?.Value != null;
+            return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
 
         private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int establishmentId)
