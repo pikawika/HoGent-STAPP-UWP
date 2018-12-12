@@ -26,7 +26,6 @@
                 Content="{Binding CurrentData}"
                 ContentTemplate="{Binding CurrentData.Template}"
                 VerticalContentAlignment="Stretch" 
-
                 HorizontalContentAlignment="Stretch" Margin="0,-60,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </NavigationView.Content>
     </NavigationView>

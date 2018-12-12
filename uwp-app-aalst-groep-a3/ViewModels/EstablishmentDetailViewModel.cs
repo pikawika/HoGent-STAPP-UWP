@@ -6,11 +6,14 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Models.Domain;
+using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
+using Windows.Security.Credentials;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 
@@ -18,14 +21,27 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class EstablishmentDetailViewModel : ViewModelBase
     {
+        private readonly string is_subbed_text = "Niet meer volgen";
+        private readonly string is_not_subbed_text = "Abonneren";
+
+        public bool isSubscribed = false;
+        private string _subscriptionButtonText = "Abonneren";
+
+        public string SubscriptionButtonText
+        {
+            get { return _subscriptionButtonText; }
+            set { _subscriptionButtonText = value; RaisePropertyChanged(nameof(SubscriptionButtonText)); }
+        }
+
+        private NetworkAPI networkAPI = new NetworkAPI();
+        private PasswordVault passwordVault = new PasswordVault();
+
         public BasicGeoposition EstablishmentPosition { get; set; }
         public Geopoint EstablishmentPoint { get; set; }
 
         public List<MapIcon> MapIcons { get; set; }
 
         private ObservableCollection<MapLayer> _merchantMarkers;
-
-        public RelayCommand MapElementClickCommand { get; set; }
 
         public ObservableCollection<MapLayer> MerchantMarkers
         {
@@ -40,34 +56,59 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _establishment = value; RaisePropertyChanged(nameof(Establishment)); }
         }
 
+        private MainPageViewModel mainPageViewModel;
+
         public RelayCommand PromotionClickedCommand { get; set; }
         public RelayCommand EventClickedCommand { get; set; }
+        public RelayCommand OpeningsurenCommand { get; set; }
+        public RelayCommand MapElementClickCommand { get; set; }
+        public RelayCommand SubscribeCommand { get; set; }
 
-        public EstablishmentDetailViewModel(Establishment establishment)
+        public EstablishmentDetailViewModel(Establishment establishment, MainPageViewModel mainPageViewModel)
         {
-
-
             Establishment = establishment;
+            this.mainPageViewModel = mainPageViewModel;
 
-            handleEmptyEvents();
-            handleEmptyPromotions();
-
-            
-            Establishment.Description = "Maecenas imperdiet tempor nisi ut rutrum. Donec sollicitudin tortor pharetra nunc lacinia posuere. Sed nisi odio, gravida sed enim non, porta elementum mauris. Ut id est sed nunc semper sagittis non sit amet felis.";
+            HandleEmptyEvents();
+            HandleEmptyPromotions();
 
             PromotionClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
+            OpeningsurenCommand = new RelayCommand((args) => ShowOpeningHoursAsync());
+            MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
+            SubscribeCommand = new RelayCommand(async _ => await Subscribe());
 
+            SetupSubscriptionButtonAsync();
             initMap();
         }
 
-        private void handleEmptyEvents()
+        private async void SetupSubscriptionButtonAsync()
+        {
+            List<Establishment> establishments_subscribed = await networkAPI.GetSubscriptions();
+
+
+            if (establishments_subscribed.Where(e => e.EstablishmentId == Establishment.EstablishmentId).ToList().Count != 0)
+            {
+                isSubscribed = true;
+            }
+
+            if (isSubscribed)
+            {
+                SubscriptionButtonText = is_subbed_text;
+            }
+            else
+            {
+                SubscriptionButtonText = is_not_subbed_text;
+            }
+        }
+
+        private void HandleEmptyEvents()
         {
             Models.Domain.Image image = new Models.Domain.Image() { Path = "img/establishments/none/empty.jpg" };
             List<Models.Domain.Image> images = new List<Models.Domain.Image>();
             images.Add(image);
 
-            
+
             if (Establishment.Events.Count == 0)
             {
 
@@ -80,7 +121,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
         }
 
-        private void handleEmptyPromotions()
+        private void HandleEmptyPromotions()
         {
             Models.Domain.Image image = new Models.Domain.Image() { Path = "img/establishments/none/empty.jpg" };
             List<Models.Domain.Image> images = new List<Models.Domain.Image>();
@@ -153,8 +194,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             MerchantMarkers = new ObservableCollection<MapLayer>();
 
-            MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
-
             RetrieveMerchantLocations();
         }
 
@@ -198,11 +237,119 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
 
             contentDialog.Title = Establishment.Name;
-            contentDialog.Content = Establishment.Street + " " + Establishment.HouseNumber+ "," + Establishment.PostalCode + " " + Establishment.City;
+            contentDialog.Content = $"{Establishment.Street} {Establishment.HouseNumber}\n{Establishment.PostalCode} {Establishment.City}";
             contentDialog.CloseButtonText = "Sluiten";
 
             await contentDialog.ShowAsync();
         }
+
+        private async void ShowOpeningHoursAsync()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            string[] dagNamen = { "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag" };
+
+            contentDialog.Title = "Openingsuren";
+
+            string days = "";
+
+            foreach (OpenDay day in Establishment.OpenDays)
+            {
+                days += "\n" + dagNamen[day.DayOfTheWeek] + ":\n";
+                if (day.OpenHours.Count == 0)
+                {
+                    days += "Gesloten\n";
+                }
+                foreach (OpenHour hour in day.OpenHours)
+                {
+                    //int is soms = 0, moet dan 00 worden
+                    string startMinute = hour.Startminute.ToString();
+                    if (startMinute.Length == 1)
+                    {
+                        startMinute += "0";
+                    }
+
+                    //int is soms = 0, moet dan 00 worden
+                    string endMinute = hour.Startminute.ToString();
+                    if (endMinute.Length == 1)
+                    {
+                        endMinute += "0";
+                    }
+                    days += hour.StartHour + ":" + startMinute + " - " + hour.EndHour + ":" + endMinute + "\n";
+                }
+            }
+
+            if (Establishment.ExceptionalDays.Count != 0)
+            {
+                days += "\nUitzonderlijk gesloten: \n";
+                foreach (ExceptionalDay exceptionalDay in Establishment.ExceptionalDays)
+                {
+                    days += exceptionalDay.Day.ToString("d MMMM yyyy") + ": " + exceptionalDay.Message + "\n";
+                }
+            }
+
+            contentDialog.Content = days;
+            contentDialog.CloseButtonText = "Sluiten";
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async Task ShowNotSignedInDialog(string title, string message)
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = title;
+            contentDialog.Content = message;
+            contentDialog.PrimaryButtonText = "Naar accountpagina";
+            contentDialog.DefaultButton = ContentDialogButton.Primary;
+            contentDialog.PrimaryButtonCommand = new RelayCommand(_ => NavigateToLogin());
+            contentDialog.SecondaryButtonText = "Annuleren";
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async Task Subscribe()
+        {
+            if (isSubscribed)
+            {
+                var message = await networkAPI.Unsubscribe(Establishment.EstablishmentId);
+                if (string.IsNullOrEmpty(message))
+                {
+                    SubscriptionButtonText = is_not_subbed_text;
+                    isSubscribed = false;
+                    await MessageUtils.ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
+                }
+                else
+                {
+                    await MessageUtils.ShowDialog("Abonneren", message);
+                }
+            }
+            else
+            {
+                try
+                {
+                    var token = passwordVault.Retrieve("Stapp", "Token");
+                    var message = await networkAPI.Subscribe(Establishment.EstablishmentId);
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        isSubscribed = true;
+                        SubscriptionButtonText = is_subbed_text;
+                        await MessageUtils.ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
+                    }
+                    else
+                    {
+                        await MessageUtils.ShowDialog("Abonneren", message);
+                    }
+                }
+                catch
+                {
+                    await ShowNotSignedInDialog("Abonneren", "U bent momenteel niet aangemeld. Om te kunnen abonneren op handelaars, heeft u een account nodig. Aanmelden of een account aanmaken kan u doen op de accountpagina.");
+                }
+            }
+        }
+
+        private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
+
     }
 
 }

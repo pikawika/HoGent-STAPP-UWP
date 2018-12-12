@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.Security.Credentials;
@@ -36,7 +37,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             if (string.IsNullOrWhiteSpace(Username)
                 || string.IsNullOrWhiteSpace(Password))
             {
-                await ShowDialog("Aanmelden", "Gelieve zowel uw gebruikersnaam als uw wachtwoord in te voeren.");
+                await MessageUtils.ShowDialog("Aanmelden", "Gelieve zowel uw gebruikersnaam als uw wachtwoord in te voeren.");
                 return;
             }
 
@@ -44,28 +45,18 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                await ShowDialog("Aanmelden", "Er is een fout opgetreden tijdens het aanmelden.");
+                await MessageUtils.ShowDialog("Aanmelden", "Er is een fout opgetreden tijdens het aanmelden.");
                 return;
             }
 
             passwordVault.Add(new PasswordCredential("Stapp", "Token", token));
             NavigateToAccount();
-            await ShowDialog("Aanmelden", "Welkom bij Stapp!");
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(LoginViewModel) || v.GetType() == typeof(RegistrationViewModel) || v.GetType() == typeof(MerchantRegistrationViewModel));
+            await MessageUtils.ShowDialog("Aanmelden", "Welkom bij Stapp!");
         }
 
-        private async Task ShowDialog(string title, string message)
-        {
-            ContentDialog contentDialog = new ContentDialog();
+        private void NavigateToRegistration() => mainPageViewModel.NavigateTo(new RegistrationViewModel(mainPageViewModel));
 
-            contentDialog.Title = title;
-            contentDialog.Content = message;
-            contentDialog.PrimaryButtonText = "Oké";
-
-            await contentDialog.ShowAsync();
-        }
-
-        private void NavigateToRegistration() => mainPageViewModel.CurrentData = new RegistrationViewModel(mainPageViewModel);
-
-        private void NavigateToAccount() => mainPageViewModel.CurrentData = new AccountViewModel(mainPageViewModel);
+        private void NavigateToAccount() => mainPageViewModel.NavigateTo(new AccountViewModel(mainPageViewModel));
     }
 }

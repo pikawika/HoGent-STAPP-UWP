@@ -17,6 +17,7 @@ using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Network;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Windows.ApplicationModel.UserActivities;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace uwp_app_aalst_groep_a3.Views
@@ -26,44 +27,31 @@ namespace uwp_app_aalst_groep_a3.Views
     /// </summary>
     public sealed partial class HomePageView : UserControl
     {
-
-        public ObservableCollection<Establishment> Establishments { get; set; }
+        UserActivitySession _currentActivity;
 
         public HomePageView()
         {
             this.InitializeComponent();
+            GenerateActivityAsync();
         }
 
-        private void Search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private async void GenerateActivityAsync()
         {
-            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-            {
-                sender.ItemsSource = Establishments;
-            }
-        }
+            // Get the default UserActivityChannel and query it for our UserActivity. If the activity doesn't exist, one is created.
+            UserActivityChannel channel = UserActivityChannel.GetDefault();
+            UserActivity userActivity = await channel.GetOrCreateUserActivityAsync("ShowHomePage");
 
-        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            // Set sender.Text. You can use args.SelectedItem to build your text string.
-        }
+            // Populate required properties
+            userActivity.VisualElements.DisplayText = "Hoofdpagina";
+            userActivity.VisualElements.Description = "Bekijk de hoofdpagina";
+            userActivity.ActivationUri = new Uri("stapp://ShowHomePage");
 
+            //Save
+            await userActivity.SaveAsync(); //save the new metadata
 
-        private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
-        {
-            if (args.SelectedItem != null)
-            {
-                // User selected an item from the suggestion list, take an action on it here.
-            }
-            else
-            {
-                // Use args.QueryText to determine what to do.
-            }
-        }
-
-        private async void InitDataAsync()
-        {
-            NetworkAPI api = new NetworkAPI();
-            Establishments = new ObservableCollection<Establishment>(await api.GetAllEstablishments());
+            // Dispose of any current UserActivitySession, and create a new one.
+            _currentActivity?.Dispose();
+            _currentActivity = userActivity.CreateSession();
         }
     }
 }

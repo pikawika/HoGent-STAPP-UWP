@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.Security.Credentials;
@@ -25,6 +26,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public RelayCommand RegisterCommand { get; set; }
         public RelayCommand NavigateToLoginCommand { get; set; }
+        public RelayCommand NavigateToMerchantRegistrationCommand { get; set; }
 
         public RegistrationViewModel(MainPageViewModel mainPageViewModel)
         {
@@ -32,6 +34,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             RegisterCommand = new RelayCommand(async _ => await CreateAccountAsync());
             NavigateToLoginCommand = new RelayCommand(_ => NavigateToLogin());
+            NavigateToMerchantRegistrationCommand = new RelayCommand(_ => NavigateToMerchantRegistration());
         }
 
         private async Task CreateAccountAsync()
@@ -43,45 +46,36 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 || string.IsNullOrWhiteSpace(Password)
                 || string.IsNullOrWhiteSpace(RepeatPassword))
             {
-                await ShowDialog("Account aanmaken", "Gelieve in ieder veld een waarde in te voeren.");
+                await MessageUtils.ShowDialog("Account aanmaken", "Gelieve in ieder veld een waarde in te voeren.");
                 return;
             }
 
             if (!Regex.IsMatch(EmailAddress, @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"))
             {
-                await ShowDialog("Account aanmaken", "Gelieve een geldig e-mailadres in te voeren.");
+                await MessageUtils.ShowDialog("Account aanmaken", "Gelieve een geldig e-mailadres in te voeren.");
                 return;
             }
 
             if (Password != RepeatPassword)
             {
-                await ShowDialog("Account aanmaken", "Wachtwoord en herhaal wachtwoord komen niet overeen.");
+                await MessageUtils.ShowDialog("Account aanmaken", "Wachtwoord en herhaal wachtwoord komen niet overeen.");
                 return;
             }
 
-            var token = await networkAPI.CreateAccount(FirstName, LastName, EmailAddress, Username, Password);
+            var token = await networkAPI.CreateAccount(FirstName, LastName, EmailAddress, Username, Password, "customer");
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                await ShowDialog("Account aanmaken", "Er is een fout opgetreden tijdens het aanmaken van een account.");
+                await MessageUtils.ShowDialog("Account aanmaken", "Er is een fout opgetreden tijdens het aanmaken van een account.");
                 return;
             }
 
             NavigateToLogin();
-            await ShowDialog("Account aanmaken", "Uw account werd succesvol aangemaakt. Welkom bij Stapp!");
+            await MessageUtils.ShowDialog("Account aanmaken", "Uw account werd succesvol aangemaakt. Welkom bij Stapp!");
         }
 
-        private async Task ShowDialog(string title, string message)
-        {
-            ContentDialog contentDialog = new ContentDialog();
+        private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
 
-            contentDialog.Title = title;
-            contentDialog.Content = message;
-            contentDialog.PrimaryButtonText = "Oké";
-
-            await contentDialog.ShowAsync();
-        }
-
-        private void NavigateToLogin() => mainPageViewModel.CurrentData = new LoginViewModel(mainPageViewModel);
+        private void NavigateToMerchantRegistration() => mainPageViewModel.NavigateTo(new MerchantRegistrationViewModel(mainPageViewModel));
     }
 }

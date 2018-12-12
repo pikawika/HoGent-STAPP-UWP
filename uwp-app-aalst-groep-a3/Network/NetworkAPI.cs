@@ -55,10 +55,10 @@ namespace uwp_app_aalst_groep_a3.Network
         }
 
         // Create an account
-        public async Task<string> CreateAccount(string firstname, string lastname, string emailaddress, string username, string password)
+        public async Task<string> CreateAccount(string firstname, string lastname, string emailaddress, string username, string password, string role)
         {
             var token = "";
-            var login = new { FirstName = firstname, LastName = lastname, Email = emailaddress, Login = new { Username = username, Password = password, Role = "customer" } };
+            var login = new { FirstName = firstname, LastName = lastname, Email = emailaddress, Login = new { Username = username, Password = password, Role = role } };
             var loginJson = JsonConvert.SerializeObject(login);
 
             try
@@ -86,7 +86,6 @@ namespace uwp_app_aalst_groep_a3.Network
                 var credentials = passwordVault.Retrieve("Stapp", "Token");
                 credentials.RetrievePassword();
 
-                Debug.WriteLine(credentials.Password);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
 
                 var json = await client.GetStringAsync(new Uri($"{baseUrl}api/user/"));
@@ -99,6 +98,62 @@ namespace uwp_app_aalst_groep_a3.Network
                                 $"{e}");
             }
             return user;
+        }
+
+        // Subscribe to an establishment
+        public async Task<string> Subscribe(int establishmentId)
+        {
+            var data = new { EstablishmentId = establishmentId };
+            var dataJson = JsonConvert.SerializeObject(data);
+            string errorMessage = null;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/customer"), new StringContent(dataJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    ErrorMessage message = new ErrorMessage();
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
+                    errorMessage = message.Error;
+                }
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+
+            return errorMessage;
+        }
+
+        // Unsubscribe to an establishment
+        public async Task<string> Unsubscribe(int establishmentId)
+        {
+            string errorMessage = null;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/customer/{establishmentId}"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    ErrorMessage message = new ErrorMessage();
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
+                    errorMessage = message.Error;
+                }
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+
+            return errorMessage;
         }
 
         /* ESTABLISHMENTS */
@@ -115,6 +170,26 @@ namespace uwp_app_aalst_groep_a3.Network
             {
                 Debug.WriteLine($"Er is een error opgetreden tijdens het " +
                                 $"ophalen van alle establishments uit de databank: " +
+                                $"{e}");
+            }
+            return establishments;
+        }
+
+        public async Task<List<Establishment>> GetSubscriptions()
+        {
+            List<Establishment> establishments = new List<Establishment>();
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+            try
+            {
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/subscriptions"));
+                establishments = JsonConvert.DeserializeObject<List<Establishment>>(json);
+            }
+            catch (HttpRequestException e)
+            {
+                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                $"ophalen van alle subscriptions uit de databank: " +
                                 $"{e}");
             }
             return establishments;

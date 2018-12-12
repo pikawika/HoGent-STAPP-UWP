@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
@@ -73,6 +74,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             Establishment_Names = new ObservableCollection<string>(Establishments.Select(e => e.Name).ToList());
         }
 
-        private void EstablishmentClicked(object args) => mainPageViewModel.CurrentData = new EstablishmentDetailViewModel(args as Establishment);
+        private void EstablishmentClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));
     }
 }
