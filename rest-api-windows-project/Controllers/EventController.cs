@@ -48,6 +48,9 @@ namespace stappBackend.Controllers
             if (eventToAdd.Attachments.Files == null || !eventToAdd.Attachments.Files.Any())
                 return BadRequest(new { error = "geen Images meegeven." });
 
+            if (!containsJpgs(eventToAdd.Attachments.Files.ToList()))
+                return BadRequest(new { error = "geen jpg images gevonden" });
+
             if (eventToAdd.StartDate == null)
                 return BadRequest(new { error = "geen StartDate meegeven." });
 
@@ -194,6 +197,11 @@ namespace stappBackend.Controllers
                 }
             }
             return attachments;
+        }
+
+        private bool containsJpgs(List<IFormFile> files)
+        {
+            return files.Any(f => Path.GetExtension(f.FileName) == ".jpg");
         }
 
         #endregion

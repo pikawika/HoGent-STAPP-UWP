@@ -77,13 +77,14 @@ namespace stappBackend.Controllers
                 if (establishmentToAdd.Images.Files == null || !establishmentToAdd.Images.Files.Any())
                     return BadRequest(new { error = "geen Images meegeven." });
 
+                if (!containsJpgs(establishmentToAdd.Images.Files.ToList()))
+                    return BadRequest(new { error = "geen jpg images gevonden" });
+
                 if (!_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), establishmentToAdd.CompanyId ?? 0))
                     return BadRequest(new { error = "De company waaraan u deze establishment wilt toevoegen is niet van u." });
 
                 // Ophalen van Latitude en Longitude op basis van het meegegeven adres
                 var adress = $"{establishmentToAdd.Street}+{establishmentToAdd.HouseNumber},+{establishmentToAdd.PostalCode}+{establishmentToAdd.City},+België";
-
-                Debug.WriteLine("HALLO", "lol " + establishmentToAdd.Categories[0].Name);
 
                 List<double> latAndLong = await GetLatAndLongFromAddressAsync(adress);
 
@@ -170,8 +171,11 @@ namespace stappBackend.Controllers
                     establishment.ExceptionalDays = ConvertExceptionalDaysViewModelsToExceptionalDays(editedEstablishment.ExceptionalDays);
 
                 if (editedEstablishment.Images != null && editedEstablishment.Images.Files.Any())
-                    establishment.Images = await ConvertFormFilesToImagesAsync(editedEstablishment.Images.Files.ToList(), id);
-
+                {
+                    var images = await ConvertFormFilesToImagesAsync(editedEstablishment.Images.Files.ToList(), id);
+                    if (images.Any())
+                        establishment.Images = images;
+                }
 
                 _companyRepository.SaveChanges();
                 return Ok(new { bericht = "De company werd succesvol bijgewerkt." });
@@ -312,6 +316,11 @@ namespace stappBackend.Controllers
                     establishmentSocialMedia.Add(new EstablishmentSocialMedia{SocialMedia = socialMedia, Url = socialVm.Url});
             }
             return establishmentSocialMedia;
+        }
+
+        private bool containsJpgs(List<IFormFile> files)
+        {
+            return files.Any(f => Path.GetExtension(f.FileName) == ".jpg");
         }
         #endregion
     }
