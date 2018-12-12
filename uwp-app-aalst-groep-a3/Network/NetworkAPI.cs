@@ -31,6 +31,7 @@ namespace uwp_app_aalst_groep_a3.Network
             client = new HttpClient(httpClientHandler);
         }
 
+        #region AUTHENTICATION
         /* AUTHENTICATION */
         // Sign in
         public async Task<string> SignIn(string username, string password)
@@ -75,6 +76,9 @@ namespace uwp_app_aalst_groep_a3.Network
 
             return token;
         }
+        #endregion
+
+        #region USER
 
         /* USER */
         // Get account details
@@ -99,6 +103,10 @@ namespace uwp_app_aalst_groep_a3.Network
             }
             return user;
         }
+
+        #endregion
+
+        #region CUSTOMER
 
         // Subscribe to an establishment
         public async Task<string> Subscribe(int establishmentId)
@@ -156,25 +164,6 @@ namespace uwp_app_aalst_groep_a3.Network
             return errorMessage;
         }
 
-        /* ESTABLISHMENTS */
-        // Get all establishments
-        public async Task<List<Establishment>> GetAllEstablishments()
-        {
-            List<Establishment> establishments = new List<Establishment>();
-            try
-            {
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/establishment"));
-                establishments =  JsonConvert.DeserializeObject<List<Establishment>>(json);
-            }
-            catch (HttpRequestException e)
-            {
-                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
-                                $"ophalen van alle establishments uit de databank: " +
-                                $"{e}");
-            }
-            return establishments;
-        }
-
         public async Task<List<Establishment>> GetSubscriptions()
         {
             List<Establishment> establishments = new List<Establishment>();
@@ -190,6 +179,29 @@ namespace uwp_app_aalst_groep_a3.Network
             {
                 Debug.WriteLine($"Er is een error opgetreden tijdens het " +
                                 $"ophalen van alle subscriptions uit de databank: " +
+                                $"{e}");
+            }
+            return establishments;
+        }
+
+        #endregion
+
+        #region ESTABLISHMENT
+
+        /* ESTABLISHMENTS */
+        // Get all establishments
+        public async Task<List<Establishment>> GetAllEstablishments()
+        {
+            List<Establishment> establishments = new List<Establishment>();
+            try
+            {
+                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/establishment"));
+                establishments = JsonConvert.DeserializeObject<List<Establishment>>(json);
+            }
+            catch (HttpRequestException e)
+            {
+                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                $"ophalen van alle establishments uit de databank: " +
                                 $"{e}");
             }
             return establishments;
@@ -213,6 +225,10 @@ namespace uwp_app_aalst_groep_a3.Network
             }
             return establishment;
         }
+
+        #endregion
+
+        #region EVENT
 
         /* EVENTS */
         // Get all events
@@ -252,6 +268,10 @@ namespace uwp_app_aalst_groep_a3.Network
             return ev;
         }
 
+        #endregion
+
+        #region PROMOTION
+
         /* PROMOTIONS */
         // Get all promotions
         public async Task<List<Promotion>> GetAllPromotions()
@@ -288,6 +308,8 @@ namespace uwp_app_aalst_groep_a3.Network
             }
             return promotion;
         }
+
+        #endregion
 
     }
 }

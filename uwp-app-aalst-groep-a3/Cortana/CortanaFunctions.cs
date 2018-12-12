@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,16 @@ namespace uwp_app_aalst_groep_a3.Cortana
         {
             StorageFile vcd = await Package.Current.InstalledLocation.GetFileAsync(@"Cortana\CustomVoiceCommandDefinitions.xml");
 
-            await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(vcd);
+            try
+            {
+                await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(vcd);
+            }
+            catch
+            {
+                Debug.WriteLine("Er is iets fout gegaan tijdens het installeren van" +
+                                "de voice commands definitions van de Stapp app." +
+                                "Mogelijks is Cortana niet geïnstalleerd op het toestel.");
+            }
         }
 
         // Look up the spoken command and execute its corresponding action
