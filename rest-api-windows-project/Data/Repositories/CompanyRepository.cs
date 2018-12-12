@@ -29,7 +29,67 @@ namespace stappBackend.Data.Repositories
 
         public Company getById(int companyId)
         {
-            return _companies.Include(c => c.Merchant).SingleOrDefault(c => c.CompanyId == companyId && !c.isDeleted);
+            Company company = _companies
+                .Include(c => c.Merchant)
+                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentCategories)
+                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentSocialMedias)
+                .Include(c => c.Establishments).ThenInclude(e => e.Images)
+                .Include(c => c.Establishments).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
+                .Include(c => c.Establishments).ThenInclude(e => e.ExceptionalDays)
+                .Include(c => c.Establishments).ThenInclude(e => e.Promotions).ThenInclude(od => od.Images)
+                .Include(c => c.Establishments).ThenInclude(e => e.Promotions).ThenInclude(od => od.Attachments)
+                .Include(c => c.Establishments).ThenInclude(e => e.Events).ThenInclude(od => od.Images)
+                .Include(c => c.Establishments).ThenInclude(e => e.Events).ThenInclude(od => od.Attachments)
+                .SingleOrDefault(c => c.CompanyId == companyId && !c.isDeleted);
+
+            if (company?.Establishments != null)
+            {
+                foreach (Establishment establishment in company.Establishments)
+                {
+                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
+                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
+                }
+            }
+
+            return company;
+
+        }
+
+        public List<Company> getFromMerchant(int merchantId)
+        {
+            List<Company> companies = _companies
+                .Where(c => c.MerchantId == merchantId && !c.isDeleted)
+                .Include(c => c.Merchant)
+                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentCategories)
+                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentSocialMedias)
+                .Include(c => c.Establishments).ThenInclude(e => e.Images)
+                .Include(c => c.Establishments).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
+                .Include(c => c.Establishments).ThenInclude(e => e.ExceptionalDays)
+                .Include(c => c.Establishments).ThenInclude(e => e.Promotions).ThenInclude(od => od.Images)
+                .Include(c => c.Establishments).ThenInclude(e => e.Promotions).ThenInclude(od => od.Attachments)
+                .Include(c => c.Establishments).ThenInclude(e => e.Events).ThenInclude(od => od.Images)
+                .Include(c => c.Establishments).ThenInclude(e => e.Events).ThenInclude(od => od.Attachments)
+                .ToList();
+
+
+            if (companies != null)
+            {
+                foreach (Company company in companies)
+                {
+                    if (company.Establishments != null)
+                    {
+                        foreach (Establishment establishment in company.Establishments)
+                        {
+                            establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
+                            establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
+                        }
+                    }
+                }
+            }
+
+            return companies;
+
+
         }
 
         public void removeCompany(int companyId)

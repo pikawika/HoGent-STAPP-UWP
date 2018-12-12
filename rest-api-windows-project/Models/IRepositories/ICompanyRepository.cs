@@ -11,6 +11,8 @@ namespace stappBackend.Models.IRepositories
 
         Company getById(int companyId);
 
+        List<Company> getFromMerchant(int merchantId);
+
         void removeCompany(int companyId);
 
         Boolean isOwnerOfCompany(int userId, int companyId);

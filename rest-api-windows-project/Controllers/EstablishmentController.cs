@@ -58,7 +58,7 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (isMerchant())
+                if (!isMerchant())
                     return BadRequest(new { error = "U bent geen handelaar." });
 
                 //modelstate werkt niet op lijsten :-D
@@ -124,7 +124,7 @@ namespace stappBackend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (isMerchant())
+                if (!isMerchant())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Establishment establishment = _establishmentRepository.getById(id);
@@ -184,7 +184,7 @@ namespace stappBackend.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (isMerchant())
+            if (!isMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             Establishment establishment = _establishmentRepository.getById(id);
@@ -202,7 +202,7 @@ namespace stappBackend.Controllers
         #region Helper Functies
         private bool isMerchant()
         {
-            return User.FindFirst("role")?.Value == "Merchant" && User.FindFirst("userId")?.Value != null;
+            return User.FindFirst("customRole")?.Value == "Merchant" && User.FindFirst("userId")?.Value != null;
         }
 
         private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int establishmentId)
