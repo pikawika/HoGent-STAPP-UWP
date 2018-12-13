@@ -10,6 +10,7 @@ using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
+using Windows.System;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
@@ -48,10 +49,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     CreationCollisionOption.GenerateUniqueName);
 
                 BackgroundDownloader downloader = new BackgroundDownloader();
-                Debug.WriteLine(NetworkAPI.baseUrl + Promotion.Attachments[0].Path);
                 DownloadOperation download = downloader.CreateDownload(source, destinationFile);
 
                 await download.StartAsync();
+
+                await Launcher.LaunchFileAsync(destinationFile);
             }
             catch (Exception ex)
             {
