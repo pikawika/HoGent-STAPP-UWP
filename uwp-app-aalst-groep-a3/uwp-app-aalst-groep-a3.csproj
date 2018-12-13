@@ -136,6 +136,7 @@
     <Compile Include="ViewModels\MapViewModel.cs" />
     <Compile Include="ViewModels\MerchantRegistrationViewModel.cs" />
     <Compile Include="ViewModels\MerchantsViewModel.cs" />
+    <Compile Include="ViewModels\PromotionDetailViewModel.cs" />
     <Compile Include="ViewModels\PromotionsViewModel.cs" />
     <Compile Include="ViewModels\RegistrationViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
@@ -168,6 +169,9 @@
     </Compile>
     <Compile Include="Views\MerchantsView.xaml.cs">
       <DependentUpon>MerchantsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PromotionDetailView.xaml.cs">
+      <DependentUpon>PromotionDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PromotionsView.xaml.cs">
       <DependentUpon>PromotionsView.xaml</DependentUpon>
@@ -293,6 +297,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PromotionDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PromotionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -320,7 +328,9 @@
       <Version>11.0.2</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="stapp.cer" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

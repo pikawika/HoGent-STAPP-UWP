@@ -45,6 +45,9 @@
         <DataTemplate x:Key="MerchantRegistrationViewModel">
             <view:MerchantRegistrationView />
         </DataTemplate>
+        <DataTemplate x:Key="PromotionDetailViewModel">
+            <view:PromotionDetailView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>
