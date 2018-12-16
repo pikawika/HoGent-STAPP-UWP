@@ -70,8 +70,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             foreach (Establishment s in Subscriptions)
             {
-                foreach (Promotion p in s.Promotions) { promotionList.Add(p); }
-                foreach (Event e in s.Events) { eventList.Add(e); }
+                foreach (Promotion p in s.Promotions) {
+                    p.Establishment = s;
+                    promotionList.Add(p);
+                }
+
+                foreach (Event e in s.Events) {
+                    e.Establishment = s;
+                    eventList.Add(e);
+                }
             }
 
             Promotions = new ObservableCollection<Promotion>(promotionList);
