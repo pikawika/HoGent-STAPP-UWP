@@ -13,8 +13,6 @@ namespace uwp_app_aalst_groep_a3.Utils
     {
         public ToastNotification createToast(string title,string content)
         {
-            string image = "https://ae01.alicdn.com/kf/HTB1dnp4RpXXXXbtapXXq6xXFXXXg/Sexy-Vintage-Mini-Korte-Jeans-Booty-Shorts-Leuke-Bikini-Denim-Korte-Hot-Vestidos-Sexy-Club-Party.jpg_640x640.jpg";
-
             // Construct the visuals of the toast
             ToastVisual visual = new ToastVisual()
             {
@@ -38,20 +36,16 @@ namespace uwp_app_aalst_groep_a3.Utils
                     }
                 }
             };
-
-            // In a real app, these would be initialized with actual data
-            int conversationId = 384928;
+            
 
             // Construct the actions for the toast (inputs and buttons)
             ToastActionsCustom actions = new ToastActionsCustom()
             {
                 Buttons =
                 {
-                    new ToastButton("Reply", new QueryString()
+                    new ToastButton("Hier Bekijken!", new QueryString()
                     {
                         { "action", "Bekijken" },
-                        { "conversationId", conversationId.ToString() }
-
                     }.ToString())
                     {
                         ActivationType = ToastActivationType.Background, 
@@ -70,17 +64,16 @@ namespace uwp_app_aalst_groep_a3.Utils
                 // Arguments when the user taps body of toast
                 Launch = new QueryString()
                 {
-                    { "action", "viewConversation" },
-                    { "conversationId", conversationId.ToString() }
+                    { "action", "viewConversation" }
 
                 }.ToString()
             };
 
             // And create the toast notification
             var toast = new ToastNotification(toastContent.GetXml());
-            toast.ExpirationTime = DateTime.Now.AddDays(2);
+            toast.ExpirationTime = DateTime.Now.AddDays(1);
             toast.Tag = "18365";
-            toast.Group = "wallPosts";
+            toast.Group = "stapp";
 
             return toast;
         }

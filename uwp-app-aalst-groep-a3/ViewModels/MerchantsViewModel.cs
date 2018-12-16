@@ -73,10 +73,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());
             _all_establishments = Establishments.ToList();
             Establishment_Names = new ObservableCollection<string>(Establishments.Select(e => e.Name).ToList());
-            await NetworkAPI.SaveSubscribedEstablishemtsAsync(_all_establishments);
-            List<Establishment> merc = await NetworkAPI.GetSubscribedEstablishmentsAsync();
-
-            ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast(merc[0].Name, merc[1].Name));
+            
         }
 
         private void EstablishmentClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));

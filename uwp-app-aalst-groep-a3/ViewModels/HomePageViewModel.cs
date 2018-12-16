@@ -11,6 +11,7 @@ using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Models.Domain;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
+using Windows.UI.Notifications;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
@@ -21,7 +22,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Promotion> Promotions
         {
             get { return _promotions; }
-            set { _promotions = value; RaisePropertyChanged(nameof(Promotions)); }
+            set { _promotions = value; RaisePropertyChanged(nameof(Promotions));  }
         }
 
         private ObservableCollection<Establishment> _establishments;
@@ -30,7 +31,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Establishment> Establishments
         {
             get { return _establishments; }
-            set { _establishments = value; RaisePropertyChanged(nameof(Establishments)); }
+            set { _establishments = value; RaisePropertyChanged(nameof(Establishments)); SubscriptionToastAsync(); }
         }
 
         private NetworkAPI NetworkAPI { get; set; }
@@ -43,6 +44,35 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             EstablishmentClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             NetworkAPI = new NetworkAPI();
             InitializeHomePage();
+
+            //SubscriptionToastAsync();
+        }
+
+        private async void SubscriptionToastAsync()
+        {
+            User user = await NetworkAPI.GetUser();
+            if (user.UserId != -2)
+            {
+                bool changed = false;
+                //eerst initialiseren anders null indien file niet bestaat
+                List<Establishment> subs = new List<Establishment>();
+                subs = await NetworkAPI.GetSubscriptions();
+
+                //List<Establishment> merc = await NetworkAPI.GetSubscribedEstablishmentsAsync();
+
+                bool isEqual = await NetworkAPI.CheckSubbedDifferenceByJSONAsync(subs);
+                if (!isEqual)
+                {
+                    //als veranderd, dan toast tonen en wegschrijven van nieue subs
+                    ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("STAPP", "Er zijn nieuwe promoties of evenementen toegevoegd, bekijk ze hier!"));
+                    await NetworkAPI.SaveSubscribedEstablishemtsAsync(subs);
+                }
+            }
+            else
+            {
+                ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("Welkom!", "Om alle functionaliteit van deze app te ontgrendelen, kan je hier aanmelden!"));
+            }
+            
         }
 
         private async void InitializeHomePage()

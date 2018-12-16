@@ -50,6 +50,16 @@ namespace uwp_app_aalst_groep_a3.Network
             return JsonConvert.DeserializeObject<List<Establishment>>(text);
         }
 
+        public async Task<bool> CheckSubbedDifferenceByJSONAsync(List<Establishment> new_establishments)
+        {
+            string json = JsonConvert.SerializeObject(new_establishments.ToArray());
+
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            Windows.Storage.StorageFile sampleFile = await storageFolder.GetFileAsync("subscribed.txt");
+            string text = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
+            return text.Equals(json);
+        }
+
         /* AUTHENTICATION */
         // Sign in
         public async Task<string> SignIn(string username, string password)
@@ -100,6 +110,7 @@ namespace uwp_app_aalst_groep_a3.Network
         public async Task<User> GetUser()
         {
             User user = new User();
+            user.UserId = -2;
             try
             {
                 var credentials = passwordVault.Retrieve("Stapp", "Token");
@@ -197,19 +208,19 @@ namespace uwp_app_aalst_groep_a3.Network
         public async Task<List<Establishment>> GetSubscriptions()
         {
             List<Establishment> establishments = new List<Establishment>();
-            var credentials = passwordVault.Retrieve("Stapp", "Token");
-            credentials.RetrievePassword();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+            
             try
             {
+                var credentials = passwordVault.Retrieve("Stapp", "Token");
+                credentials.RetrievePassword();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
                 var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/subscriptions"));
                 establishments = JsonConvert.DeserializeObject<List<Establishment>>(json);
             }
-            catch (HttpRequestException e)
+            catch
             {
                 Debug.WriteLine($"Er is een error opgetreden tijdens het " +
-                                $"ophalen van alle subscriptions uit de databank: " +
-                                $"{e}");
+                                $"ophalen van alle subscriptions uit de databank: ");
             }
             return establishments;
         }
