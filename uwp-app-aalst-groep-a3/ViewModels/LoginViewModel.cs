@@ -8,6 +8,7 @@ using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 using Windows.Security.Credentials;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml.Controls;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
@@ -27,7 +28,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public LoginViewModel(MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
-
             SignInCommand = new RelayCommand(async _ => await SignInAsync());
             NavigateToRegistrationCommand = new RelayCommand(_ => NavigateToRegistration());
         }
