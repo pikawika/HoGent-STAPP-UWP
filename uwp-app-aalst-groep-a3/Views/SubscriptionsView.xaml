@@ -5,9 +5,87 @@
     xmlns:local="using:uwp_app_aalst_groep_a3.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <UserControl.Resources>
+        <DataTemplate x:Key="SubscriptionsTemplate">
+            <Grid
+                Background="White">
+                <Image
+                    Source="/Assets/2000px-Solid_black.svg.png"
+                    Stretch="UniformToFill"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+                <Image
+                    Source="{Binding Images[0].Path}"
+                    Stretch="UniformToFill"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Opacity="0.6">
 
-    </Grid>
+                </Image>
+                <TextBlock Text="{Binding Name}" FocusVisualPrimaryBrush="White" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+                <RowDefinition Height="6*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Uw abonnementen" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+
+            <Grid Grid.Row="1">
+                <controls:AdaptiveGridView
+                Name="AdaptiveGridViewControl"
+                OneRowModeEnabled="False"
+                ItemHeight="200"
+                DesiredWidth="300"
+                SelectionMode="Single"
+                IsItemClickEnabled="True"
+                ItemClickCommand="{Binding SubscriptionClickedCommand}"
+                ItemsSource="{Binding Subscriptions}"
+                ItemTemplate="{StaticResource SubscriptionsTemplate}"/>
+            </Grid>
+            
+            <TextBlock Text="Promoties van uw abonnementen" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+
+            <Grid Grid.Row="3">
+                <controls:AdaptiveGridView
+                Name="AdaptiveGridViewControl2"
+                OneRowModeEnabled="False"
+                ItemHeight="200"
+                DesiredWidth="300"
+                SelectionMode="Single"
+                IsItemClickEnabled="True"
+                ItemClickCommand="{Binding PromotionClickedCommand}"
+                ItemsSource="{Binding Promotions}"
+                ItemTemplate="{StaticResource SubscriptionsTemplate}"/>
+            </Grid>
+            
+            <TextBlock Text="Evenementen van uw abonnementen" Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+
+            <Grid Grid.Row="5">
+                <controls:AdaptiveGridView
+                Name="AdaptiveGridViewControl3"
+                OneRowModeEnabled="False"
+                ItemHeight="200"
+                DesiredWidth="300"
+                SelectionMode="Single"
+                IsItemClickEnabled="True"
+                ItemClickCommand="{Binding EventClickedCommand}"
+                ItemsSource="{Binding Events}"
+                ItemTemplate="{StaticResource SubscriptionsTemplate}"/>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+
 </UserControl>
