@@ -51,6 +51,9 @@
         <DataTemplate x:Key="SubscriptionsViewModel">
             <view:SubscriptionsView />
         </DataTemplate>
+        <DataTemplate x:Key="MerchantPanelViewModel">
+            <view:MerchantPanelView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>

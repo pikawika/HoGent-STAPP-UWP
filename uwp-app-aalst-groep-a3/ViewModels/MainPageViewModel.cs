@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Base;
@@ -63,11 +67,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             // De homepage wordt meteen toegevoegd aan de navigatiegeschiedenis
             NavigationHistoryItems.Add(new HomePageViewModel(this));
 
-            // Als de gebruiker aangemeld is, dan moet er een icoontje voor de abonnementen zichtbaar zijn
+            // Als de gebruiker aangemeld is, dan moet er een gepast extra icoontje in de navigatiebalk verschijnen
             try
             {
-                passwordVault.Retrieve("Stapp", "Token");
-                AddSubscriptionNavigationViewItem();
+                var role = UserUtils.GetUserRole();
+                if (role.ToLower() == "customer") AddSubscriptionNavigationViewItem();
+                else if (role.ToLower() == "merchant") AddMerchantPanelNavigationViewItem();
             }
             catch
             {
@@ -100,6 +105,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         // Verwijderen van het abonnement icoontje in de navigatiebalk
         public void RemoveSubscriptionNavigationViewItem() => NavigationViewItems.Remove(NavigationViewItems.SingleOrDefault(n => n.Tag.ToString() == "Subscription"));
+
+        // Toevoegen van het handelaar paneel icoontje aan de navigatiebalk
+        public void AddMerchantPanelNavigationViewItem() => NavigationViewItems.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.PreviewLink), Content = "Mijn overzicht", Tag = "Panel" });
+
+        // Verwijderen van het handelaar paneel icoontje in de navigatiebalk
+        public void RemoveMerchantPanelNavigationViewItem() => NavigationViewItems.Remove(NavigationViewItems.SingleOrDefault(n => n.Tag.ToString() == "Panel"));
 
         // Methode voor het navigeren zodra er in de navigatiebalk op een icoontje geklikt wordt
         private void Navigate(object args)
@@ -144,6 +155,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         break;
                     case "Abonnementen":
                         NavigateTo(new SubscriptionsViewModel(this));
+                        break;
+                    case "Mijn overzicht":
+                        NavigateTo(new MerchantPanelViewModel(this));
                         break;
                 }
             }
@@ -194,6 +208,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (current.Contains("establishment")) current = "merchants";
             else if (current.Contains("login") || current.Contains("registration")) current = "account";
+            else if (current.Contains("panel")) current = "panel";
 
             SelectedItem = NavigationViewItems.SingleOrDefault(n => current.Contains(n.Tag.ToString().ToLower()));
         }

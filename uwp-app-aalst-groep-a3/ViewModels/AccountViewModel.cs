@@ -50,11 +50,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async Task SignOutAsync()
         {
-            PasswordCredential pc = passwordVault.Retrieve("Stapp", "Token");
-            passwordVault.Remove(pc);
             NavigateToLogin();
-            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel) || v.GetType() == typeof(SubscriptionsViewModel));
-            mainPageViewModel.RemoveSubscriptionNavigationViewItem();
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel) || v.GetType() == typeof(SubscriptionsViewModel) || v.GetType() == typeof(MerchantPanelViewModel));
+
+            var role = UserUtils.GetUserRole();
+            if (role.ToLower() == "customer") mainPageViewModel.RemoveSubscriptionNavigationViewItem();
+            else if (role.ToLower() == "merchant") mainPageViewModel.RemoveMerchantPanelNavigationViewItem();
+
+            UserUtils.RemoveUserToken();
+            
             await MessageUtils.ShowDialog("Afmelden", "U bent succesvol afgemeld.");
         }
 
