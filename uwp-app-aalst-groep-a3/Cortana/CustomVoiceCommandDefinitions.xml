@@ -6,73 +6,44 @@
     <Example> Show Merchants </Example>
     
     <Command Name="ShowMerchants">
-      <Example> Show merchants, Show mergens, Show me merchants, Show me the merchants, Show me mergens, Show me the mergens, Show mergence, Show me mergence, Show me the mergence, Show mergent, Show me mergent, Show me the mergent </Example>          
+      <Example> Show merchants </Example>          
       <ListenFor> Show merchants </ListenFor>
-      <ListenFor> Show mergens </ListenFor>
-      <ListenFor> Show me merchants </ListenFor>
-      <ListenFor> Show me the merchants </ListenFor>
-      <ListenFor> Show me mergens </ListenFor>
-      <ListenFor> Show me the mergens </ListenFor>
-      <ListenFor> Show mergence </ListenFor>
-      <ListenFor> Show me mergence </ListenFor>
-      <ListenFor> Show me the mergence </ListenFor>
-      <ListenFor> Show mergent </ListenFor>
-      <ListenFor> Show me mergent </ListenFor>
-      <ListenFor> Show me the mergent </ListenFor>
-      <Feedback> Opening Stapp to show you the merchants </Feedback>
+      <Feedback> Opening Stapp to show the merchants </Feedback>
       <Navigate/>          
     </Command>
 
     <Command Name="ShowHomePage">
-      <Example> Show homepage, Show home page, Show me homepage, Show me home page, Show me the homepage, Show me the home page </Example>
+      <Example> Show homepage </Example>
       <ListenFor> Show homepage </ListenFor>
-      <ListenFor> Show home page </ListenFor>
-      <ListenFor> Show me homepage </ListenFor>
-      <ListenFor> Show me home page </ListenFor>
-      <ListenFor> Show me the homepage </ListenFor>
-      <ListenFor> Show me the home page </ListenFor>
-      <Feedback> Opening Stapp to show you the homepage </Feedback>
+      <Feedback> Opening Stapp to show the homepage </Feedback>
       <Navigate/>
     </Command>
 
     <Command Name="ShowPromotions">
-      <Example> Show promotions, Show me promotions, Show me the promotions </Example>
+      <Example> Show promotions </Example>
       <ListenFor> Show promotions </ListenFor>
-      <ListenFor> Show me promotions </ListenFor>
-      <ListenFor> Show me the promotions </ListenFor>
-      <Feedback> Opening Stapp to show you the promotions </Feedback>
+      <Feedback> Opening Stapp to show the promotions </Feedback>
       <Navigate/>
     </Command>
 
     <Command Name="ShowEvents">
-      <Example> Show events, Show me events, Show me the events </Example>
+      <Example> Show events </Example>
       <ListenFor> Show events </ListenFor>
-      <ListenFor> Show me events </ListenFor>
-      <ListenFor> Show me the events </ListenFor>
-      <Feedback> Opening Stapp to show you the events </Feedback>
+      <Feedback> Opening Stapp to show the events </Feedback>
       <Navigate/>
     </Command>
 
     <Command Name="ShowMap">
-      <Example> Show the map, Show me the map, Show map </Example>
-      <ListenFor> Show the map </ListenFor>
-      <ListenFor> Show me the map </ListenFor>
+      <Example> Show map </Example>
       <ListenFor> Show map </ListenFor>
-      <Feedback> Opening Stapp to show you the map </Feedback>
+      <Feedback> Opening Stapp to show the map </Feedback>
       <Navigate/>
     </Command>
 
     <Command Name="ShowSubscriptions">
-      <Example> Show subscriptions, Show my subscriptions, Show me subscriptions, Show me my subscriptions, Show subscription, Show my subscription, Show me subscription, Show me my subscription </Example>
+      <Example> Show subscriptions </Example>
       <ListenFor> Show subscriptions </ListenFor>
-      <ListenFor> Show my subscriptions </ListenFor>
-      <ListenFor> Show me subscriptions </ListenFor>
-      <ListenFor> Show me my subscriptions </ListenFor>
-      <ListenFor> Show subscription </ListenFor>
-      <ListenFor> Show my subscription </ListenFor>
-      <ListenFor> Show me subscription </ListenFor>
-      <ListenFor> Show me my subscription </ListenFor>
-      <Feedback> Opening Stapp to show you your subscriptions </Feedback>
+      <Feedback> Opening Stapp to show your subscriptions </Feedback>
       <Navigate/>
     </Command>
 
