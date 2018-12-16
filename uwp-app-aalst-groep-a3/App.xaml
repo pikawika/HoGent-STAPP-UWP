@@ -48,6 +48,9 @@
         <DataTemplate x:Key="PromotionDetailViewModel">
             <view:PromotionDetailView />
         </DataTemplate>
+        <DataTemplate x:Key="SubscriptionsViewModel">
+            <view:SubscriptionsView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>

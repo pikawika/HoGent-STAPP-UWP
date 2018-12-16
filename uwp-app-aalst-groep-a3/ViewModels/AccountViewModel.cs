@@ -28,6 +28,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         }
 
         public RelayCommand SignOutCommand { get; set; }
+        public RelayCommand ShowSubscriptionsCommand { get; set; }
 
         public AccountViewModel(MainPageViewModel mainPageViewModel)
         {
@@ -36,6 +37,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             User = new User { FirstName = "", LastName = "", Email = "", Login = new Login() { Username = "" } };
 
             SignOutCommand = new RelayCommand(async _ => await SignOutAsync());
+
+            ShowSubscriptionsCommand = new RelayCommand(_ => ShowSubscriptions());
 
             GetUser();
         }
@@ -55,5 +58,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         }
 
         private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
+
+        private void ShowSubscriptions() => mainPageViewModel.NavigateTo(new SubscriptionsViewModel(mainPageViewModel));
     }
 }

@@ -174,11 +174,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             var current = CurrentData.GetType().ToString().ToLower();
 
             if (current.Contains("establishment")) current = "merchants";
-            else if (current.Contains("login") || current.Contains("registration")) current = "account";
+            else if (current.Contains("login") || current.Contains("registration") || current.Contains("subscription")) current = "account";
 
             SelectedItem = NavigationViewItems.SingleOrDefault(n => current.Contains(n.Tag.ToString().ToLower()));
         }
-
+        
+        // Deze functie zorgt ervoor dat de back button niet zichtbaar is als je niet meer terug kan gaan
         private void AdjustBackButtonVisibility()
         {
             var currentView = SystemNavigationManager.GetForCurrentView();
