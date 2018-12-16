@@ -28,6 +28,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         }
 
         public RelayCommand SignOutCommand { get; set; }
+        public RelayCommand ShowSubscriptionsCommand { get; set; }
 
         public AccountViewModel(MainPageViewModel mainPageViewModel)
         {
@@ -36,6 +37,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             User = new User { FirstName = "", LastName = "", Email = "", Login = new Login() { Username = "" } };
 
             SignOutCommand = new RelayCommand(async _ => await SignOutAsync());
+
+            ShowSubscriptionsCommand = new RelayCommand(_ => ShowSubscriptions());
 
             GetUser();
         }
@@ -50,10 +53,13 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             PasswordCredential pc = passwordVault.Retrieve("Stapp", "Token");
             passwordVault.Remove(pc);
             NavigateToLogin();
-            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel));
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel) || v.GetType() == typeof(SubscriptionsViewModel));
+            mainPageViewModel.RemoveSubscriptionNavigationViewItem();
             await MessageUtils.ShowDialog("Afmelden", "U bent succesvol afgemeld.");
         }
 
         private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
+
+        private void ShowSubscriptions() => mainPageViewModel.NavigateTo(new SubscriptionsViewModel(mainPageViewModel));
     }
 }

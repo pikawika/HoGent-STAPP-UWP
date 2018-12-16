@@ -57,9 +57,22 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             NavigationViewItems = new ObservableCollection<NavigationViewItem>(CreateNavigationViewItems());
 
+            // De navigatiebalk weet niet dat standaard het geselecteerde icoontje het huisje is, dus dit wordt manueel gedaan
             SelectedItem = NavigationViewItems.FirstOrDefault();
 
+            // De homepage wordt meteen toegevoegd aan de navigatiegeschiedenis
             NavigationHistoryItems.Add(new HomePageViewModel(this));
+
+            // Als de gebruiker aangemeld is, dan moet er een icoontje voor de abonnementen zichtbaar zijn
+            try
+            {
+                passwordVault.Retrieve("Stapp", "Token");
+                AddSubscriptionNavigationViewItem();
+            }
+            catch
+            {
+                Debug.WriteLine("De gebruiker is niet aangemeld.");
+            }
 
             CurrentData = NavigationHistoryItems[0];
 
@@ -81,6 +94,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             return items;
         }
+
+        // Toevoegen van het abonnement icoontje aan de navigatiebalk
+        public void AddSubscriptionNavigationViewItem() => NavigationViewItems.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Read), Content = "Abonnementen", Tag = "Subscription" });
+
+        // Verwijderen van het abonnement icoontje in de navigatiebalk
+        public void RemoveSubscriptionNavigationViewItem() => NavigationViewItems.Remove(NavigationViewItems.SingleOrDefault(n => n.Tag.ToString() == "Subscription"));
 
         // Methode voor het navigeren zodra er in de navigatiebalk op een icoontje geklikt wordt
         private void Navigate(object args)
@@ -114,9 +133,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         // Als er een token in de password vault zit, is de gebruiker aangemeld
                         try
                         {
-                            //var pc = passwordVault.Retrieve("Stapp", "Token");
-                            //passwordVault.Remove(pc);
-
                             passwordVault.Retrieve("Stapp", "Token");
                             NavigateTo(new AccountViewModel(this));
                         }
@@ -125,6 +141,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         {
                             NavigateTo(new LoginViewModel(this));
                         }
+                        break;
+                    case "Abonnementen":
+                        NavigateTo(new SubscriptionsViewModel(this));
                         break;
                 }
             }
@@ -178,7 +197,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             SelectedItem = NavigationViewItems.SingleOrDefault(n => current.Contains(n.Tag.ToString().ToLower()));
         }
-
+        
+        // Deze functie zorgt ervoor dat de back button niet zichtbaar is als je niet meer terug kan gaan
         private void AdjustBackButtonVisibility()
         {
             var currentView = SystemNavigationManager.GetForCurrentView();

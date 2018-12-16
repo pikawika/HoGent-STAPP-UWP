@@ -164,6 +164,7 @@ namespace uwp_app_aalst_groep_a3.Network
             return errorMessage;
         }
 
+        // Get subscriptions from a customer
         public async Task<List<Establishment>> GetSubscriptions()
         {
             List<Establishment> establishments = new List<Establishment>();

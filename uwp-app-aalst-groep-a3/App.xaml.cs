@@ -113,6 +113,7 @@ namespace uwp_app_aalst_groep_a3
                         if (uriArgs.Uri.Host == "showmap") rootFrame.Navigate(typeof(MainPage), "ShowMap");
                         if (uriArgs.Uri.Host == "showhomepage") rootFrame.Navigate(typeof(MainPage), "ShowHomePage");
                         if (uriArgs.Uri.Host == "showevents") rootFrame.Navigate(typeof(MainPage), "ShowEvents");
+                        if (uriArgs.Uri.Host == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
                     }
                 }
                 Window.Current.Activate();
