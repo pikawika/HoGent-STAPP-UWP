@@ -17,6 +17,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private NetworkAPI NetworkAPI = new NetworkAPI();
 
+        private ObservableCollection<Company> _companies;
+
+        public ObservableCollection<Company> Companies
+        {
+            get { return _companies; }
+            set { _companies = value; RaisePropertyChanged(nameof(Companies)); }
+        }
+
         private ObservableCollection<Establishment> _establishments;
 
         public ObservableCollection<Establishment> Establishments
@@ -62,7 +70,19 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async void InitializeHomePage()
         {
-            Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetSubscriptions());
+            Companies = new ObservableCollection<Company>(await NetworkAPI.GetCompanies());
+
+            var establishmentList = new List<Establishment>();
+
+            foreach (Company c in Companies)
+            {
+                foreach (Establishment e in c.Establishments)
+                {
+                    establishmentList.Add(e);
+                }
+            }
+
+            Establishments = new ObservableCollection<Establishment>(establishmentList);
 
             var promotionList = new List<Promotion>();
             var eventList = new List<Event>();
