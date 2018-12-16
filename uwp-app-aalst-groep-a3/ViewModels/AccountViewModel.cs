@@ -54,6 +54,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             passwordVault.Remove(pc);
             NavigateToLogin();
             mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel) || v.GetType() == typeof(SubscriptionsViewModel));
+            mainPageViewModel.RemoveSubscriptionNavigationViewItem();
             await MessageUtils.ShowDialog("Afmelden", "U bent succesvol afgemeld.");
         }
 
