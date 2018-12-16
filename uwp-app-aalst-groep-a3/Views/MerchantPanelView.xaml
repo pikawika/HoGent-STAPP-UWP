@@ -5,9 +5,97 @@
     xmlns:local="using:uwp_app_aalst_groep_a3.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
 
-    </Grid>
+    <UserControl.Resources>
+        <DataTemplate x:Key="ImageTemplate">
+            <Grid
+                Background="White">
+                <Image
+                    Source="/Assets/2000px-Solid_black.svg.png"
+                    Stretch="UniformToFill"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+                <Image
+                    Source="{Binding Images[0].Path}"
+                    Stretch="UniformToFill"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Opacity="0.6">
+
+                </Image>
+                <TextBlock Text="{Binding Name}" FocusVisualPrimaryBrush="White" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition/>
+                <RowDefinition Height="6*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <TextBlock Text="Uw etablissementen" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+                <Button Content="Nieuw etablissement" Margin="30,0,0,0" />
+            </StackPanel>
+
+            <Grid Grid.Row="1">
+                <controls:AdaptiveGridView
+                Name="AdaptiveGridViewControl"
+                OneRowModeEnabled="False"
+                ItemHeight="200"
+                DesiredWidth="300"
+                SelectionMode="Single"
+                IsItemClickEnabled="True"
+                ItemClickCommand="{Binding EstablishmentClickedCommand}"
+                ItemsSource="{Binding Establishments}"
+                ItemTemplate="{StaticResource ImageTemplate}"/>
+            </Grid>
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                <TextBlock Text="Promoties van uw etablissementen" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+                <Button Content="Nieuwe promotie" Margin="30,0,0,0" />
+            </StackPanel>
+            
+            <Grid Grid.Row="3">
+                <controls:AdaptiveGridView
+                Name="AdaptiveGridViewControl2"
+                OneRowModeEnabled="False"
+                ItemHeight="200"
+                DesiredWidth="300"
+                SelectionMode="Single"
+                IsItemClickEnabled="True"
+                ItemClickCommand="{Binding PromotionClickedCommand}"
+                ItemsSource="{Binding Promotions}"
+                ItemTemplate="{StaticResource ImageTemplate}"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="4">
+                <TextBlock Text="Evenementen van uw etablissementen" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+                <Button Content="Nieuw evenement" Margin="30,0,0,0" />
+            </StackPanel>
+
+            <Grid Grid.Row="5">
+                <controls:AdaptiveGridView
+                Name="AdaptiveGridViewControl3"
+                OneRowModeEnabled="False"
+                ItemHeight="200"
+                DesiredWidth="300"
+                SelectionMode="Single"
+                IsItemClickEnabled="True"
+                ItemClickCommand="{Binding EventClickedCommand}"
+                ItemsSource="{Binding Events}"
+                ItemTemplate="{StaticResource ImageTemplate}"/>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+    
 </UserControl>
