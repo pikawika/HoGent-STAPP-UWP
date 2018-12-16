@@ -31,7 +31,7 @@
     </UserControl.Resources>
 
     <ScrollViewer>
-        <Grid>
+        <Grid Padding="20">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="6*"/>
@@ -41,7 +41,7 @@
                 <RowDefinition Height="6*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Uw abonnementen" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+            <TextBlock Text="Uw abonnementen" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
 
             <Grid Grid.Row="1">
                 <controls:AdaptiveGridView
@@ -55,8 +55,8 @@
                 ItemsSource="{Binding Subscriptions}"
                 ItemTemplate="{StaticResource SubscriptionsTemplate}"/>
             </Grid>
-            
-            <TextBlock Text="Promoties van uw abonnementen" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+
+            <TextBlock Text="Promoties van uw abonnementen" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
 
             <Grid Grid.Row="3">
                 <controls:AdaptiveGridView
@@ -70,8 +70,8 @@
                 ItemsSource="{Binding Promotions}"
                 ItemTemplate="{StaticResource SubscriptionsTemplate}"/>
             </Grid>
-            
-            <TextBlock Text="Evenementen van uw abonnementen" Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+
+            <TextBlock Text="Evenementen van uw abonnementen" Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
 
             <Grid Grid.Row="5">
                 <controls:AdaptiveGridView
