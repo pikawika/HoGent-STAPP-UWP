@@ -9,6 +9,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.VoiceCommands;
 using Windows.Media.SpeechRecognition;
+using Windows.Security.Credentials;
 using Windows.Storage;
 using Windows.System;
 
@@ -17,6 +18,7 @@ namespace uwp_app_aalst_groep_a3.Cortana
     public class CortanaFunctions
     {
         private MainPageViewModel mainPageViewModel;
+        private PasswordVault passwordVault = new PasswordVault();
 
         public CortanaFunctions(MainPageViewModel mainPageViewModel)
         {
@@ -34,8 +36,8 @@ namespace uwp_app_aalst_groep_a3.Cortana
             }
             catch
             {
-                Debug.WriteLine("Er is iets fout gegaan tijdens het installeren van" +
-                                "de voice commands definitions van de Stapp app." +
+                Debug.WriteLine("Er is iets fout gegaan tijdens het installeren van " +
+                                "de voice commands definitions van de Stapp app. " +
                                 "Mogelijks is Cortana niet geïnstalleerd op het toestel.");
             }
         }
@@ -57,6 +59,9 @@ namespace uwp_app_aalst_groep_a3.Cortana
                 case "ShowMap":
                     ShowMap();
                     break;
+                case "ShowSubscriptions":
+                    ShowSubscriptions();
+                    break;
                 default:
                     break;
             }
@@ -69,6 +74,19 @@ namespace uwp_app_aalst_groep_a3.Cortana
         private void ShowPromotions() => mainPageViewModel.NavigateTo(new PromotionsViewModel(mainPageViewModel));
 
         private void ShowMap() => mainPageViewModel.NavigateTo(new MapViewModel(mainPageViewModel));
+
+        private void ShowSubscriptions()
+        {
+            try
+            {
+                passwordVault.Retrieve("Stapp", "Token");
+                mainPageViewModel.NavigateTo(new SubscriptionsViewModel(mainPageViewModel));
+            }
+            catch
+            {
+                mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
+            }
+        }
 
     }
 }

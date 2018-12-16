@@ -62,6 +62,20 @@
       <Navigate/>
     </Command>
 
+    <Command Name="ShowSubscriptions">
+      <Example> Show subscriptions, Show my subscriptions, Show me subscriptions, Show me my subscriptions, Show subscription, Show my subscription, Show me subscription, Show me my subscription </Example>
+      <ListenFor> Show subscriptions </ListenFor>
+      <ListenFor> Show my subscriptions </ListenFor>
+      <ListenFor> Show me subscriptions </ListenFor>
+      <ListenFor> Show me my subscriptions </ListenFor>
+      <ListenFor> Show subscription </ListenFor>
+      <ListenFor> Show my subscription </ListenFor>
+      <ListenFor> Show me subscription </ListenFor>
+      <ListenFor> Show me my subscription </ListenFor>
+      <Feedback> Opening Stapp to show you your subscriptions </Feedback>
+      <Navigate/>
+    </Command>
+
   </CommandSet>  
 
 </VoiceCommands>

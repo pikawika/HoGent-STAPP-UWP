@@ -63,7 +63,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             // De homepage wordt meteen toegevoegd aan de navigatiegeschiedenis
             NavigationHistoryItems.Add(new HomePageViewModel(this));
 
-            // Als de gebruiker aangemeld is, dan moet er een icoontje voor de abonnementen zichtbaar zijn.
+            // Als de gebruiker aangemeld is, dan moet er een icoontje voor de abonnementen zichtbaar zijn
             try
             {
                 passwordVault.Retrieve("Stapp", "Token");
