@@ -34,21 +34,21 @@ namespace stappBackend.Data.Repositories
                 .Include(e => e.Events).ThenInclude(e => e.Images)
                 .ToList();
 
-            if (establishments != null)
+
+            foreach (Establishment establishment in establishments)
             {
-                foreach (Establishment establishment in establishments)
-                {
-                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
-                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
-                }
+                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Today || p.isDeleted);
+                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Today || e.isDeleted);
             }
+
 
             return establishments;
         }
 
         public Establishment getById(int id)
         {
-            var establishment = _establishments.Where(e => e.EstablishmentId == id && !e.isDeleted)
+            var establishment = _establishments
+                .Where(e => e.EstablishmentId == id && !e.isDeleted)
                 .Include(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(e => e.OpenDays).ThenInclude(od => od.OpenHours)
@@ -62,8 +62,8 @@ namespace stappBackend.Data.Repositories
 
             if (establishment != null)
             {
-                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
-                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
+                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Today || p.isDeleted);
+                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Today || e.isDeleted);
             }
 
             return establishment;

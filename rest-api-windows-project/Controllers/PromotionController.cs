@@ -17,10 +17,12 @@ namespace stappBackend.Controllers
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionRepository _promotionRepository;
+        private readonly IEstablishmentRepository _establishmentRepository;
 
-        public PromotionController(IPromotionRepository promotionRepository)
+        public PromotionController(IPromotionRepository promotionRepository, IEstablishmentRepository establishmentRepository)
         {
             _promotionRepository = promotionRepository;
+            _establishmentRepository = establishmentRepository;
         }
 
         // GET api/promotion
@@ -44,10 +46,10 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             //modelstate werkt niet op lijsten :-D
-            if (promotionToAdd.Attachments == null || !promotionToAdd.Attachments.Any())
+            if (promotionToAdd.Images == null || !promotionToAdd.Images.Any())
                 return BadRequest(new { error = "geen Images meegeven." });
 
-            if (!ContainsJpgs(promotionToAdd.Attachments.ToList()))
+            if (!ContainsJpgs(promotionToAdd.Images))
                 return BadRequest(new { error = "geen jpg images gevonden" });
 
             if (promotionToAdd.StartDate == null)
@@ -59,6 +61,14 @@ namespace stappBackend.Controllers
 
             if (ModelState.IsValid)
             {
+                Establishment establishmentFromDb = _establishmentRepository.getById(promotionToAdd.EstablishmentId ?? 0);
+
+                if (establishmentFromDb == null)
+                    return BadRequest(new { error = "Establishment niet gevonden" });
+
+                if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), establishmentFromDb.EstablishmentId))
+                    return BadRequest(new { error = "Establishment behoord niet tot uw establishments" });
+
                 Promotion newPromotion = new Promotion
                 {
                     Name = promotionToAdd.Name,

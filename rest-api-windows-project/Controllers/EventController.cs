@@ -17,10 +17,12 @@ namespace stappBackend.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IEstablishmentRepository _establishmentRepository;
 
-        public EventController(IEventRepository eventRepository)
+        public EventController(IEventRepository eventRepository, IEstablishmentRepository establishmentRepository)
         {
             _eventRepository = eventRepository;
+            _establishmentRepository = establishmentRepository;
         }
 
         // GET api/event
@@ -44,10 +46,10 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             //modelstate werkt niet op lijsten :-D
-            if (eventToAdd.Attachments == null || !eventToAdd.Attachments.Any())
+            if (eventToAdd.Images == null || !eventToAdd.Images.Any())
                 return BadRequest(new { error = "geen Images meegeven." });
 
-            if (!ContainsJpgs(eventToAdd.Attachments))
+            if (!ContainsJpgs(eventToAdd.Images))
                 return BadRequest(new { error = "geen jpg images gevonden" });
 
             if (eventToAdd.StartDate == null)
@@ -59,6 +61,14 @@ namespace stappBackend.Controllers
 
             if (ModelState.IsValid)
             {
+                Establishment establishmentFromDb = _establishmentRepository.getById(eventToAdd.EstablishmentId ?? 0);
+
+                if (establishmentFromDb == null)
+                    return BadRequest(new { error = "Establishment niet gevonden" });
+
+                if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), establishmentFromDb.EstablishmentId))
+                    return BadRequest(new { error = "Establishment behoord niet tot uw establishments" });
+
                 Event newEvent = new Event
                 {
                     Name = eventToAdd.Name,
@@ -67,10 +77,10 @@ namespace stappBackend.Controllers
                     EndDate = (DateTime)eventToAdd.EndDate
                 };
 
-                _eventRepository.addEvent(eventToAdd.establishmentId ?? 0, newEvent);
+                _eventRepository.addEvent(eventToAdd.EstablishmentId ?? 0, newEvent);
 
                 //we hebben id nodig voor img path dus erna
-                newEvent.Images = ConvertFileViewModelToImages(eventToAdd.Attachments, newEvent.EventId);
+                newEvent.Images = ConvertFileViewModelToImages(eventToAdd.Images, newEvent.EventId);
                 newEvent.Attachments = ConvertFileViewModelToAttachments(eventToAdd.Attachments, newEvent.EventId);
                 _eventRepository.SaveChanges();
 

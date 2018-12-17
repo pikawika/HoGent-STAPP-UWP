@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using stappBackend.Models;
 using stappBackend.Models.IRepositories;
@@ -42,13 +41,13 @@ namespace stappBackend.Data.Repositories
                 .Include(c => c.Establishments).ThenInclude(e => e.Events).ThenInclude(od => od.Attachments)
                 .SingleOrDefault(c => c.CompanyId == companyId && !c.isDeleted);
 
-            if (company?.Establishments != null)
+            if (company?.Establishments == null) return company;
             {
                 company.Establishments.RemoveAll(e => e.isDeleted);
                 foreach (Establishment establishment in company.Establishments)
                 {
-                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
-                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
+                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Today || p.isDeleted);
+                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Today || e.isDeleted);
                 }
             }
 
@@ -73,21 +72,20 @@ namespace stappBackend.Data.Repositories
                 .ToList();
 
 
-            if (companies != null)
+
+            foreach (Company company in companies)
             {
-                foreach (Company company in companies)
+                company.Establishments.RemoveAll(e => e.isDeleted);
+                if (company.Establishments != null)
                 {
-                    company.Establishments.RemoveAll(e => e.isDeleted);
-                    if (company.Establishments != null)
+                    foreach (Establishment establishment in company.Establishments)
                     {
-                        foreach (Establishment establishment in company.Establishments)
-                        {
-                            establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
-                            establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
-                        }
+                        establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Today || p.isDeleted);
+                        establishment.Events.RemoveAll(e => e.EndDate < DateTime.Today || e.isDeleted);
                     }
                 }
             }
+
 
             return companies;
 

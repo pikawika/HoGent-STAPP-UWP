@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using stappBackend.Models.ViewModels.Attachments;
-using stappBackend.Models.ViewModels.Establishment;
 
 namespace stappBackend.Models.ViewModels.Event
 {
     public class AddEventViewModel
     {
         [Required(ErrorMessage = "{0} is verplicht.")]
-        public int? establishmentId { get; set; }
+        public int? EstablishmentId { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         public string Name { get; set; }

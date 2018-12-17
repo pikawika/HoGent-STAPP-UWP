@@ -34,7 +34,7 @@ namespace stappBackend.Controllers
                 if (!IsCustomer())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
-                Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.establishmentId);
+                Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.EstablishmentId);
 
                 if (establishment == null)
                     return BadRequest(new { error = "Het opgegeven etablissement bestaat niet." });
