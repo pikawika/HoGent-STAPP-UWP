@@ -53,5 +53,13 @@ namespace uwp_app_aalst_groep_a3.Views
             _currentActivity?.Dispose();
             _currentActivity = userActivity.CreateSession();
         }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(e.NewSize.Width < 300)
+            {
+
+            }
+        }
     }
 }
