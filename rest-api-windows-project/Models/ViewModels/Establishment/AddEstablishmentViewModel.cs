@@ -30,7 +30,6 @@ namespace stappBackend.Models.ViewModels.Establishment
         [Required(ErrorMessage = "{0} is verplicht.")]
         public List<CategoryViewModel> Categories { get; set; }
 
-        [Required(ErrorMessage = "{0} is verplicht.")]
         public List<OpenDayViewModel> OpenDays { get; set; }
 
         public List<SocialMediaViewModel> SocialMedias { get; set; }

@@ -43,7 +43,7 @@ namespace stappBackend.Controllers
             if (user != null){
                 return Ok(user);
             }
-            return BadRequest(new { error = "Geen user gevonden met de opgegeven id." });
+            return BadRequest(new { error = "Geen gebruiker gevonden met de opgegeven id." });
         }
 
         [HttpPost("CheckEmailExists")]
@@ -91,7 +91,7 @@ namespace stappBackend.Controllers
                 //geen user gevonden
                 if (CheckUsernameExists(login.Username))
                 {
-                    return BadRequest(new { error = "Incorrect wachtwoord" });
+                    return BadRequest(new { error = "Incorrect wachtwoord." });
                 }
                 else
                 {
