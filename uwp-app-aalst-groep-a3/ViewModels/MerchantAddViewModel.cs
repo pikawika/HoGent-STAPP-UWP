@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,6 +103,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _instagram = value; RaisePropertyChanged(nameof(Instagram)); }
         }
 
+        private ObservableCollection<Company> _companies;
+        public ObservableCollection<Company> Companies
+        {
+            get => _companies;
+            set { _companies = value; RaisePropertyChanged(nameof(_companies)); }
+        }
+
+        private Company _pickedCompany;
+        public Company PickedCompany
+        {
+            get => _pickedCompany;
+            set { _pickedCompany = value; RaisePropertyChanged(nameof(_pickedCompany)); }
+        }
+
         private string _buttonText = "";
         public string ButtonText
         {
@@ -160,11 +175,34 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             CompanyVisibility = Visibility.Visible;
         }
 
-        private void InitializeEstablishment()
+        private async Task InitializeEstablishment()
         {
             Establishment = new EstablishmentRequest();
             ButtonText = "Voeg vestiging toe";
             EstablishmentVisibility = Visibility.Visible;
+
+            //lijst van companies
+            Companies = new ObservableCollection<Company>();
+
+            //selected company
+            PickedCompany = new Company();
+
+            var result = await networkAPI.GetCompanies();
+
+            if (result.Item2 == null)
+            {
+                Companies = new ObservableCollection<Company>(result.Item1);
+                if (Companies.Any())
+                {
+                    PickedCompany = Companies[0];
+                }
+            }
+            else
+            {
+                //TODO nog geen companie voegt da keer toe
+            }
+
+            
         }
 
         private void InitializePromotion()
@@ -204,6 +242,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     Establishment.SocialMedias.Add(new SocialMediaRequest { Name = "instagram", Url = Instagram });
                 }
+
+                Establishment.CompanyId = PickedCompany.CompanyId;
             }
 
             if (Promotion != null)

@@ -44,12 +44,16 @@
         <TextBlock Text="Twitter" Visibility="{Binding EstablishmentVisibility}" />
         <TextBox PlaceholderText="Facebook url" Text="{Binding Instagram, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
+        <ComboBox
+            ItemsSource="{Binding Companies}"
+            DisplayMemberPath="Name"
+            SelectedItem="{Binding PickedCompany, Mode=TwoWay}"/>
         <!-- CompanyId-->
         <!-- Categories -->
         <!-- OpenDays -->
         <!-- ExceptionalDays -->
 
-        
+
 
 
         <!-- ADD PROMOTION -->
