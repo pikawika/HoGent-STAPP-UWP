@@ -65,5 +65,13 @@ namespace uwp_app_aalst_groep_a3.Views
             NetworkAPI api = new NetworkAPI();
             Establishments = new ObservableCollection<Establishment>(await api.GetAllEstablishments());
         }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(e.NewSize.Width < 300)
+            {
+
+            }
+        }
     }
 }

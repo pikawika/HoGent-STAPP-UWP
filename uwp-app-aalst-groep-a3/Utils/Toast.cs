@@ -5,12 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Models;
+using uwp_app_aalst_groep_a3.Network;
+using uwp_app_aalst_groep_a3.ViewModels;
 using Windows.UI.Notifications;
 
 namespace uwp_app_aalst_groep_a3.Utils
 {
     class Toast
     {
+        public MainPageViewModel MainPage { get; set; }
+
         public ToastNotification createToast(string title,string content)
         {
             // Construct the visuals of the toast
@@ -27,12 +32,7 @@ namespace uwp_app_aalst_groep_a3.Utils
                         new AdaptiveText()
                         {
                             Text = content
-                        },
-
-                        /*new AdaptiveImage()
-                        {
-                            Source = image
-                        }*/
+                        }
                     }
                 }
             };
@@ -76,6 +76,35 @@ namespace uwp_app_aalst_groep_a3.Utils
             toast.Group = "stapp";
 
             return toast;
+        }
+
+        public async void SubscriptionToastAsync(ViewModels.MainPageViewModel mainPageViewModel)
+        {
+            this.MainPage = mainPageViewModel;
+            NetworkAPI networkAPI = new NetworkAPI();
+            User user = await networkAPI.GetUser();
+            if (user.UserId != -2)
+            {
+                bool changed = false;
+                //eerst initialiseren anders null indien file niet bestaat
+                List<Establishment> subs = new List<Establishment>();
+                subs = await networkAPI.GetSubscriptions();
+
+                //List<Establishment> merc = await NetworkAPI.GetSubscribedEstablishmentsAsync();
+
+                bool isEqual = await networkAPI.CheckSubbedDifferenceByJSONAsync(subs);
+                if (!isEqual)
+                {
+                    //als veranderd, dan toast tonen en wegschrijven van nieue subs
+                    ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("STAPP", "Er zijn nieuwe promoties of evenementen toegevoegd, bekijk ze hier!"));
+                    await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
+                }
+            }
+            else
+            {
+                ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("Welkom!", "Om alle functionaliteit van deze app te ontgrendelen, kan je hier aanmelden!"));
+            }
+
         }
     }
 }
