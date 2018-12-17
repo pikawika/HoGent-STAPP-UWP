@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using stappBackend.Models;
 using stappBackend.Models.IRepositories;
 using stappBackend.Models.ViewModels.Customer;
-using stappBackend.Models.ViewModels.User;
 
 namespace stappBackend.Controllers
 {
@@ -18,8 +14,8 @@ namespace stappBackend.Controllers
     [Authorize]
     public class CustomerController : ControllerBase
     {
-        private ICustomerRepository _customerRepository;
-        private IEstablishmentRepository _establishmentRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IEstablishmentRepository _establishmentRepository;
 
         public CustomerController(ICustomerRepository customerRepository, IEstablishmentRepository establishmentRepository)
         {
@@ -27,44 +23,50 @@ namespace stappBackend.Controllers
             _establishmentRepository = establishmentRepository;
         }
 
-        [HttpPost("subscribe")]
+        [HttpPost]
         public IActionResult Post([FromBody]ModifySubscriptionViewModel addSubscriptionViewModel)
         {
             if (ModelState.IsValid)
             {
-                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
+                if (IsMerchant())
+                    return BadRequest(new { error = "Handelaars kunnen zich niet abonneren op andere handelaars." });
+                    
+                if (!IsCustomer())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
-                Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.establishmentId);
+                Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.EstablishmentId);
 
                 if (establishment == null)
-                    return BadRequest(new { error = "Geen establishment met de meegegeven id" });
+                    return BadRequest(new { error = "Het opgegeven etablissement bestaat niet." });
 
                 Customer customer = _customerRepository.getById(int.Parse(User.FindFirst("userId")?.Value));
 
                 if (customer.EstablishmentSubscriptions.Any(es => es.EstablishmentId == establishment.EstablishmentId))
-                    return BadRequest(new { error = "U bent reeds subscribed aan deze establishment" });
+                    return BadRequest(new { error = "U bent reeds geabonneerd op dit etablissement." });
 
                 EstablishmentSubscription establishmentSubscription = new EstablishmentSubscription() { Customer = customer, Establishment = establishment, DateAdded = DateTime.Now, EstablishmentId = establishment.EstablishmentId };
 
                 _customerRepository.addSubscription(customer.UserId, establishmentSubscription);
 
-                return Ok(new { message = "Toegevoegd!" });
+                return Ok(new { message = "U bent succes geabonneerd op dit etablissement.!" });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             return BadRequest(new { error = "De ingevoerde waarden zijn onvolledig of voldoen niet aan de eisen voor een login. Foutboodschap: " + errorMsg });
         }
 
-        [HttpDelete("subscribe")]
-        public IActionResult Delete([FromBody]ModifySubscriptionViewModel addSubscriptionViewModel)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
             if (ModelState.IsValid)
             {
-                if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
+                if (IsMerchant())
+                    return BadRequest(new { error = "Handelaars kunnen zich niet abonneren op andere handelaars." });
+                    
+                if (!IsCustomer())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
-                Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.establishmentId);
+                Establishment establishment = _establishmentRepository.getById(id);
 
                 if (establishment == null)
                     return BadRequest(new { error = "Geen establishment met de meegegeven id" });
@@ -91,13 +93,25 @@ namespace stappBackend.Controllers
         [HttpGet("subscriptions")]
         public IActionResult Get()
         {
-            if (User.FindFirst("userId")?.Value == null || User.FindFirst("customRole")?.Value.ToLower() != "customer")
+            if (!IsCustomer())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
 
             List<Establishment> subscriptions = _customerRepository.GetEstablishmentSubscriptions(int.Parse(User.FindFirst("userId")?.Value));
 
             return Ok(subscriptions);
+        }
+
+        private bool IsCustomer()
+        {
+            return User.FindFirst("userId")?.Value != null &&
+                   User.FindFirst("customRole")?.Value.ToLower() == "customer";
+        }
+        
+        private bool IsMerchant()
+        {
+            return User.FindFirst("userId")?.Value != null &&
+                   User.FindFirst("customRole")?.Value.ToLower() == "merchant";
         }
 
     }

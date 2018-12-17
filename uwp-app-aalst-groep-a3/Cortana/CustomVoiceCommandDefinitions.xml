@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.2">
+  <CommandSet xml:lang="en-us" Name="CustomCommands">
+   <CommandPrefix> Listen up </CommandPrefix>
+    <Example> Show Merchants </Example>
+    
+    <Command Name="ShowMerchants">
+      <Example> Show merchants </Example>          
+      <ListenFor> Show merchants </ListenFor>
+      <Feedback> Opening Stapp to show the merchants </Feedback>
+      <Navigate/>          
+    </Command>
+
+    <Command Name="ShowHomePage">
+      <Example> Show homepage </Example>
+      <ListenFor> Show homepage </ListenFor>
+      <Feedback> Opening Stapp to show the homepage </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="ShowPromotions">
+      <Example> Show promotions </Example>
+      <ListenFor> Show promotions </ListenFor>
+      <Feedback> Opening Stapp to show the promotions </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="ShowEvents">
+      <Example> Show events </Example>
+      <ListenFor> Show events </ListenFor>
+      <Feedback> Opening Stapp to show the events </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="ShowMap">
+      <Example> Show map </Example>
+      <ListenFor> Show map </ListenFor>
+      <Feedback> Opening Stapp to show the map </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="ShowSubscriptions">
+      <Example> Show subscriptions </Example>
+      <ListenFor> Show subscriptions </ListenFor>
+      <Feedback> Opening Stapp to show your subscriptions </Feedback>
+      <Navigate/>
+    </Command>
+
+  </CommandSet>  
+
+</VoiceCommands>

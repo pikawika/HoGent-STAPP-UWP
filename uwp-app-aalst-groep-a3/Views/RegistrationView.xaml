@@ -35,5 +35,6 @@
 
         <Button Content="Maak account aan" Command="{Binding RegisterCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
         <Button Content="Terug naar aanmelden" Background="Transparent" Foreground="#0078d7" Command="{Binding NavigateToLoginCommand}"  HorizontalAlignment="Stretch"/>
+        <Button Content="Maak een handelaar account aan" Background="Transparent" Foreground="#0078d7" Command="{Binding NavigateToMerchantRegistrationCommand}"  HorizontalAlignment="Stretch"/>
     </StackPanel>
 </UserControl>

@@ -8,6 +8,12 @@
     <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Models\ViewModels\attachment\**" />
+    <Content Remove="Models\ViewModels\attachment\**" />
+    <EmbeddedResource Remove="Models\ViewModels\attachment\**" />
+    <None Remove="Models\ViewModels\attachment\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="wwwroot\img\socialMediaLogo\" />
   </ItemGroup>
   <ItemGroup>

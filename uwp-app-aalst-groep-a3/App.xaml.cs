@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using uwp_app_aalst_groep_a3.Cortana;
 using uwp_app_aalst_groep_a3.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.SpeechRecognition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -70,6 +73,70 @@ namespace uwp_app_aalst_groep_a3
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 // Ensure the current window is active
+                Window.Current.Activate();
+
+                try
+                {
+                    CortanaFunctions.RegisterVCD();
+                }
+                catch
+                {
+                    Debug.WriteLine("Er is iets fout gegaan tijdens het installeren van" +
+                        "de voice commands definitions van de Stapp app." +
+                        "Mogelijks is Cortana niet geïnstalleerd op het toestel.");
+                }
+            }
+        }
+
+        // Extra code voor het gebruik van Cortana
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            if (args.Kind == ActivationKind.Protocol)
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
+
+                if (rootFrame == null)
+                {
+                    rootFrame = new Frame();
+
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+
+                    Window.Current.Content = rootFrame;
+                }
+                if (rootFrame.Content == null)
+                {
+                    var uriArgs = args as ProtocolActivatedEventArgs;
+                    if (uriArgs != null)
+                    {
+                        if (uriArgs.Uri.Host == "showpromotions") rootFrame.Navigate(typeof(MainPage), "ShowPromotions");
+                        if (uriArgs.Uri.Host == "showmerchants") rootFrame.Navigate(typeof(MainPage), "ShowMerchants");
+                        if (uriArgs.Uri.Host == "showmap") rootFrame.Navigate(typeof(MainPage), "ShowMap");
+                        if (uriArgs.Uri.Host == "showhomepage") rootFrame.Navigate(typeof(MainPage), "ShowHomePage");
+                        if (uriArgs.Uri.Host == "showevents") rootFrame.Navigate(typeof(MainPage), "ShowEvents");
+                        if (uriArgs.Uri.Host == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                    }
+                }
+                Window.Current.Activate();
+            }
+            else if (args.Kind == ActivationKind.VoiceCommand)
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
+
+                if (rootFrame == null)
+                {
+                    rootFrame = new Frame();
+
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+
+                    Window.Current.Content = rootFrame;
+                }
+                if (rootFrame.Content == null)
+                {
+                    SpeechRecognitionResult result = (args as VoiceCommandActivatedEventArgs).Result;
+                    string commandName = result.RulePath[0];
+
+                    rootFrame.Navigate(typeof(MainPage), commandName);
+                }
                 Window.Current.Activate();
             }
         }

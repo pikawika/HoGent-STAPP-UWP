@@ -21,6 +21,9 @@
         <DataTemplate x:Key="EventsViewModel">
             <view:EventsView />
         </DataTemplate>
+        <DataTemplate x:Key="PromotionsViewModel">
+            <view:PromotionsView />
+        </DataTemplate>
         <DataTemplate x:Key="SettingsViewModel">
             <view:SettingsView />
         </DataTemplate>
@@ -38,6 +41,21 @@
         </DataTemplate>
         <DataTemplate x:Key="EventDetailViewModel">
             <view:EventDetailView />
+        </DataTemplate>
+        <DataTemplate x:Key="MerchantRegistrationViewModel">
+            <view:MerchantRegistrationView />
+        </DataTemplate>
+        <DataTemplate x:Key="PromotionDetailViewModel">
+            <view:PromotionDetailView />
+        </DataTemplate>
+        <DataTemplate x:Key="SubscriptionsViewModel">
+            <view:SubscriptionsView />
+        </DataTemplate>
+        <DataTemplate x:Key="MerchantPanelViewModel">
+            <view:MerchantPanelView />
+        </DataTemplate>
+        <DataTemplate x:Key="MerchantAddViewModel">
+            <view:MerchantAddView />
         </DataTemplate>
     </Application.Resources>
 

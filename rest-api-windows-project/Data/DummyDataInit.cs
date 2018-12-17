@@ -128,7 +128,7 @@ namespace stappBackend.Data
                 mrspaghettiAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = restrauntCategory });
                 mrspaghettiAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = cafeCategory });
 
-                mrspaghettiAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() {SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/WeLoveMisterSpaghettiAalst/" });
+                mrspaghettiAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() {SocialMedia = facebookSocialMedia, Url = "https://www.facebook.com/WeLoveMisterSpaghettiAalst/" });
 
                 mrspaghettiAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/1/1.jpg" });
                 mrspaghettiAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/1/2.jpg" });
@@ -145,21 +145,22 @@ namespace stappBackend.Data
                 mrspaghettiAalstEstablishment.ExceptionalDays.Add(new ExceptionalDay() { Day = DateTime.Today.AddDays(4), Message = "All you can eat event!" });
                 mrspaghettiAalstEstablishment.ExceptionalDays.Add(new ExceptionalDay() { Day = DateTime.Today.AddDays(10), Message = "Ladies night event!" });
 
-                mrspaghettiAalstEstablishment.Events.Add(new Event(){StartDate = DateTime.Today.AddDays(4), EndDate = DateTime.Today.AddDays(4).AddHours(5),
+                mrspaghettiAalstEstablishment.Events.Add(new Event(){StartDate = DateTime.Today.AddDays(4).AddHours(11).AddMinutes(30), EndDate = DateTime.Today.AddDays(4).AddHours(22),
                     Name = "All you can eat",
                     Message = "Bij het all you can eat event betaal je een inkom van 20 euro en krijg je een ganse avond spaghetti voorgeschoteld! De normale openingsuren gelden.",
                     Images = new List<Image>(){new Image(){Path = "img/events/1/1.jpg"}, new Image() { Path = "img/events/1/2.jpg" } }
                 });
-                mrspaghettiAalstEstablishment.Events.Add(new Event(){StartDate = DateTime.Today.AddDays(10), EndDate = DateTime.Today.AddDays(10).AddHours(5),
+                mrspaghettiAalstEstablishment.Events.Add(new Event(){StartDate = DateTime.Today.AddDays(10).AddHours(18), EndDate = DateTime.Today.AddDays(10).AddHours(23),
                     Name = "Ladies night",
                     Message = "Voor deze ladies night kunnen alle meiden vanaf 6u savonds terrecht bij Mr Spaghetti te Aalst voor een hapje en een drankje terwijl er een Sturm Der Liebe marathon afspeeld op het groot scherm!",
                     Images = new List<Image>() { new Image() { Path = "img/events/2/1.jpg" }, new Image() { Path = "img/events/2/2.jpg" } }
                 });
 
                 mrspaghettiAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(10).AddHours(5),
-                    Name = "€5 korting op een spaghetti naar keuze",
-                    Message = "5€ korting op een spaghetti naar keuze bij het vermelden van de couponcode 'Spaghet5'.",
-                    Images = new List<Image>() { new Image() { Path = "img/promotions/1/1.jpg" }, new Image() { Path = "img/promotions/1/2.jpg" } }
+                    Name = "€ 5 korting op een spaghetti naar keuze",
+                    Message = "€ 5 korting op een spaghetti naar keuze bij het vermelden van de couponcode 'Spaghet5'.",
+                    Images = new List<Image>() { new Image() { Path = "img/promotions/1/1.jpg" }, new Image() { Path = "img/promotions/1/2.jpg" } },
+                    Attachments = new List<File>() { new File() { Name = "QR-code", Path = "files/promotions/1/1.pdf" } }
                 });
 
                 mrspaghettiCompany.Establishments.Add(mrspaghettiAalstEstablishment);
@@ -168,8 +169,8 @@ namespace stappBackend.Data
 
                 fnacAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = winkelCategory });
 
-                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/FnacAalst/" });
-                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, url = "https://twitter.com/fnacbelgie" });
+                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, Url = "https://www.facebook.com/FnacAalst/" });
+                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, Url = "https://twitter.com/fnacbelgie" });
 
                 fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/1.jpg" });
                 fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/2.jpg" });
@@ -187,7 +188,7 @@ namespace stappBackend.Data
                 
                 fnacAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today.AddDays(12), EndDate = DateTime.Today.AddDays(16),
                     Name = "Week van de smartphone.",
-                    Message = "Tot wel 50% korting op ons assortiment smartphones. Kom eens binnen en luister welk toestel onze experts u aanraden.",
+                    Message = "Tot wel 50% korting op ons assortiment smartphones. Kom eens binnen en ontdek welk toestel onze experts u aanbevelen.",
                     Images = new List<Image>() { new Image() { Path = "img/promotions/2/1.jpg" }, new Image() { Path = "img/promotions/2/2.jpg" } }
                 });
 
@@ -198,7 +199,7 @@ namespace stappBackend.Data
                 safirAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = cafeCategory });
                 safirAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = restrauntCategory });
 
-                safirAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/pages/category/Cafe/Safir-188724374609159/" });
+                safirAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, Url = "https://www.facebook.com/pages/category/Cafe/Safir-188724374609159/" });
                 safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/1.jpg" });
                 safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/2.jpg" });
                 safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/3.jpg" });
@@ -223,9 +224,9 @@ namespace stappBackend.Data
 
                 hogentAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = schoolCategory });
 
-                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/HoGentCampusAalst/" });
-                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, url = "https://twitter.com/hogeschool_gent" });
-                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = instagramSocialMedia, url = "https://www.instagram.com/explore/locations/420243736/hogent-stadscampus-aalst" });
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, Url = "https://www.facebook.com/HoGentCampusAalst/" });
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, Url = "https://twitter.com/hogeschool_gent" });
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = instagramSocialMedia, Url = "https://www.instagram.com/explore/locations/420243736/hogent-stadscampus-aalst" });
 
                 hogentAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/4/1.jpg" });
                 hogentAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/4/2.jpg" });
@@ -240,11 +241,12 @@ namespace stappBackend.Data
 
                 hogentAalstEstablishment.Events.Add(new Event()
                 {
-                    StartDate = new DateTime(2019, 3, 5), EndDate = new DateTime(2019, 3, 8),
+                    StartDate = new DateTime(2019, 3, 5).AddHours(14), EndDate = new DateTime(2019, 3, 8).AddHours(18),
                     Name = "Open lessen dagen!",
                     Message =
                         "Een goede manier om een toekomstige opleiding te kiezen, is gewoon komen proeven. Proeven van de leerstof, van de manier van lesgeven, van de sfeer op de campus. Gewoon een échte les meemaken tussen onze huidige studenten. Het aanbod aan Live! lessen is zeer divers. Pik eventueel ook een les mee uit een richting die je minder bekend in de oren klinkt.",
-                    Images = new List<Image>() { new Image() { Path = "img/events/3/1.jpg" }, new Image() { Path = "img/events/3/2.jpg" } }
+                    Images = new List<Image>() { new Image() { Path = "img/events/3/1.jpg" }, new Image() { Path = "img/events/3/2.jpg" } },
+                    Attachments = new List<File>() { new File() { Name = "Brochure Toegepaste Informatica", Path = "files/promotions/3/1.pdf" }, new File(){Name = "Brochure bedrijfsmanagement", Path = "files/promotions/3/2.pdf" } }
                 });
 
                 hogentCompany.Establishments.Add(hogentAalstEstablishment);

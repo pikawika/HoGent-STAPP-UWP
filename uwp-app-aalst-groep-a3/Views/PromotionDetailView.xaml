@@ -1,0 +1,109 @@
+﻿<UserControl
+    x:Class="uwp_app_aalst_groep_a3.Views.PromotionDetailView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:uwp_app_aalst_groep_a3.Utils"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <local:DateTimeConverter x:Key="DateTimeConverter"/>
+
+        <Style x:Key="ButtonRemoveHover" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="8,4,8,4"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="FocusVisualMargin" Value="-3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver" />
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Image
+            Source="{Binding Promotion.Images[0].Path}"
+            Stretch="UniformToFill"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"/>
+
+        <StackPanel Grid.Row="1" Padding="20" HorizontalAlignment="Center" Width="700" VerticalAlignment="Center">
+
+            <TextBlock Text="{Binding Promotion.Name}" TextAlignment="Center" FontSize="40" FontWeight="Bold" Margin="10"/>
+            <Line Height="2" Width="100"/>
+            <TextBlock Text="{Binding Promotion.Message}" TextAlignment="Center" TextWrapping="Wrap" Margin="10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Geldig van"  FontWeight="Bold" Margin="0,0,7,0" FontSize="15"/>
+                <TextBlock Text="{Binding Promotion.StartDate, Converter={StaticResource DateTimeConverter}}" FontWeight="Bold" FontSize="15"/>
+                <TextBlock Text="tot en met"  FontWeight="Bold" Margin="3,0,7,0" FontSize="15"/>
+                <TextBlock Text="{Binding Promotion.EndDate, Converter={StaticResource DateTimeConverter}}" FontWeight="Bold"  FontSize="15"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Download kortingsbon" Width="300" Margin="20" Command="{Binding DownloadCouponCommandClicked}" Style="{StaticResource ButtonRemoveHover}" Background="#0078d7" HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="White" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}"></Button>
+                <Button Content="Toon handelaar" HorizontalAlignment="Center" Width="300" Margin="20" Command="{Binding ShowPromotionCommandClicked}"></Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Visibility="{Binding MerchantVisibility}">
+                <Button Content="Bewerk deze promotie" Width="300" Margin="20" Command="{Binding EditPromotionCommand}" Style="{StaticResource ButtonRemoveHover}" Background="#0078d7" HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="White" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}"></Button>
+                <Button Content="Verwijder deze promotie" HorizontalAlignment="Center" Width="300" Margin="20" Command="{Binding DeletePromotionCommand}"></Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

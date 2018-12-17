@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
-namespace uwp_app_aalst_groep_a3.ViewModels
+namespace uwp_app_aalst_groep_a3.Base
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
