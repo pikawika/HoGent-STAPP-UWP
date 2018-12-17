@@ -103,7 +103,14 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\ErrorMessage.cs" />
+    <Compile Include="Network\Request\Attachments\FileRequest.cs" />
+    <Compile Include="Network\Request\Establishment\CategoryRequest.cs" />
+    <Compile Include="Network\Request\Establishment\ExceptionalDayRequest.cs" />
+    <Compile Include="Network\Request\Establishment\EstablishmentRequest.cs" />
+    <Compile Include="Network\Request\Establishment\OpenDayRequest.cs" />
+    <Compile Include="Network\Request\Establishment\OpenHourRequest.cs" />
+    <Compile Include="Network\Request\Establishment\SocialMediaRequest.cs" />
+    <Compile Include="Network\responses\ErrorMessage.cs" />
     <Compile Include="Models\Establishment.cs" />
     <Compile Include="Models\EstablishmentCategory.cs" />
     <Compile Include="Models\EstablishmentSocialMedia.cs" />
@@ -122,6 +129,7 @@
     <Compile Include="Models\UserToken.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Network\NetworkAPI.cs" />
+    <Compile Include="Network\responses\SuccesMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\DateTimeConverter.cs" />
     <Compile Include="Utils\MessageUtils.cs" />
@@ -363,6 +371,7 @@
     </PackageReference>
 
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

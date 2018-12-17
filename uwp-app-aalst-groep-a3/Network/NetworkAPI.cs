@@ -1,17 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
-using uwp_app_aalst_groep_a3.Utils;
 using Windows.Security.Credentials;
+using uwp_app_aalst_groep_a3.Network.requests;
+using uwp_app_aalst_groep_a3.Network.responses;
 
 namespace uwp_app_aalst_groep_a3.Network
 {
@@ -386,9 +383,10 @@ namespace uwp_app_aalst_groep_a3.Network
         }
 
         // Voegt nieuwe company voor ingelogde merchant toe
-        public async Task<string> addCompany(String naam)
+        public async Task<(string, bool)> addCompany(string naam)
         {
-            string errorMessage = null;
+            string message;
+            bool isSuccess = false;
 
             var newCompany = new { name = naam };
             var newCompanyJson = JsonConvert.SerializeObject(newCompany);
@@ -402,26 +400,35 @@ namespace uwp_app_aalst_groep_a3.Network
                 var res = await client.PostAsync(new Uri($"{baseUrl}api/company"), new StringContent(newCompanyJson, System.Text.Encoding.UTF8, "application/json"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    ErrorMessage message = new ErrorMessage();
-                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
-                    errorMessage = message.Error;
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
                 }
             }
             catch (Exception e)
             {
-                errorMessage = e.Message;
+                message = e.Message;
             }
 
-            return errorMessage;
+            return (message, isSuccess);
         }
 
         // edit company voor ingelogde merchant
-        public async Task<string> editCompany(int companyId, String naam)
+        public async Task<(string, bool)> editCompany(int companyId, string naam = "")
         {
-            string errorMessage = null;
+            string message;
+            bool isSuccess = false;
 
-            var newCompany = new { name = naam };
-            var newCompanyJson = JsonConvert.SerializeObject(newCompany);
+            if (string.IsNullOrEmpty(naam))
+            {
+                return ("Gelieve een nieuwe naam in te voeren", false);
+            }
+
+            var editedCompany = new { name = naam };
+            var editedCompanyJson = JsonConvert.SerializeObject(editedCompany);
 
             var credentials = passwordVault.Retrieve("Stapp", "Token");
             credentials.RetrievePassword();
@@ -429,26 +436,30 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.PutAsync(new Uri($"{baseUrl}api/company/{companyId}"), new StringContent(newCompanyJson, System.Text.Encoding.UTF8, "application/json"));
+                var res = await client.PutAsync(new Uri($"{baseUrl}api/company/{companyId}"), new StringContent(editedCompanyJson, System.Text.Encoding.UTF8, "application/json"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    ErrorMessage message = new ErrorMessage();
-                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
-                    errorMessage = message.Error;
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
                 }
             }
             catch (Exception e)
             {
-                errorMessage = e.Message;
+                message = e.Message;
             }
 
-            return errorMessage;
+            return (message, isSuccess);
         }
 
         // delete company voor ingelogde merchant
-        public async Task<string> deleteCompany(int companyId)
+        public async Task<(string, bool)> deleteCompany(int companyId)
         {
-            string errorMessage = null;
+            string message;
+            bool isSuccess = false;
 
             var credentials = passwordVault.Retrieve("Stapp", "Token");
             credentials.RetrievePassword();
@@ -459,26 +470,125 @@ namespace uwp_app_aalst_groep_a3.Network
                 var res = await client.DeleteAsync(new Uri($"{baseUrl}api/company/{companyId}"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    ErrorMessage message = new ErrorMessage();
-                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
-                    errorMessage = message.Error;
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
                 }
             }
             catch (Exception e)
             {
-                errorMessage = e.Message;
+                message = e.Message;
             }
 
-            return errorMessage;
+            return (message, isSuccess);
         }
         #endregion
 
         #region MERCHANT ESTABLISHMENTS
-        
+        // Voegt nieuwe establishment voor ingelogde merchant toe
+        public async Task<(string, bool)> addEstablishment(EstablishmentRequest newEstablishmentRequest)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var newCompanyJson = JsonConvert.SerializeObject(newEstablishmentRequest);
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/establishment"), new StringContent(newCompanyJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
+        // edit establishment voor ingelogde merchant
+        public async Task<(string, bool)> editEstablishment(int establishmentId, EstablishmentRequest editEstablishmentRequest)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var editedEstablishmentJson = JsonConvert.SerializeObject(editEstablishmentRequest);
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PutAsync(new Uri($"{baseUrl}api/establishment/{establishmentId}"), new StringContent(editedEstablishmentJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
+        // delete establishment voor ingelogde merchant
+        public async Task<(string, bool)> deleteEstablishment(int EstablishmentId)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/establishment/{EstablishmentId}"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
         #endregion
 
         #region MERCHANT PROMOTIONS
-        
+
         #endregion
 
         #region MERCHANT EVENTS
