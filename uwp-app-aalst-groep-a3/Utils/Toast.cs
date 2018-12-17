@@ -47,13 +47,8 @@ namespace uwp_app_aalst_groep_a3.Utils
                     {
                         { "action", "Bekijken" },
                     }.ToString())
-                    {
-                        ActivationType = ToastActivationType.Background, 
-                        // Reference the text box's ID in order to
-                        // place this button next to the text box
-                        TextBoxId = "tbReply"
-                    },
                 }
+                
             };
 
             ToastContent toastContent = new ToastContent()
