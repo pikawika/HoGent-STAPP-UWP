@@ -92,13 +92,22 @@ namespace uwp_app_aalst_groep_a3.Utils
 
                 //List<Establishment> merc = await NetworkAPI.GetSubscribedEstablishmentsAsync();
 
-                bool isEqual = await networkAPI.CheckSubbedDifferenceByJSONAsync(subs);
-                if (!isEqual)
+                try
                 {
-                    //als veranderd, dan toast tonen en wegschrijven van nieue subs
-                    ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("STAPP", "Er zijn nieuwe promoties of evenementen toegevoegd, bekijk ze hier!"));
+                    bool isEqual = await networkAPI.CheckSubbedDifferenceByJSONAsync(subs);
+                    if (!isEqual)
+                    {
+                        //als veranderd, dan toast tonen en wegschrijven van nieue subs
+                        ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("STAPP", "Er zijn nieuwe promoties of evenementen toegevoegd, bekijk ze hier!"));
+                        await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
+                    }
+                }
+                catch
+                {
                     await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
                 }
+
+                
             }
             else
             {
