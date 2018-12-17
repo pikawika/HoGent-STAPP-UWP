@@ -43,10 +43,10 @@ namespace stappBackend.Controllers
             Company company = _companyRepository.getById(id);
 
             if (company == null)
-                return BadRequest(new { error = "Company niet gevonden." });
+                return BadRequest(new { error = "Bedrijf niet gevonden." });
 
             if (company.MerchantId != int.Parse(User.FindFirst("userId")?.Value))
-                return BadRequest(new { error = "Deze company behoord niet tot uw comanies." });
+                return BadRequest(new { error = "Dit bedrijf behoord niet tot uw bedrijven." });
 
             return Ok(company);
         }

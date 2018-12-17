@@ -515,9 +515,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een onverwachte fout opgetreden tijdens het toevoegen van de vestiging.";
             }
 
             return (message, isSuccess);
@@ -548,9 +548,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een onverwachte fout opgetreden tijdens het bewerken van de vestiging.";
             }
 
             return (message, isSuccess);
@@ -603,7 +603,7 @@ namespace uwp_app_aalst_groep_a3.Network
                 {
                     isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
                 }
-            } catch(Exception e) { }
+            } catch { }
 
             return isOwner;
         }
@@ -625,7 +625,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.PostAsync(new Uri($"{baseUrl}api/promotion"), new StringContent(newPromotionJson, System.Text.Encoding.UTF8, "application/json"));
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/event"), new StringContent(newPromotionJson, System.Text.Encoding.UTF8, "application/json"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
@@ -658,7 +658,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.PutAsync(new Uri($"{baseUrl}api/promotion/{promotionId}"), new StringContent(editedPromotionJson, System.Text.Encoding.UTF8, "application/json"));
+                var res = await client.PutAsync(new Uri($"{baseUrl}api/event/{promotionId}"), new StringContent(editedPromotionJson, System.Text.Encoding.UTF8, "application/json"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
@@ -725,7 +725,7 @@ namespace uwp_app_aalst_groep_a3.Network
                     isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
                 }
             }
-            catch (Exception e) { }
+            catch { }
 
             return isOwner;
         }
@@ -812,7 +812,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/promotion/{eventId}"));
+                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/event/{eventId}"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
@@ -848,7 +848,7 @@ namespace uwp_app_aalst_groep_a3.Network
                     isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
                 }
             }
-            catch (Exception e) { }
+            catch { }
 
             return isOwner;
         }

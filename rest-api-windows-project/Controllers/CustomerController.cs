@@ -37,18 +37,18 @@ namespace stappBackend.Controllers
                 Establishment establishment = _establishmentRepository.getById(addSubscriptionViewModel.EstablishmentId);
 
                 if (establishment == null)
-                    return BadRequest(new { error = "Het opgegeven etablissement bestaat niet." });
+                    return BadRequest(new { error = "Het opgegeven vestiging bestaat niet." });
 
                 Customer customer = _customerRepository.getById(int.Parse(User.FindFirst("userId")?.Value));
 
                 if (customer.EstablishmentSubscriptions.Any(es => es.EstablishmentId == establishment.EstablishmentId))
-                    return BadRequest(new { error = "U bent reeds geabonneerd op dit etablissement." });
+                    return BadRequest(new { error = "U bent reeds geabonneerd op deze vestiging." });
 
                 EstablishmentSubscription establishmentSubscription = new EstablishmentSubscription() { Customer = customer, Establishment = establishment, DateAdded = DateTime.Now, EstablishmentId = establishment.EstablishmentId };
 
                 _customerRepository.addSubscription(customer.UserId, establishmentSubscription);
 
-                return Ok(new { message = "U bent succes geabonneerd op dit etablissement.!" });
+                return Ok(new { message = "U bent succesvol geabonneerd op deze vestiging!" });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -69,7 +69,7 @@ namespace stappBackend.Controllers
                 Establishment establishment = _establishmentRepository.getById(id);
 
                 if (establishment == null)
-                    return BadRequest(new { error = "Geen establishment met de meegegeven id" });
+                    return BadRequest(new { error = "Geen vestiging met de meegegeven id." });
 
                 Customer customer = _customerRepository.getById(int.Parse(User.FindFirst("userId")?.Value));
 
@@ -78,7 +78,7 @@ namespace stappBackend.Controllers
                         es => es.EstablishmentId == establishment.EstablishmentId);
 
                 if (establishmentSubscription == null)
-                    return BadRequest(new { error = "Deze establishment staat niet in uw lijst van subscriptions" });
+                    return BadRequest(new { error = "Deze vestiging behoord niet tot u." });
 
                 _customerRepository.removeSubscription(customer.UserId, establishmentSubscription);
 
