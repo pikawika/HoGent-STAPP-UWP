@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using stappBackend.Models;
 using stappBackend.Models.Domain;
@@ -13,6 +14,7 @@ using File = stappBackend.Models.Domain.File;
 namespace stappBackend.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class EventController : ControllerBase
     {
@@ -27,6 +29,7 @@ namespace stappBackend.Controllers
 
         // GET api/event
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Event> Get()
         {
             return _eventRepository.GetAll();
@@ -34,6 +37,7 @@ namespace stappBackend.Controllers
 
         // GET api/event/id
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public Event Get(int id)
         {
             return _eventRepository.getById(id);
@@ -157,6 +161,12 @@ namespace stappBackend.Controllers
 
             _eventRepository.removeEvent(id);
             return Ok(new { bericht = "De event werd succesvol verwijderd." });
+        }
+
+        [HttpPost("ownerof/{id}")]
+        public Boolean Post(int id)
+        {
+            return _eventRepository.isOwnerOfEvent(int.Parse(User.FindFirst("userId")?.Value), id);
         }
 
         #region Helper Functies

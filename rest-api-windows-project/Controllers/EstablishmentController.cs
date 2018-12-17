@@ -202,6 +202,12 @@ namespace stappBackend.Controllers
             return Ok(new { bericht = "De establishment werd succesvol verwijderd." });
         }
 
+        [HttpPost("ownerof/{id}")]
+        public Boolean Post(int id)
+        {
+            return _establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), id);
+        }
+
         #region Helper Functies
         private bool IsMerchant()
         {

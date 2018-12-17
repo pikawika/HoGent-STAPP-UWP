@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using stappBackend.Models;
 using stappBackend.Models.Domain;
@@ -13,6 +14,7 @@ using File = stappBackend.Models.Domain.File;
 namespace stappBackend.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class PromotionController : ControllerBase
     {
@@ -27,6 +29,7 @@ namespace stappBackend.Controllers
 
         // GET api/promotion
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Promotion> Get()
         {
             return _promotionRepository.GetAll();
@@ -34,6 +37,7 @@ namespace stappBackend.Controllers
 
         // GET api/promotion/id
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public Promotion Get(int id)
         {
             return _promotionRepository.getById(id);
@@ -157,6 +161,12 @@ namespace stappBackend.Controllers
 
             _promotionRepository.removePromotion(id);
             return Ok(new { bericht = "De promotion werd succesvol verwijderd." });
+        }
+
+        [HttpPost("ownerof/{id}")]
+        public Boolean Post(int id)
+        {
+            return _promotionRepository.isOwnerOfPromotion(int.Parse(User.FindFirst("userId")?.Value), id);
         }
 
         #region Helper Functies
