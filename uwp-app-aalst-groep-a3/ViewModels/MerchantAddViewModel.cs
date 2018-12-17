@@ -13,6 +13,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using uwp_app_aalst_groep_a3.Network.requests;
 using uwp_app_aalst_groep_a3.Network.Request.Attachments;
+using uwp_app_aalst_groep_a3.Network.Request.Establishment;
 using uwp_app_aalst_groep_a3.Network.Request.Event;
 using uwp_app_aalst_groep_a3.Network.Request.Promotion;
 
@@ -78,6 +79,27 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             get => _eventVisibility;
             set { _eventVisibility = value; RaisePropertyChanged(nameof(EventVisibility)); }
+        }
+
+        private string _facebook;
+        public string Facebook
+        {
+            get => _facebook;
+            set { _facebook = value; RaisePropertyChanged(nameof(Facebook)); }
+        }
+
+        private string _twitter;
+        public string Twitter
+        {
+            get => _twitter;
+            set { _twitter = value; RaisePropertyChanged(nameof(Twitter)); }
+        }
+
+        private string _instagram;
+        public string Instagram
+        {
+            get => _instagram;
+            set { _instagram = value; RaisePropertyChanged(nameof(Instagram)); }
         }
 
         private string _buttonText = "";
@@ -161,7 +183,38 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private void AddMerchantObject()
         {
+            if (Company != null)
+            {
 
+            }
+
+            if (Establishment != null)
+            {
+                if (Facebook != null)
+                {
+                    Establishment.SocialMedias.Add(new SocialMediaRequest{Name = "facebook", Url = Facebook});
+                }
+
+                if (Twitter != null)
+                {
+                    Establishment.SocialMedias.Add(new SocialMediaRequest { Name = "twitter", Url = Twitter });
+                }
+
+                if (Instagram != null)
+                {
+                    Establishment.SocialMedias.Add(new SocialMediaRequest { Name = "instagram", Url = Instagram });
+                }
+            }
+
+            if (Promotion != null)
+            {
+
+            }
+
+            if (Event != null)
+            {
+
+            }
         }
 
         private async void CancelAddDialog()

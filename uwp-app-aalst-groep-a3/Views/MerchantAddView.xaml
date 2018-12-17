@@ -34,10 +34,18 @@
         <TextBox PlaceholderText="Gemeente" Text="{Binding Establishment.City, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
         <Button Content="Kies afbeelding(en)" Command="{Binding PickImageCommand}" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
-        
+
+        <TextBlock Text="Facebook" Visibility="{Binding EstablishmentVisibility}" />
+        <TextBox PlaceholderText="Facebook url" Text="{Binding Facebook, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+
+        <TextBlock Text="Instagram" Visibility="{Binding EstablishmentVisibility}" />
+        <TextBox PlaceholderText="Facebook url" Text="{Binding Twitter, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+
+        <TextBlock Text="Twitter" Visibility="{Binding EstablishmentVisibility}" />
+        <TextBox PlaceholderText="Facebook url" Text="{Binding Instagram, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+
         <!-- CompanyId-->
         <!-- Categories -->
-        <!-- SocialMedias -->
         <!-- OpenDays -->
         <!-- ExceptionalDays -->
 
