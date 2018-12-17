@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using stappBackend.Models;
 using stappBackend.Models.Domain;
 using stappBackend.Models.IRepositories;
+using stappBackend.Models.ViewModels.Attachments;
 using stappBackend.Models.ViewModels.Establishment;
 
 namespace stappBackend.Controllers
@@ -22,10 +21,10 @@ namespace stappBackend.Controllers
     [ApiController]
     public class EstablishmentController : ControllerBase
     {
-        private IEstablishmentRepository _establishmentRepository;
-        private ICategoryRepository _categoryRepository;
-        private ICompanyRepository _companyRepository;
-        private ISocialMediaRepository _socialMediaRepository;
+        private readonly IEstablishmentRepository _establishmentRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICompanyRepository _companyRepository;
+        private readonly ISocialMediaRepository _socialMediaRepository;
 
         public EstablishmentController(IEstablishmentRepository establishmentRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepository, ISocialMediaRepository socialMediaRepository)
         {
@@ -54,11 +53,11 @@ namespace stappBackend.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm]AddEstablishmentViewModel establishmentToAdd)
+        public async Task<IActionResult> Post([FromBody]AddEstablishmentViewModel establishmentToAdd)
         {
             if (ModelState.IsValid)
             {
-                if (!isMerchant())
+                if (!IsMerchant())
                     return BadRequest(new { error = "U bent geen handelaar." });
 
                 //modelstate werkt niet op lijsten :-D
@@ -74,10 +73,10 @@ namespace stappBackend.Controllers
                     return BadRequest(new { error = "geen OpenDays meegeven." });
 
                 //modelstate werkt niet op lijsten :-D
-                if (establishmentToAdd.Images.Files == null || !establishmentToAdd.Images.Files.Any())
+                if (establishmentToAdd.Images == null || !establishmentToAdd.Images.Any())
                     return BadRequest(new { error = "geen Images meegeven." });
 
-                if (!containsJpgs(establishmentToAdd.Images.Files.ToList()))
+                if (!ContainsJpgs(establishmentToAdd.Images))
                     return BadRequest(new { error = "geen jpg images gevonden" });
 
                 if (!_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), establishmentToAdd.CompanyId ?? 0))
@@ -111,7 +110,7 @@ namespace stappBackend.Controllers
                 _establishmentRepository.addEstablishment(establishmentToAdd.CompanyId ?? 0, newEstablishment);
 
                 //we hebben id nodig voor img path dus erna
-                newEstablishment.Images = await ConvertFormFilesToImagesAsync(establishmentToAdd.Images.Files.ToList(), newEstablishment.EstablishmentId);
+                newEstablishment.Images = ConvertFileViewModelToImages(establishmentToAdd.Images, newEstablishment.EstablishmentId);
                 _establishmentRepository.SaveChanges();
                 return Ok(new { bericht = "De establishment werd succesvol toegevoegd." });
             }
@@ -121,11 +120,11 @@ namespace stappBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromForm]ModifyEstablishmentViewModel editedEstablishment)
+        public IActionResult Put(int id, [FromBody]ModifyEstablishmentViewModel editedEstablishment)
         {
             if (ModelState.IsValid)
             {
-                if (!isMerchant())
+                if (!IsMerchant())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Establishment establishment = _establishmentRepository.getById(id);
@@ -170,9 +169,9 @@ namespace stappBackend.Controllers
                 if (editedEstablishment.ExceptionalDays != null && editedEstablishment.ExceptionalDays.Any())
                     establishment.ExceptionalDays = ConvertExceptionalDaysViewModelsToExceptionalDays(editedEstablishment.ExceptionalDays);
 
-                if (editedEstablishment.Images != null && editedEstablishment.Images.Files.Any())
+                if (editedEstablishment.Images != null && editedEstablishment.Images.Any())
                 {
-                    var images = await ConvertFormFilesToImagesAsync(editedEstablishment.Images.Files.ToList(), id);
+                    var images = ConvertFileViewModelToImages(editedEstablishment.Images, id);
                     if (images.Any())
                         establishment.Images = images;
                 }
@@ -188,7 +187,7 @@ namespace stappBackend.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (!isMerchant())
+            if (!IsMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             Establishment establishment = _establishmentRepository.getById(id);
@@ -203,13 +202,19 @@ namespace stappBackend.Controllers
             return Ok(new { bericht = "De establishment werd succesvol verwijderd." });
         }
 
+        [HttpPost("ownerof/{id}")]
+        public Boolean Post(int id)
+        {
+            return _establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), id);
+        }
+
         #region Helper Functies
-        private bool isMerchant()
+        private bool IsMerchant()
         {
             return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
 
-        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int promotionId)
+        private List<Image> ConvertFileViewModelToImages(List<FileViewModel> imageFiles, int establishmentId)
         {
             List<Image> images = new List<Image>();
 
@@ -218,14 +223,18 @@ namespace stappBackend.Controllers
 
             for (int i = 1; i <= imageFiles.Count; i++)
             {
-                if (Path.GetExtension(imageFiles[(i - 1)].FileName) == ".jpg")
+                if (Path.GetExtension(imageFiles[(i - 1)].FullFileName) == ".jpg")
                 {
-                    string imagePath = "img/promotions/" + promotionId + "/" + i + ".jpg";
+                    string imagePath = "img/establishments/" + establishmentId + "/" + i + ".jpg";
                     images.Add(new Image { Path = imagePath });
                     string filePath = @"wwwroot/" + imagePath;
+
+                    var bytes = Convert.FromBase64String(imageFiles[(i - 1)].Base64File);
+
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                     FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                    await imageFiles[(i - 1)].CopyToAsync(fileStream);
+                    if (bytes.Length > 0)
+                        fileStream.Write(bytes, 0, bytes.Length);
                     fileStream.Close();
                 }
             }
@@ -270,7 +279,7 @@ namespace stappBackend.Controllers
                 if (category == null)
                 {
                     //nog geen cat met die naam dus nieuwe maken!
-                    category = new Category {Name = category.Name};
+                    category = new Category {Name = categoryvm.Name };
                     _categoryRepository.Add(category);
                 }
                 EstablishmentCategory establishmentCategory = new EstablishmentCategory { Category = category};
@@ -281,17 +290,17 @@ namespace stappBackend.Controllers
 
         private List<OpenDay> ConvertOpenDaysViewModelsToOpenDays(List<OpenDayViewModel> openDaysVm)
         {
-            List<OpenDay> OpenDays = new List<OpenDay>();
+            List<OpenDay> openDays = new List<OpenDay>();
             for (int i = 0; i <= 6; i++)
             {
-                OpenDays.Add(new OpenDay{DayOfTheWeek = i});
+                openDays.Add(new OpenDay{DayOfTheWeek = i});
                 foreach (OpenHourViewModel openHourVm in openDaysVm.FirstOrDefault(od => od.DayOfTheWeek == i)?.OpenHours ?? new List<OpenHourViewModel>())
                 {
-                    OpenDays[i].OpenHours.Add(new OpenHour{EndHour = openHourVm.EndHour, EndMinute = openHourVm.EndMinute, StartHour = openHourVm.StartHour, Startminute = openHourVm.Startminute});
+                    openDays[i].OpenHours.Add(new OpenHour{EndHour = openHourVm.EndHour, EndMinute = openHourVm.EndMinute, StartHour = openHourVm.StartHour, Startminute = openHourVm.Startminute});
                 }
                 
             }
-            return OpenDays;
+            return openDays;
         }
 
         private List<ExceptionalDay> ConvertExceptionalDaysViewModelsToExceptionalDays(List<ExceptionalDayViewModel> daysvm)
@@ -318,9 +327,9 @@ namespace stappBackend.Controllers
             return establishmentSocialMedia;
         }
 
-        private bool containsJpgs(List<IFormFile> files)
+        private bool ContainsJpgs(List<FileViewModel> files)
         {
-            return files.Any(f => Path.GetExtension(f.FileName) == ".jpg");
+            return files.Any(f => Path.GetExtension(f.FullFileName) == ".jpg");
         }
         #endregion
     }

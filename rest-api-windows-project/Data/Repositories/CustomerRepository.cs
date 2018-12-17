@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Compression;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using stappBackend.Models;
-using stappBackend.Models.Domain;
 using stappBackend.Models.IRepositories;
 
 namespace stappBackend.Data.Repositories
@@ -40,7 +37,7 @@ namespace stappBackend.Data.Repositories
 
         public List<Establishment> GetEstablishmentSubscriptions(int userId)
         {
-            List<Establishment> establishments =  _customers
+            List<Establishment> establishments = _customers
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Images)
@@ -58,14 +55,14 @@ namespace stappBackend.Data.Repositories
                 .Where(e => !e.isDeleted)
                 .ToList();
 
-            if (establishments != null)
+            if (establishments == null) return null;
+
+            foreach (Establishment establishment in establishments)
             {
-                foreach (Establishment establishment in establishments)
-                {
-                    establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now || p.isDeleted);
-                    establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now || e.isDeleted);
-                }
+                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Today || p.isDeleted);
+                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Today || e.isDeleted);
             }
+
 
             return establishments;
         }

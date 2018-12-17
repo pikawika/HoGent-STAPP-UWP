@@ -29,7 +29,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ViewModelBase CurrentData
         {
             get { return _currentData; }
-            private set { _currentData = value; RaisePropertyChanged(); }
+            private set
+            {
+                _currentData = value; RaisePropertyChanged();
+                Toast toast = new Toast();
+                toast.SubscriptionToastAsync(this);
+            }
         }
 
         // De lijst van icoontjes die in de navigatiebalk zullen komen te staan

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using stappBackend.Models;
 using stappBackend.Models.IRepositories;
@@ -24,7 +23,7 @@ namespace stappBackend.Data.Repositories
         public IEnumerable<Promotion> GetAll()
         {
             return _promotions
-                .Where(p => !p.isDeleted)
+                .Where(p => p.EndDate >= DateTime.Today && !p.isDeleted)
                 .Include(p => p.Images)
                 .Include(p => p.Attachments)
                 .Include(p => p.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
@@ -36,7 +35,7 @@ namespace stappBackend.Data.Repositories
 
         public Promotion getById(int id)
         {
-            return _promotions.Where(p => p.PromotionId == id && !p.isDeleted)
+            return _promotions.Where(p => p.EndDate >= DateTime.Today && p.PromotionId == id && !p.isDeleted)
                 .Include(p => p.Images)
                 .Include(p => p.Attachments)
                 .Include(p => p.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)

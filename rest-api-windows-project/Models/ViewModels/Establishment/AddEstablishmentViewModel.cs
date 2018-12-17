@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using stappBackend.Models.ViewModels.Attachments;
 
 namespace stappBackend.Models.ViewModels.Establishment
 {
@@ -34,15 +31,13 @@ namespace stappBackend.Models.ViewModels.Establishment
         public List<CategoryViewModel> Categories { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        public List<SocialMediaViewModel> SocialMedias { get; set; }
-
-        [Required(ErrorMessage = "{0} is verplicht.")]
         public List<OpenDayViewModel> OpenDays { get; set; }
+
+        public List<SocialMediaViewModel> SocialMedias { get; set; }
 
         public List<ExceptionalDayViewModel> ExceptionalDays { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        [DataType(DataType.Upload)]
-        public IFormCollection Images { set; get; }
+        public List<FileViewModel> Images { get; set; }
     }
 }

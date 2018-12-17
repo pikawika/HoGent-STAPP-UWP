@@ -2,30 +2,34 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using stappBackend.Models;
 using stappBackend.Models.Domain;
 using stappBackend.Models.IRepositories;
+using stappBackend.Models.ViewModels.Attachments;
 using stappBackend.Models.ViewModels.Event;
 using File = stappBackend.Models.Domain.File;
 
 namespace stappBackend.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class EventController : ControllerBase
     {
-        private IEventRepository _eventRepository;
+        private readonly IEventRepository _eventRepository;
+        private readonly IEstablishmentRepository _establishmentRepository;
 
-        public EventController(IEventRepository eventRepository)
+        public EventController(IEventRepository eventRepository, IEstablishmentRepository establishmentRepository)
         {
             _eventRepository = eventRepository;
+            _establishmentRepository = establishmentRepository;
         }
 
         // GET api/event
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Event> Get()
         {
             return _eventRepository.GetAll();
@@ -33,22 +37,23 @@ namespace stappBackend.Controllers
 
         // GET api/event/id
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public Event Get(int id)
         {
             return _eventRepository.getById(id);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm]AddEventViewModel eventToAdd)
+        public IActionResult Post([FromBody]AddEventViewModel eventToAdd)
         {
-            if (!isMerchant())
+            if (!IsMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             //modelstate werkt niet op lijsten :-D
-            if (eventToAdd.Attachments.Files == null || !eventToAdd.Attachments.Files.Any())
+            if (eventToAdd.Images == null || !eventToAdd.Images.Any())
                 return BadRequest(new { error = "geen Images meegeven." });
 
-            if (!containsJpgs(eventToAdd.Attachments.Files.ToList()))
+            if (!ContainsJpgs(eventToAdd.Images))
                 return BadRequest(new { error = "geen jpg images gevonden" });
 
             if (eventToAdd.StartDate == null)
@@ -60,6 +65,14 @@ namespace stappBackend.Controllers
 
             if (ModelState.IsValid)
             {
+                Establishment establishmentFromDb = _establishmentRepository.getById(eventToAdd.EstablishmentId ?? 0);
+
+                if (establishmentFromDb == null)
+                    return BadRequest(new { error = "Establishment niet gevonden" });
+
+                if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), establishmentFromDb.EstablishmentId))
+                    return BadRequest(new { error = "Establishment behoord niet tot uw establishments" });
+
                 Event newEvent = new Event
                 {
                     Name = eventToAdd.Name,
@@ -68,11 +81,11 @@ namespace stappBackend.Controllers
                     EndDate = (DateTime)eventToAdd.EndDate
                 };
 
-                _eventRepository.addEvent(eventToAdd.establishmentId ?? 0, newEvent);
+                _eventRepository.addEvent(eventToAdd.EstablishmentId ?? 0, newEvent);
 
                 //we hebben id nodig voor img path dus erna
-                newEvent.Images = await ConvertFormFilesToImagesAsync(eventToAdd.Attachments.Files.ToList(), newEvent.EventId);
-                newEvent.Attachments = await ConvertFormFilesToAttachmentsAsync(eventToAdd.Attachments.Files.ToList(), newEvent.EventId);
+                newEvent.Images = ConvertFileViewModelToImages(eventToAdd.Images, newEvent.EventId);
+                newEvent.Attachments = ConvertFileViewModelToAttachments(eventToAdd.Attachments, newEvent.EventId);
                 _eventRepository.SaveChanges();
 
                 return Ok(new { bericht = "De event werd succesvol toegevoegd." });
@@ -83,11 +96,11 @@ namespace stappBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromForm]ModifyEventViewModel editedEvent)
+        public IActionResult Put(int id, [FromBody]ModifyEventViewModel editedEvent)
         {
             if (ModelState.IsValid)
             {
-                if (!isMerchant())
+                if (!IsMerchant())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Event eventFromDb = _eventRepository.getById(id);
@@ -110,12 +123,16 @@ namespace stappBackend.Controllers
                 if (editedEvent.EndDate != null)
                     eventFromDb.EndDate = (DateTime)editedEvent.EndDate;
 
-                if (editedEvent.Attachments != null && editedEvent.Attachments.Files.Any())
+                if (editedEvent.Images != null && editedEvent.Images.Any())
                 {
-                    var images = await ConvertFormFilesToImagesAsync(editedEvent.Attachments.Files.ToList(), id);
-                    var attachments = await ConvertFormFilesToAttachmentsAsync(editedEvent.Attachments.Files.ToList(), id);
+                    var images = ConvertFileViewModelToImages(editedEvent.Images, id);
                     if (images.Any())
                         eventFromDb.Images = images;
+                }
+
+                if (editedEvent.Attachments != null && editedEvent.Attachments.Any())
+                {
+                    var attachments = ConvertFileViewModelToAttachments(editedEvent.Attachments, id);
                     if (attachments.Any())
                         eventFromDb.Attachments = attachments;
                 }
@@ -131,7 +148,7 @@ namespace stappBackend.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (!isMerchant())
+            if (!IsMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             if (!_eventRepository.isOwnerOfEvent(int.Parse(User.FindFirst("userId")?.Value), id))
@@ -146,13 +163,19 @@ namespace stappBackend.Controllers
             return Ok(new { bericht = "De event werd succesvol verwijderd." });
         }
 
+        [HttpPost("ownerof/{id}")]
+        public Boolean Post(int id)
+        {
+            return _eventRepository.isOwnerOfEvent(int.Parse(User.FindFirst("userId")?.Value), id);
+        }
+
         #region Helper Functies
-        private bool isMerchant()
+        private bool IsMerchant()
         {
             return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
 
-        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int eventId)
+        private List<Image> ConvertFileViewModelToImages(List<FileViewModel> imageFiles, int eventId)
         {
             List<Image> images = new List<Image>();
 
@@ -161,14 +184,18 @@ namespace stappBackend.Controllers
 
             for (int i = 1; i <= imageFiles.Count; i++)
             {
-                if (Path.GetExtension(imageFiles[(i - 1)].FileName) == ".jpg")
+                if (Path.GetExtension(imageFiles[(i - 1)].FullFileName) == ".jpg")
                 {
                     string imagePath = "img/events/" + eventId + "/" + i + ".jpg";
                     images.Add(new Image { Path = imagePath });
                     string filePath = @"wwwroot/" + imagePath;
+
+                    var bytes = Convert.FromBase64String(imageFiles[(i - 1)].Base64File);
+
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                     FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                    await imageFiles[(i - 1)].CopyToAsync(fileStream);
+                    if (bytes.Length > 0)
+                        fileStream.Write(bytes, 0, bytes.Length);
                     fileStream.Close();
                 }
             }
@@ -176,7 +203,8 @@ namespace stappBackend.Controllers
             return images;
         }
 
-        private async Task<List<File>> ConvertFormFilesToAttachmentsAsync(List<IFormFile> attachmentsFiles, int eventId)
+
+        private List<File> ConvertFileViewModelToAttachments(List<FileViewModel> attachmentsFiles, int eventId)
         {
             List<File> attachments = new List<File>();
 
@@ -185,23 +213,27 @@ namespace stappBackend.Controllers
 
             for (int i = 1; i <= attachmentsFiles.Count; i++)
             {
-                if (Path.GetExtension(attachmentsFiles[(i - 1)].FileName) == ".pdf")
+                if (Path.GetExtension(attachmentsFiles[(i - 1)].FullFileName) == ".pdf")
                 {
-                    string imagePath = "files/events/" + eventId + "/" + i + ".pdf";
-                    attachments.Add(new File { Path = imagePath, Name = attachmentsFiles[(i - 1)].FileName });
-                    string filePath = @"wwwroot/" + imagePath;
+                    string attachmentPath = "files/events/" + eventId + "/" + i + ".pdf";
+                    attachments.Add(new File { Path = attachmentPath, Name = attachmentsFiles[(i - 1)].Name });
+                    string filePath = @"wwwroot/" + attachmentPath;
+
+                    var bytes = Convert.FromBase64String(attachmentsFiles[(i - 1)].Base64File);
+
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                     FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                    await attachmentsFiles[(i - 1)].CopyToAsync(fileStream);
+                    if (bytes.Length > 0)
+                        fileStream.Write(bytes, 0, bytes.Length);
                     fileStream.Close();
                 }
             }
             return attachments;
         }
 
-        private bool containsJpgs(List<IFormFile> files)
+        private bool ContainsJpgs(List<FileViewModel> files)
         {
-            return files.Any(f => Path.GetExtension(f.FileName) == ".jpg");
+            return files.Any(f => Path.GetExtension(f.FullFileName) == ".jpg");
         }
 
         #endregion
