@@ -48,10 +48,16 @@
         <TextBox PlaceholderText="Omschrijving" Text="{Binding Promotion.Message, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
 
         <TextBlock Text="Startdatum" Visibility="{Binding PromotionVisibility}" />
-        <DatePicker Date="{Binding Promotion.StartDate, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+        <StackPanel Orientation="Horizontal" Visibility="{Binding PromotionVisibility}">
+            <DatePicker Date="{Binding Promotion.StartDate.Date, Mode=TwoWay}"  />
+            <TimePicker Time="{Binding Promotion.StartDate.TimeOfDay, Mode=TwoWay}" ClockIdentifier="24HourClock" />
+        </StackPanel>
 
         <TextBlock Text="Einddatum" Visibility="{Binding PromotionVisibility}" />
-        <DatePicker Date="{Binding Promotion.EndDate, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+        <StackPanel Orientation="Horizontal" Visibility="{Binding PromotionVisibility}">
+            <DatePicker Date="{Binding Promotion.EndDate.Date, Mode=TwoWay}"  />
+            <TimePicker Time="{Binding Promotion.EndDate.TimeOfDay, Mode=TwoWay}" ClockIdentifier="24HourClock" />
+        </StackPanel>
 
         <!-- establishmentId -->
         <!-- Images -->
@@ -65,10 +71,16 @@
         <TextBox PlaceholderText="Omschrijving" Text="{Binding Event.Message, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
 
         <TextBlock Text="Startdatum" Visibility="{Binding EventVisibility}" />
-        <DatePicker Date="{Binding Event.StartDate, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+        <StackPanel Orientation="Horizontal" Visibility="{Binding EventVisibility}">
+            <DatePicker Date="{Binding Event.StartDate.Date, Mode=TwoWay}" />
+            <TimePicker Time="{Binding Event.StartDate.TimeOfDay, Mode=TwoWay}" ClockIdentifier="24HourClock" />
+        </StackPanel>
 
         <TextBlock Text="Einddatum" Visibility="{Binding EventVisibility}" />
-        <DatePicker Date="{Binding Event.EndDate, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+        <StackPanel Orientation="Horizontal" Visibility="{Binding EventVisibility}">
+            <DatePicker Date="{Binding Event.EndDate.Date, Mode=TwoWay}"  />
+            <TimePicker Time="{Binding Event.EndDate.TimeOfDay, Mode=TwoWay}" ClockIdentifier="24HourClock" />
+        </StackPanel>
 
         <!-- establishmentId -->
         <!-- Images -->
