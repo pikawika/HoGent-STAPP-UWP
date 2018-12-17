@@ -78,6 +78,19 @@ namespace uwp_app_aalst_groep_a3.Utils
             return toast;
         }
 
+        public async void SubscriptionAsyncWriteOnly()
+        {
+            NetworkAPI networkAPI = new NetworkAPI();
+            User user = await networkAPI.GetUser();
+            if (user.UserId != -2)
+            {
+                //eerst initialiseren anders null indien file niet bestaat
+                List<Establishment> subs = new List<Establishment>();
+                subs = await networkAPI.GetSubscriptions();
+                await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
+            }
+        }
+
         public async void SubscriptionToastAsync(ViewModels.MainPageViewModel mainPageViewModel)
         {
             this.MainPage = mainPageViewModel;
