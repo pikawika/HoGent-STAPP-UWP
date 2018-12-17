@@ -51,16 +51,16 @@ namespace stappBackend.Controllers
 
             //modelstate werkt niet op lijsten :-D
             if (eventToAdd.Images == null || !eventToAdd.Images.Any())
-                return BadRequest(new { error = "geen Images meegeven." });
+                return BadRequest(new { error = "Geen afbeelding(en) meegeven." });
 
             if (!ContainsJpgs(eventToAdd.Images))
-                return BadRequest(new { error = "geen jpg images gevonden" });
+                return BadRequest(new { error = "Geen jpg afbeelding(en) meegeven" });
 
             if (eventToAdd.StartDate == null)
-                return BadRequest(new { error = "geen StartDate meegeven." });
+                return BadRequest(new { error = "Geen start datum meegeven." });
 
             if (eventToAdd.EndDate == null)
-                return BadRequest(new { error = "geen EndDate meegeven." });
+                return BadRequest(new { error = "Geen eind datum meegeven." });
 
 
             if (ModelState.IsValid)
@@ -68,10 +68,10 @@ namespace stappBackend.Controllers
                 Establishment establishmentFromDb = _establishmentRepository.getById(eventToAdd.EstablishmentId ?? 0);
 
                 if (establishmentFromDb == null)
-                    return BadRequest(new { error = "Establishment niet gevonden" });
+                    return BadRequest(new { error = "Vestiging met opgegeven id niet gevonden" });
 
                 if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), establishmentFromDb.EstablishmentId))
-                    return BadRequest(new { error = "Establishment behoord niet tot uw establishments" });
+                    return BadRequest(new { error = "Vestiging behoord niet tot uw vestigingen" });
 
                 Event newEvent = new Event
                 {
@@ -88,7 +88,7 @@ namespace stappBackend.Controllers
                 newEvent.Attachments = ConvertFileViewModelToAttachments(eventToAdd.Attachments, newEvent.EventId);
                 _eventRepository.SaveChanges();
 
-                return Ok(new { bericht = "De event werd succesvol toegevoegd." });
+                return Ok(new { bericht = "Het evenement werd succesvol toegevoegd." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -106,10 +106,10 @@ namespace stappBackend.Controllers
                 Event eventFromDb = _eventRepository.getById(id);
 
                 if (eventFromDb == null)
-                    return BadRequest(new { error = "Event niet gevonden" });
+                    return BadRequest(new { error = "Evenement niet gevonden." });
 
                 if (!_eventRepository.isOwnerOfEvent(int.Parse(User.FindFirst("userId")?.Value), id))
-                    return BadRequest(new { error = "Event behoord niet tot uw events" });
+                    return BadRequest(new { error = "Evenement behoord niet tot uw evenementen." });
 
                 if (!string.IsNullOrEmpty(editedEvent.Name))
                     eventFromDb.Name = editedEvent.Name;
@@ -138,7 +138,7 @@ namespace stappBackend.Controllers
                 }
 
                 _eventRepository.SaveChanges();
-                return Ok(new { bericht = "De event werd succesvol bijgewerkt." });
+                return Ok(new { bericht = "Het evenement werd succesvol bijgewerkt." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -152,15 +152,15 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             if (!_eventRepository.isOwnerOfEvent(int.Parse(User.FindFirst("userId")?.Value), id))
-                return BadRequest(new { error = "event behoord niet tot uw events" });
+                return BadRequest(new { error = "Evenement behoord niet tot uw evenementen." });
 
             Event eventFromDb = _eventRepository.getById(id);
 
             if (eventFromDb == null)
-                return BadRequest(new { error = "event niet gevonden" });
+                return BadRequest(new { error = "Evenement niet gevonden." });
 
             _eventRepository.removeEvent(id);
-            return Ok(new { bericht = "De event werd succesvol verwijderd." });
+            return Ok(new { bericht = "Het evenement werd succesvol verwijderd." });
         }
 
         [HttpPost("ownerof/{id}")]
