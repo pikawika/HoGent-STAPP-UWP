@@ -356,9 +356,8 @@ namespace uwp_app_aalst_groep_a3.Network
             string errorMessage = null;
             List<Company> companiesFromMerchant = new List<Company>();
 
-            var credentials = passwordVault.Retrieve("Stapp", "Token");
-            credentials.RetrievePassword();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+            var token = UserUtils.GetUserToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             try
             {
@@ -374,9 +373,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     companiesFromMerchant = JsonConvert.DeserializeObject<List<Company>>(await res.Content.ReadAsStringAsync());
                 }
             }
-            catch (Exception e)
+            catch
             {
-                errorMessage = e.Message;
+                errorMessage = "Er is een overwachte fout opgetreden tijdens het ophalen van uw gegevens.";
             }
 
             return (companiesFromMerchant, errorMessage);
@@ -408,9 +407,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een overwachte fout opgetreden tijdens het toevoegen van een bedrijf.";
             }
 
             return (message, isSuccess);
@@ -447,9 +446,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een overwachte fout opgetreden tijdens het bewerken van een bedrijf.";
             }
 
             return (message, isSuccess);
@@ -478,9 +477,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een overwachte fout opgetreden tijdens het verwijderen van een bedrijf.";
             }
 
             return (message, isSuccess);

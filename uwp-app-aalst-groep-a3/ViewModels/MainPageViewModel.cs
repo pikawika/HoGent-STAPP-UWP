@@ -181,11 +181,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             if (CanGoBack())
             {
-                var index = NavigationHistoryItems.Count - 1;
-                CurrentData = NavigationHistoryItems[index - 1];
-                NavigationHistoryItems.RemoveAt(index);
-                AdjustSelectedItem();
-                AdjustBackButtonVisibility();
+                BackButtonPressed();
                 e.Handled = true;
             }
         }
@@ -213,7 +209,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (current.Contains("establishment")) current = "merchants";
             else if (current.Contains("login") || current.Contains("registration")) current = "account";
-            else if (current.Contains("panel")) current = "panel";
+            else if (current.Contains("panel") || current.Contains("add")) current = "panel";
 
             SelectedItem = NavigationViewItems.SingleOrDefault(n => current.Contains(n.Tag.ToString().ToLower()));
         }
@@ -224,6 +220,17 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             var currentView = SystemNavigationManager.GetForCurrentView();
             if (NavigationHistoryItems.Count > 1) currentView.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             else currentView.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Disabled;
+        }
+
+
+        // Deze functie wordt uitgevoerd wanneer op de back button geklikt wordt
+        public void BackButtonPressed()
+        {
+            var index = NavigationHistoryItems.Count - 1;
+            CurrentData = NavigationHistoryItems[index - 1];
+            NavigationHistoryItems.RemoveAt(index);
+            AdjustSelectedItem();
+            AdjustBackButtonVisibility();
         }
 
     }

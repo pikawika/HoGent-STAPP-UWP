@@ -121,6 +121,7 @@
     <Compile Include="Models\Image.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Merchant.cs" />
+    <Compile Include="Models\MerchantObjectType.cs" />
     <Compile Include="Models\OpenDay.cs" />
     <Compile Include="Models\OpenHour.cs" />
     <Compile Include="Models\Promotion.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MapViewModel.cs" />
+    <Compile Include="ViewModels\MerchantAddViewModel.cs" />
     <Compile Include="ViewModels\MerchantPanelViewModel.cs" />
     <Compile Include="ViewModels\MerchantRegistrationViewModel.cs" />
     <Compile Include="ViewModels\MerchantsViewModel.cs" />
@@ -175,6 +177,9 @@
     </Compile>
     <Compile Include="Views\MapView.xaml.cs">
       <DependentUpon>MapView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MerchantAddView.xaml.cs">
+      <DependentUpon>MerchantAddView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MerchantPanelView.xaml.cs">
       <DependentUpon>MerchantPanelView.xaml</DependentUpon>
@@ -304,6 +309,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MapView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MerchantAddView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

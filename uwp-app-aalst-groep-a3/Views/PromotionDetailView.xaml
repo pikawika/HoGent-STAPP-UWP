@@ -34,21 +34,7 @@
                                             <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
                                         </Storyboard>
                                     </VisualState>
-                                    <VisualState x:Name="PointerOver">
-                                        <!--
-                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                        </Storyboard>-->
-                                    </VisualState>
+                                    <VisualState x:Name="PointerOver" />
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
@@ -112,6 +98,11 @@
             <StackPanel Orientation="Horizontal">
                 <Button Content="Download kortingsbon" Width="300" Margin="20" Command="{Binding DownloadCouponCommandClicked}" Style="{StaticResource ButtonRemoveHover}" Background="#0078d7" HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="White" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}"></Button>
                 <Button Content="Toon handelaar" HorizontalAlignment="Center" Width="300" Margin="20" Command="{Binding ShowPromotionCommandClicked}"></Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Visibility="{Binding MerchantVisibility}">
+                <Button Content="Bewerk deze promotie" Width="300" Margin="20" Command="{Binding EditPromotionCommand}" Style="{StaticResource ButtonRemoveHover}" Background="#0078d7" HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="White" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}"></Button>
+                <Button Content="Verwijder deze promotie" HorizontalAlignment="Center" Width="300" Margin="20" Command="{Binding DeletePromotionCommand}"></Button>
             </StackPanel>
         </StackPanel>
     </Grid>

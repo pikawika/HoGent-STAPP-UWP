@@ -64,7 +64,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private async Task SignOutAsync()
         {
             NavigateToLogin();
-            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel) || v.GetType() == typeof(SubscriptionsViewModel) || v.GetType() == typeof(MerchantPanelViewModel));
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v =>
+                v.GetType() == typeof(AccountViewModel) ||
+                v.GetType() == typeof(SubscriptionsViewModel) ||
+                v.GetType() == typeof(MerchantPanelViewModel) ||
+                v.GetType() == typeof(MerchantAddViewModel));
 
             var role = UserUtils.GetUserRole();
             if (role.ToLower() == "customer") mainPageViewModel.RemoveSubscriptionNavigationViewItem();
