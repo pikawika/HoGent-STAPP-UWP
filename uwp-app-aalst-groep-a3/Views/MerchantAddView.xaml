@@ -15,6 +15,13 @@
         <TextBox PlaceholderText="Naam" Text="{Binding Company.Name, Mode=TwoWay}" Visibility="{Binding CompanyVisibility}" />
 
         <!-- ADD ESTABLISHMENT-->
+        <TextBlock Text="Moederbedrijf" Visibility="{Binding EstablishmentVisibility}" />
+        <ComboBox
+            ItemsSource="{Binding Companies}"
+            DisplayMemberPath="Name"
+            SelectedItem="{Binding PickedCompany, Mode=TwoWay}"
+            Visibility="{Binding EstablishmentVisibility}"/>
+
         <TextBlock Text="Naam" Visibility="{Binding EstablishmentVisibility}" />
         <TextBox PlaceholderText="Naam" Text="{Binding Establishment.Name, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
@@ -44,19 +51,22 @@
         <TextBlock Text="Twitter" Visibility="{Binding EstablishmentVisibility}" />
         <TextBox PlaceholderText="Facebook url" Text="{Binding Instagram, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
-        <ComboBox
-            ItemsSource="{Binding Companies}"
-            DisplayMemberPath="Name"
-            SelectedItem="{Binding PickedCompany, Mode=TwoWay}"/>
-        <!-- CompanyId-->
-        <!-- Categories -->
-        <!-- OpenDays -->
-        <!-- ExceptionalDays -->
+        
+        <!-- Categories: gwn string name -->
+        <!-- OpenDays -> day of week -> open hours ->startuur startmin einduur eindmin -->
+        <!-- ExceptionalDays : date (no time) + message -->
 
 
 
 
         <!-- ADD PROMOTION -->
+        <TextBlock Text="Vestiging" Visibility="{Binding PromotionVisibility}" />
+        <ComboBox
+            ItemsSource="{Binding Establishments}"
+            DisplayMemberPath="Name"
+            SelectedItem="{Binding PickedEstablishment, Mode=TwoWay}"
+            Visibility="{Binding PromotionVisibility}"/>
+
         <TextBlock Text="Naam" Visibility="{Binding PromotionVisibility}" />
         <TextBox PlaceholderText="Naam" Text="{Binding Promotion.Name, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
 
@@ -73,9 +83,14 @@
 
         <Button Content="Kies kortingsbon" Command="{Binding PickAttachmentCommand}" Visibility="{Binding PromotionVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
-        <!-- establishmentId -->
-
         <!-- ADD EVENT -->
+        <TextBlock Text="Vestiging" Visibility="{Binding EventVisibility}" />
+        <ComboBox
+            ItemsSource="{Binding Establishments}"
+            DisplayMemberPath="Name"
+            SelectedItem="{Binding PickedEstablishment, Mode=TwoWay}"
+            Visibility="{Binding EventVisibility}"/>
+
         <TextBlock Text="Naam" Visibility="{Binding EventVisibility}" />
         <TextBox PlaceholderText="Naam" Text="{Binding Event.Name, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
 
@@ -91,8 +106,6 @@
         <Button Content="Kies afbeelding(en)" Command="{Binding PickImageCommand}" Visibility="{Binding EventVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
         <Button Content="Kies kortingsbon" Command="{Binding PickAttachmentCommand}" Visibility="{Binding EventVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
-
-        <!-- establishmentId -->
 
         <!-- BUTTONS (USED FOR ALL TYPES) -->
         <Button Content="{Binding ButtonText}" Command="{Binding AddMerchantObjectCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>

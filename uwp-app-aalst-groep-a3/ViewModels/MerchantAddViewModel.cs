@@ -107,14 +107,28 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Company> Companies
         {
             get => _companies;
-            set { _companies = value; RaisePropertyChanged(nameof(_companies)); }
+            set { _companies = value; RaisePropertyChanged(nameof(Companies)); }
         }
 
         private Company _pickedCompany;
         public Company PickedCompany
         {
             get => _pickedCompany;
-            set { _pickedCompany = value; RaisePropertyChanged(nameof(_pickedCompany)); }
+            set { _pickedCompany = value; RaisePropertyChanged(nameof(PickedCompany)); }
+        }
+
+        private ObservableCollection<Establishment> _establishments;
+        public ObservableCollection<Establishment> Establishments
+        {
+            get => _establishments;
+            set { _establishments = value; RaisePropertyChanged(nameof(Establishments)); }
+        }
+
+        private Establishment _pickedEstablishment;
+        public Establishment PickedEstablishment
+        {
+            get => _pickedEstablishment;
+            set { _pickedEstablishment = value; RaisePropertyChanged(nameof(PickedEstablishment)); }
         }
 
         private string _buttonText = "";
@@ -205,18 +219,76 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             
         }
 
-        private void InitializePromotion()
+        private async Task InitializePromotion()
         {
             Promotion = new PromotionRequest();
             ButtonText = "Voeg promotie toe";
             PromotionVisibility = Visibility.Visible;
+
+            //lijst van establishments
+            Establishments = new ObservableCollection<Establishment>();
+
+            //selected establishment
+            PickedEstablishment = new Establishment();
+
+            var result = await networkAPI.GetCompanies();
+
+            if (result.Item2 == null)
+            {
+                Establishments = new ObservableCollection<Establishment>();
+
+                foreach (Company company in result.Item1)
+                {
+                    foreach (Establishment establishment in company.Establishments)
+                    {
+                        _establishments.Add(establishment);
+                    }
+                }
+                if (Establishments.Any())
+                {
+                    PickedEstablishment = Establishments[0];
+                }
+            }
+            else
+            {
+                //TODO nog geen establishment voegt da keer toe
+            }
         }
 
-        private void InitializeEvent()
+        private async Task InitializeEvent()
         {
             Event = new EventRequest();
             ButtonText = "Voeg evenement toe";
             EventVisibility = Visibility.Visible;
+
+            //lijst van establishments
+            Establishments = new ObservableCollection<Establishment>();
+
+            //selected establishment
+            PickedEstablishment = new Establishment();
+
+            var result = await networkAPI.GetCompanies();
+
+            if (result.Item2 == null)
+            {
+                Establishments = new ObservableCollection<Establishment>();
+
+                foreach (Company company in result.Item1)
+                {
+                    foreach (Establishment establishment in company.Establishments)
+                    {
+                        _establishments.Add(establishment);
+                    }
+                }
+                if (Establishments.Any())
+                {
+                    PickedEstablishment = Establishments[0];
+                }
+            }
+            else
+            {
+                //TODO nog geen establishment voegt da keer toe
+            }
         }
 
         private void AddMerchantObject()
