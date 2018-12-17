@@ -27,7 +27,7 @@
         <TextBlock Text="Gebruikersnaam" />
         <TextBox PlaceholderText="Gebruikersnaam" Text="{Binding User.Login.Username, Mode=TwoWay}" IsEnabled="False"/>
 
-        <Button Content="Bekijk abonnementen" Command="{Binding ShowSubscriptionsCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
+        <Button Content="{Binding ButtonText}" Command="{Binding ShowSubscriptionsCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
 
         <Button Content="Meld af" Command="{Binding SignOutCommand}" HorizontalAlignment="Stretch" Background="Transparent" Foreground="#0078d7"/>
     </StackPanel>

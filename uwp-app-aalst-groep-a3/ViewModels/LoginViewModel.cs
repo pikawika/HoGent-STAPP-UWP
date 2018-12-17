@@ -50,9 +50,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
 
             passwordVault.Add(new PasswordCredential("Stapp", "Token", token));
+
             NavigateToAccount();
             mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(LoginViewModel) || v.GetType() == typeof(RegistrationViewModel) || v.GetType() == typeof(MerchantRegistrationViewModel));
-            mainPageViewModel.AddSubscriptionNavigationViewItem();
+
+            var role = UserUtils.GetUserRole();
+            if (role.ToLower() == "customer") mainPageViewModel.AddSubscriptionNavigationViewItem();
+            else if (role.ToLower() == "merchant") mainPageViewModel.AddMerchantPanelNavigationViewItem();
+
             await MessageUtils.ShowDialog("Aanmelden", "Welkom bij Stapp!");
         }
 

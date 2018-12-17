@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Utils;
 using uwp_app_aalst_groep_a3.ViewModels;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -18,7 +19,6 @@ namespace uwp_app_aalst_groep_a3.Cortana
     public class CortanaFunctions
     {
         private MainPageViewModel mainPageViewModel;
-        private PasswordVault passwordVault = new PasswordVault();
 
         public CortanaFunctions(MainPageViewModel mainPageViewModel)
         {
@@ -79,8 +79,9 @@ namespace uwp_app_aalst_groep_a3.Cortana
         {
             try
             {
-                passwordVault.Retrieve("Stapp", "Token");
-                mainPageViewModel.NavigateTo(new SubscriptionsViewModel(mainPageViewModel));
+                var role = UserUtils.GetUserRole();
+                if (role.ToLower() == "customer") mainPageViewModel.NavigateTo(new SubscriptionsViewModel(mainPageViewModel));
+                else if (role.ToLower() == "merchant") mainPageViewModel.NavigateTo(new MerchantPanelViewModel(mainPageViewModel));
             }
             catch
             {

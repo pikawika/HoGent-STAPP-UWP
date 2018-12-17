@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
+using uwp_app_aalst_groep_a3.Utils;
 using Windows.Security.Credentials;
 
 namespace uwp_app_aalst_groep_a3.Network
@@ -321,21 +322,32 @@ namespace uwp_app_aalst_groep_a3.Network
 
         #region MERCHANT
 
-        #region MERCHANT COMPANIES
-
-        #endregion
-
-        #region MERCHANT ESTABLISHMENTS
-
-        #endregion
-
-        #region MERCHANT PROMOTIONS
-
-        #endregion
-
-        #region MERCHANT EVENTS
-
-        #endregion
+        // Get companies from a merchant
+        public async Task<List<Company>> GetCompanies()
+        {
+            List<Company> companies = new List<Company>();
+            try
+            {
+                var token = UserUtils.GetUserToken();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                try
+                {
+                    var json = await client.GetStringAsync(new Uri($"{baseUrl}api/merchant/company"));
+                    companies = JsonConvert.DeserializeObject<List<Company>>(json);
+                }
+                catch (HttpRequestException e)
+                {
+                    Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                    $"ophalen van alle companies uit de databank: " +
+                                    $"{e}");
+                }
+                return companies;
+            }
+            catch
+            {
+                return companies;
+            }
+        }
 
         #endregion
 
