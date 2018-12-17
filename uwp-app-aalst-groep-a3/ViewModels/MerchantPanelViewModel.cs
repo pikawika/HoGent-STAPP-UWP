@@ -70,40 +70,50 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async void InitializeHomePage()
         {
-            Companies = new ObservableCollection<Company>(await NetworkAPI.GetCompanies());
 
-            var establishmentList = new List<Establishment>();
+            var result = await NetworkAPI.GetCompanies();
 
-            foreach (Company c in Companies)
+            if (result.Item2 == null)
             {
-                foreach (Establishment e in c.Establishments)
+                Companies = new ObservableCollection<Company>(result.Item1);
+
+                var establishmentList = new List<Establishment>();
+
+                foreach (Company c in Companies)
                 {
-                    establishmentList.Add(e);
+                    foreach (Establishment e in c.Establishments)
+                    {
+                        establishmentList.Add(e);
+                    }
                 }
+
+                Establishments = new ObservableCollection<Establishment>(establishmentList);
+
+                var promotionList = new List<Promotion>();
+                var eventList = new List<Event>();
+
+                foreach (Establishment s in Establishments)
+                {
+                    foreach (Promotion p in s.Promotions)
+                    {
+                        p.Establishment = s;
+                        promotionList.Add(p);
+                    }
+
+                    foreach (Event e in s.Events)
+                    {
+                        e.Establishment = s;
+                        eventList.Add(e);
+                    }
+                }
+
+                Promotions = new ObservableCollection<Promotion>(promotionList);
+                Events = new ObservableCollection<Event>(eventList);
             }
-
-            Establishments = new ObservableCollection<Establishment>(establishmentList);
-
-            var promotionList = new List<Promotion>();
-            var eventList = new List<Event>();
-
-            foreach (Establishment s in Establishments)
+            else
             {
-                foreach (Promotion p in s.Promotions)
-                {
-                    p.Establishment = s;
-                    promotionList.Add(p);
-                }
-
-                foreach (Event e in s.Events)
-                {
-                    e.Establishment = s;
-                    eventList.Add(e);
-                }
+                await MessageUtils.ShowDialog("Ophalen gegevens", result.Item2);
             }
-
-            Promotions = new ObservableCollection<Promotion>(promotionList);
-            Events = new ObservableCollection<Event>(eventList);
         }
 
         private void EstablishmentClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));

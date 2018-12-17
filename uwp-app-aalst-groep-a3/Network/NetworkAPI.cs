@@ -323,8 +323,8 @@ namespace uwp_app_aalst_groep_a3.Network
         #region MERCHANT
 
         #region MERCHANT COMPANIES
-        // Haal alle companies van ingelogde merchant op
-        public async Task<(List<Company>, string)> getCompaniesFromMerchant()
+        // Haal alle companies van aangemelde handelaar op
+        public async Task<(List<Company>, string)> GetCompanies()
         {
             string errorMessage = null;
             List<Company> companiesFromMerchant = new List<Company>();
