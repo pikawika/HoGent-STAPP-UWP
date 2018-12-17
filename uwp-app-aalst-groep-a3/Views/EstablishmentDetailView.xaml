@@ -9,6 +9,7 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
+    SizeChanged="UserControl_SizeChanged"
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     >
 
@@ -132,6 +133,7 @@
         </Grid.RowDefinitions>
 
         <controls:Carousel
+            x:Name="topcarousel"
             InvertPositive="True" 
             Orientation="Horizontal"
             SelectedIndex="0"

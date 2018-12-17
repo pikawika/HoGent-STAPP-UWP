@@ -14,6 +14,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class SubscriptionsViewModel : ViewModelBase
     {
+        private bool _loading = true;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
+        }
+
+        public bool Shown
+        {
+            get { return !_loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
+        }
+
         private MainPageViewModel mainPageViewModel;
 
         private NetworkAPI NetworkAPI = new NetworkAPI();
@@ -23,7 +37,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Establishment> Subscriptions
         {
             get { return _subscriptions; }
-            set { _subscriptions = value; RaisePropertyChanged(nameof(Subscriptions)); }
+            set { _subscriptions = value; RaisePropertyChanged(nameof(Subscriptions)); Loading = false; }
         }
 
         private ObservableCollection<Promotion> _promotions = new ObservableCollection<Promotion>();

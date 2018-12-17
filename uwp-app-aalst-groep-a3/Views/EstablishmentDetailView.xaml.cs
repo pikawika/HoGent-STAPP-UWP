@@ -26,5 +26,17 @@ namespace uwp_app_aalst_groep_a3.Views
         {
             this.InitializeComponent();
         }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize.Width < 700 || e.NewSize.Height < 600)
+            {
+                topcarousel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                topcarousel.Visibility = Visibility.Visible;
+            }
+        }
     }
 }
