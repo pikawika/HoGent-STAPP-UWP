@@ -20,6 +20,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
     {
         public Promotion Promotion { get; set; }
         private MainPageViewModel mainPageViewModel;
+        private NetworkAPI networkAPI = new NetworkAPI();
 
         public RelayCommand ShowPromotionCommandClicked { get; set; }
         public RelayCommand DownloadCouponCommandClicked { get; set; }
@@ -41,6 +42,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             ShowPromotionCommandClicked = new RelayCommand(async (object args) => await ShowPromotionAsync());
             DownloadCouponCommandClicked = new RelayCommand(async _ => await DownloadCoupon());
+
+            EditPromotionCommand = new RelayCommand(_ => EditPromotion());
+            DeletePromotionCommand = new RelayCommand(async _ => await DeletePromotionDialog());
 
             CheckMerchantOwnsPromotion();
         }
@@ -75,17 +79,19 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
         }
 
-        private void CheckMerchantOwnsPromotion()
+        private async void CheckMerchantOwnsPromotion()
         {
             try
             {
                 var role = UserUtils.GetUserRole();
                 if (role.ToLower() == "merchant")
                 {
-                    // HIER CODE TOEVOEGEN OM TE ZIEN OF DE MERCHANT EIGENAAR IS
+                    bool isOwner = await networkAPI.IsOwnerOfPromotion(Promotion.PromotionId);
 
-                    EditPromotionCommand = new RelayCommand(_ => EditPromotion());
-                    DeletePromotionCommand = new RelayCommand(_ => DeletePromotionDialog());
+                    if (isOwner)
+                    {
+                        MerchantVisibility = Visibility.Visible;
+                    }
                 }
             }
             catch { }
@@ -93,7 +99,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private void EditPromotion() { }
 
-        private async void DeletePromotionDialog()
+        private async Task DeletePromotionDialog()
         {
             ContentDialog contentDialog = new ContentDialog();
 
@@ -102,12 +108,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             contentDialog.PrimaryButtonText = "Ja";
             contentDialog.CloseButtonText = "Nee";
 
-            contentDialog.PrimaryButtonCommand = new RelayCommand(_ => DeleteEvent());
+            contentDialog.PrimaryButtonCommand = new RelayCommand(async _ => await DeleteEvent());
 
             await contentDialog.ShowAsync();
         }
 
-        private void DeleteEvent() { }
+        private async Task DeleteEvent() {
+            var message = await networkAPI.DeletePromotion(Promotion.PromotionId);
+            await MessageUtils.ShowDialog("Evenement verwijderen", message.Item1);
+            if (message.Item2)
+            {
+                mainPageViewModel.BackButtonPressed();
+                mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(PromotionDetailViewModel));
+            }
+        }
 
     }
 }

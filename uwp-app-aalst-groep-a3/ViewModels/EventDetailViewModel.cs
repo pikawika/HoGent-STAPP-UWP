@@ -22,6 +22,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
     {
         public Event Event { get; set; }
         private MainPageViewModel mainPageViewModel;
+        private NetworkAPI networkAPI = new NetworkAPI();
 
         public RelayCommand ShowEstablishmentCommandClicked { get; set; }
         public RelayCommand AddToCalendarCommand { get; set; }
@@ -44,6 +45,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ShowEstablishmentCommandClicked = new RelayCommand(async (object args) => await ShowEstablishmentAsync());
             AddToCalendarCommand = new RelayCommand((object args) => AddEventToCalendar(args));
 
+            EditEventCommand = new RelayCommand(_ => EditEvent());
+            DeleteEventCommand = new RelayCommand(async _ => await DeleteEventDialog());
+
             CheckMerchantOwnsEvent();
         }
 
@@ -65,17 +69,19 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             string appointmentID = await AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Placement.Default);
         }
 
-        private void CheckMerchantOwnsEvent()
+        private async void CheckMerchantOwnsEvent()
         {
             try
             {
                 var role = UserUtils.GetUserRole();
                 if (role.ToLower() == "merchant")
                 {
-                    // HIER CODE TOEVOEGEN OM TE ZIEN OF DE MERCHANT EIGENAAR IS
+                    bool isOwner = await networkAPI.IsOwnerOfEvent(Event.EventId);
 
-                    EditEventCommand = new RelayCommand(_ => EditEvent());
-                    DeleteEventCommand = new RelayCommand(_ => DeleteEventDialog());
+                    if (isOwner)
+                    {
+                        MerchantVisibility = Visibility.Visible;
+                    }
                 }
             }
             catch { }
@@ -90,7 +96,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private void EditEvent() { }
 
-        private async void DeleteEventDialog()
+        private async Task DeleteEventDialog()
         {
             ContentDialog contentDialog = new ContentDialog();
 
@@ -99,12 +105,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             contentDialog.PrimaryButtonText = "Ja";
             contentDialog.CloseButtonText = "Nee";
 
-            contentDialog.PrimaryButtonCommand = new RelayCommand(_ => DeleteEvent());
+            contentDialog.PrimaryButtonCommand = new RelayCommand(async _ => await DeleteEvent());
 
             await contentDialog.ShowAsync();
         }
 
-        private void DeleteEvent() { }
+        private async Task DeleteEvent() {
+            var message = await networkAPI.DeleteEvent(Event.EventId);
+            await MessageUtils.ShowDialog("Evenement verwijderen", message.Item1);
+            if (message.Item2)
+            {
+                mainPageViewModel.BackButtonPressed();
+                mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(EventDetailViewModel));
+            }
+        }
 
     }
 }

@@ -515,9 +515,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een onverwachte fout opgetreden tijdens het toevoegen van de vestiging.";
             }
 
             return (message, isSuccess);
@@ -548,9 +548,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een onverwachte fout opgetreden tijdens het bewerken van de vestiging.";
             }
 
             return (message, isSuccess);
@@ -603,7 +603,7 @@ namespace uwp_app_aalst_groep_a3.Network
                 {
                     isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
                 }
-            } catch(Exception e) { }
+            } catch { }
 
             return isOwner;
         }
