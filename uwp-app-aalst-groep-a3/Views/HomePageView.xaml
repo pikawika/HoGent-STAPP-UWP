@@ -9,6 +9,27 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+      <VisualStateManager.VisualStateGroups>
+		
+         <VisualStateGroup>
+			
+            <VisualState>
+				
+               <VisualState.StateTriggers>
+                  <!-- VisualState is dan triggered als window 
+                     width >=720 -->
+                  <AdaptiveTrigger MinWindowWidth = "720" />
+               </VisualState.StateTriggers>
+					
+               <VisualState.Setters>
+                    <Setter Target="topcarousel.Visibility" Value="Collapsed" />
+               </VisualState.Setters>
+					
+            </VisualState>
+				
+         </VisualStateGroup>
+			
+      </VisualStateManager.VisualStateGroups>
 
     <UserControl.Resources>
         <DataTemplate x:Key="EstablishmentsTemplate">
@@ -38,6 +59,8 @@
         </Grid.RowDefinitions>
 
         <controls:Carousel
+            x:Name="topcarousel"
+            Visibility="Visible"
             InvertPositive="True" 
             Orientation="Horizontal"
             SelectedIndex="0"

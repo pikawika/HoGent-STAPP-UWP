@@ -69,7 +69,7 @@ namespace uwp_app_aalst_groep_a3.Utils
             toast.ExpirationTime = DateTime.Now.AddDays(1);
             toast.Tag = "18365";
             toast.Group = "stapp";
-
+            
             return toast;
         }
 
@@ -116,10 +116,6 @@ namespace uwp_app_aalst_groep_a3.Utils
                 }
 
                 
-            }
-            else
-            {
-                ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("Welkom!", "Om alle functionaliteit van deze app te ontgrendelen, kan je hier aanmelden!"));
             }
 
         }
