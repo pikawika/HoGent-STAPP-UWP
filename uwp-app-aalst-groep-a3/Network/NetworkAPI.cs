@@ -9,6 +9,8 @@ using uwp_app_aalst_groep_a3.Models;
 using Windows.Security.Credentials;
 using uwp_app_aalst_groep_a3.Network.requests;
 using uwp_app_aalst_groep_a3.Network.responses;
+using uwp_app_aalst_groep_a3.Network.Request.Event;
+using uwp_app_aalst_groep_a3.Network.Request.Promotion;
 
 namespace uwp_app_aalst_groep_a3.Network
 {
@@ -61,6 +63,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
         /* AUTHENTICATION */
         // Sign in
+        #region AUTHENTICATION
         public async Task<string> SignIn(string username, string password)
         {
             var token = "";
@@ -382,7 +385,7 @@ namespace uwp_app_aalst_groep_a3.Network
         }
 
         // Voegt nieuwe company voor ingelogde merchant toe
-        public async Task<(string, bool)> addCompany(string naam)
+        public async Task<(string, bool)> AddCompany(string naam)
         {
             string message;
             bool isSuccess = false;
@@ -416,7 +419,7 @@ namespace uwp_app_aalst_groep_a3.Network
         }
 
         // edit company voor ingelogde merchant
-        public async Task<(string, bool)> editCompany(int companyId, string naam = "")
+        public async Task<(string, bool)> EditCompany(int companyId, string naam = "")
         {
             string message;
             bool isSuccess = false;
@@ -455,7 +458,7 @@ namespace uwp_app_aalst_groep_a3.Network
         }
 
         // delete company voor ingelogde merchant
-        public async Task<(string, bool)> deleteCompany(int companyId)
+        public async Task<(string, bool)> DeleteCompany(int companyId)
         {
             string message;
             bool isSuccess = false;
@@ -487,13 +490,13 @@ namespace uwp_app_aalst_groep_a3.Network
         #endregion
 
         #region MERCHANT ESTABLISHMENTS
-        // Voegt nieuwe establishment voor ingelogde merchant toe
-        public async Task<(string, bool)> addEstablishment(EstablishmentRequest newEstablishmentRequest)
+        // Voegt nieuwe establishment voor ingelogde merchant zijn company toe
+        public async Task<(string, bool)> AddEstablishment(EstablishmentRequest newEstablishmentRequest)
         {
             string message;
             bool isSuccess = false;
 
-            var newCompanyJson = JsonConvert.SerializeObject(newEstablishmentRequest);
+            var newEstablishmentJson = JsonConvert.SerializeObject(newEstablishmentRequest);
 
             var credentials = passwordVault.Retrieve("Stapp", "Token");
             credentials.RetrievePassword();
@@ -501,7 +504,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.PostAsync(new Uri($"{baseUrl}api/establishment"), new StringContent(newCompanyJson, System.Text.Encoding.UTF8, "application/json"));
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/establishment"), new StringContent(newEstablishmentJson, System.Text.Encoding.UTF8, "application/json"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
@@ -520,8 +523,8 @@ namespace uwp_app_aalst_groep_a3.Network
             return (message, isSuccess);
         }
 
-        // edit establishment voor ingelogde merchant
-        public async Task<(string, bool)> editEstablishment(int establishmentId, EstablishmentRequest editEstablishmentRequest)
+        // edit establishment voor ingelogde merchant zijn company
+        public async Task<(string, bool)> EditEstablishment(int establishmentId, EstablishmentRequest editEstablishmentRequest)
         {
             string message;
             bool isSuccess = false;
@@ -553,8 +556,8 @@ namespace uwp_app_aalst_groep_a3.Network
             return (message, isSuccess);
         }
 
-        // delete establishment voor ingelogde merchant
-        public async Task<(string, bool)> deleteEstablishment(int EstablishmentId)
+        // delete establishment voor ingelogde merchant zijn company
+        public async Task<(string, bool)> DeleteEstablishment(int EstablishmentId)
         {
             string message;
             bool isSuccess = false;
@@ -584,13 +587,271 @@ namespace uwp_app_aalst_groep_a3.Network
             return (message, isSuccess);
         }
 
+        // returnt of aangemelde gebruiker al dan niet owner is van meegegeven establishment
+        public async Task<bool> IsOwnerOfEstablishment(int EstablishmentId)
+        {
+            bool isOwner = false;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/establishment/ownerof/{EstablishmentId}"), null);
+                if (res.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
+                }
+            } catch(Exception e) { }
+
+            return isOwner;
+        }
+
         #endregion
 
         #region MERCHANT PROMOTIONS
+        // Voegt nieuwe promotion voor ingelogde merchant zijn establishment toe
+        public async Task<(string, bool)> AddPromotion(PromotionRequest newPromotionRequest)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var newPromotionJson = JsonConvert.SerializeObject(newPromotionRequest);
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/promotion"), new StringContent(newPromotionJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
+        // edit promotion voor ingelogde merchant zijn establishment
+        public async Task<(string, bool)> EditPromotion(int promotionId, PromotionRequest editPromotionRequest)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var editedPromotionJson = JsonConvert.SerializeObject(editPromotionRequest);
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PutAsync(new Uri($"{baseUrl}api/promotion/{promotionId}"), new StringContent(editedPromotionJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
+        // delete promotion voor ingelogde merchant zijn establishment
+        public async Task<(string, bool)> DeletePromotion(int promotionId)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/promotion/{promotionId}"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
+        // returnt of aangemelde gebruiker al dan niet owner is van meegegeven establishment
+        public async Task<bool> IsOwnerOfPromotion(int promotionId)
+        {
+            bool isOwner = false;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/promotion/ownerof/{promotionId}"), null);
+                if (res.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception e) { }
+
+            return isOwner;
+        }
+
 
         #endregion
 
         #region MERCHANT EVENTS
+        // Voegt nieuwe event voor ingelogde merchant zijn establishment toe
+        public async Task<(string, bool)> AddEvent(EventRequest newEventRequest)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var newEventJson = JsonConvert.SerializeObject(newEventRequest);
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/promotion"), new StringContent(newEventJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
+        // edit event voor ingelogde merchant zijn establishment
+        public async Task<(string, bool)> EditEvent(int eventId, EventRequest editEventRequest)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var editedEventJson = JsonConvert.SerializeObject(editEventRequest);
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PutAsync(new Uri($"{baseUrl}api/promotion/{eventId}"), new StringContent(editedEventJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
+        // delete event voor ingelogde merchant zijn establishment
+        public async Task<(string, bool)> DeleteEvent(int eventId)
+        {
+            string message;
+            bool isSuccess = false;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/promotion/{eventId}"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                    isSuccess = true;
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            return (message, isSuccess);
+        }
+
+        // returnt of aangemelde gebruiker al dan niet owner is van meegegeven establishment
+        public async Task<bool> IsOwnerOfEvent(int eventId)
+        {
+            bool isOwner = false;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/event/ownerof/{eventId}"), null);
+                if (res.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception e) { }
+
+            return isOwner;
+        }
 
         #endregion
 
