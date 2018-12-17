@@ -94,7 +94,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             catch { }
         }
 
-        private void EditPromotion() { }
+        private void EditPromotion() => mainPageViewModel.NavigateTo(new MerchantEditViewModel(MerchantObjectType.PROMOTION, mainPageViewModel, null, null, Promotion));
 
         private async Task DeletePromotionDialog()
         {

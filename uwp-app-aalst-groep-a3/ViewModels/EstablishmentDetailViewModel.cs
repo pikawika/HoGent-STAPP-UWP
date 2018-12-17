@@ -399,7 +399,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             catch { }
         }
 
-        private void EditEstablishment() { }
+        private void EditEstablishment() => mainPageViewModel.NavigateTo(new MerchantEditViewModel(MerchantObjectType.ESTABLISHMENT, mainPageViewModel, null, Establishment));
 
         private async Task DeleteEstablishmentDialog()
         {

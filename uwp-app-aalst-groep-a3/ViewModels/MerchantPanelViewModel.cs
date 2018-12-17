@@ -49,6 +49,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _events = value; RaisePropertyChanged(nameof(Events)); }
         }
 
+        public RelayCommand CompanyClickedCommand { get; set; }
         public RelayCommand EstablishmentClickedCommand { get; set; }
         public RelayCommand PromotionClickedCommand { get; set; }
         public RelayCommand EventClickedCommand { get; set; }
@@ -62,6 +63,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             this.mainPageViewModel = mainPageViewModel;
 
+            CompanyClickedCommand = new RelayCommand((object args) => CompanyClicked(args));
             EstablishmentClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             PromotionClickedCommand = new RelayCommand((object args) => PromotionClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
@@ -122,6 +124,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
         }
 
+        private void CompanyClicked(object args) => mainPageViewModel.NavigateTo(new MerchantEditViewModel(MerchantObjectType.COMPANY, mainPageViewModel, args as Company));
         private void EstablishmentClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));
         private void PromotionClicked(object args) => mainPageViewModel.NavigateTo(new PromotionDetailViewModel(args as Promotion, mainPageViewModel));
         private void EventClicked(object args) => mainPageViewModel.NavigateTo(new EventDetailViewModel(args as Event, mainPageViewModel));
