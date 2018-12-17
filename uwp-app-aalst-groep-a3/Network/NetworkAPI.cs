@@ -11,6 +11,7 @@ using uwp_app_aalst_groep_a3.Network.requests;
 using uwp_app_aalst_groep_a3.Network.responses;
 using uwp_app_aalst_groep_a3.Network.Request.Event;
 using uwp_app_aalst_groep_a3.Network.Request.Promotion;
+using uwp_app_aalst_groep_a3.Utils;
 
 namespace uwp_app_aalst_groep_a3.Network
 {
@@ -63,7 +64,6 @@ namespace uwp_app_aalst_groep_a3.Network
 
         /* AUTHENTICATION */
         // Sign in
-        #region AUTHENTICATION
         public async Task<string> SignIn(string username, string password)
         {
             var token = "";
