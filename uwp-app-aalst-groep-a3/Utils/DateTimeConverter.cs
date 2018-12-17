@@ -11,7 +11,7 @@ namespace uwp_app_aalst_groep_a3.Utils
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            DateTime date = (DateTime)value;
+            DateTimeOffset date = (DateTimeOffset)value;
             return date.ToString("d MMMM yyyy");
         }
 
