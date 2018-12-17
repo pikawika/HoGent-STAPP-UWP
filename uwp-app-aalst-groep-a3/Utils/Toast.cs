@@ -47,13 +47,8 @@ namespace uwp_app_aalst_groep_a3.Utils
                     {
                         { "action", "Bekijken" },
                     }.ToString())
-                    {
-                        ActivationType = ToastActivationType.Background, 
-                        // Reference the text box's ID in order to
-                        // place this button next to the text box
-                        TextBoxId = "tbReply"
-                    },
                 }
+                
             };
 
             ToastContent toastContent = new ToastContent()
@@ -76,6 +71,19 @@ namespace uwp_app_aalst_groep_a3.Utils
             toast.Group = "stapp";
 
             return toast;
+        }
+
+        public async void SubscriptionAsyncWriteOnly()
+        {
+            NetworkAPI networkAPI = new NetworkAPI();
+            User user = await networkAPI.GetUser();
+            if (user.UserId != -2)
+            {
+                //eerst initialiseren anders null indien file niet bestaat
+                List<Establishment> subs = new List<Establishment>();
+                subs = await networkAPI.GetSubscriptions();
+                await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
+            }
         }
 
         public async void SubscriptionToastAsync(ViewModels.MainPageViewModel mainPageViewModel)
