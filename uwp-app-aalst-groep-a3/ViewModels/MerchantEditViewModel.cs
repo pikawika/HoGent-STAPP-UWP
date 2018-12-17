@@ -154,7 +154,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
 
             contentDialog.Title = "Bewerken annuleren";
-            contentDialog.Content = "Bent u zeker dat u het toevoegen wilt annuleren?";
+            contentDialog.Content = "Bent u zeker dat u het bewerken wilt annuleren?";
             contentDialog.PrimaryButtonText = "Ja";
             contentDialog.CloseButtonText = "Nee";
 
