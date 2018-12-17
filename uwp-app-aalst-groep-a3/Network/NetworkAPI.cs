@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -32,7 +33,35 @@ namespace uwp_app_aalst_groep_a3.Network
             client = new HttpClient(httpClientHandler);
         }
 
-        #region AUTHENTICATION
+
+        public async Task SaveSubscribedEstablishemtsAsync(List<Establishment> establishments)
+        {
+            string json = JsonConvert.SerializeObject(establishments.ToArray());
+
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            Windows.Storage.StorageFile sampleFile = await storageFolder.CreateFileAsync("subscribed.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+            JsonSerializer serializer = new JsonSerializer();
+            await Windows.Storage.FileIO.WriteTextAsync(sampleFile,JsonConvert.SerializeObject(establishments));
+        }
+        
+        public async Task<List<Establishment>> GetSubscribedEstablishmentsAsync()
+        {
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            Windows.Storage.StorageFile sampleFile = await storageFolder.GetFileAsync("subscribed.txt");
+            string text = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
+            return JsonConvert.DeserializeObject<List<Establishment>>(text);
+        }
+
+        public async Task<bool> CheckSubbedDifferenceByJSONAsync(List<Establishment> new_establishments)
+        {
+            string json = JsonConvert.SerializeObject(new_establishments.ToArray());
+
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            Windows.Storage.StorageFile sampleFile = await storageFolder.GetFileAsync("subscribed.txt");
+            string text = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
+            return text.Equals(json);
+        }
+
         /* AUTHENTICATION */
         // Sign in
         public async Task<string> SignIn(string username, string password)
@@ -43,7 +72,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.PostAsync(new Uri($"{baseUrl}api/user/login"), new StringContent(loginJson, System.Text.Encoding.UTF8, "application/json"));
+                var res = await client.PostAsync(new Uri($"{ baseUrl}api/user/login"), new StringContent(loginJson, System.Text.Encoding.UTF8, "application/json"));
                 var userToken = JsonConvert.DeserializeObject<UserToken>(res.Content.ReadAsStringAsync().Result);
                 token = userToken.Token;
             }
@@ -86,6 +115,7 @@ namespace uwp_app_aalst_groep_a3.Network
         public async Task<User> GetUser()
         {
             User user = new User();
+            user.UserId = -2;
             try
             {
                 var credentials = passwordVault.Retrieve("Stapp", "Token");
@@ -201,7 +231,7 @@ namespace uwp_app_aalst_groep_a3.Network
         // Get all establishments
         public async Task<List<Establishment>> GetAllEstablishments()
         {
-            List<Establishment> establishments = new List<Establishment>();
+             List<Establishment> establishments = new List<Establishment>();
             try
             {
                 var json = await client.GetStringAsync(new Uri($"{baseUrl}api/establishment"));
