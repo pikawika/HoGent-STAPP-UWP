@@ -34,7 +34,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     "kunnen de app gebruiken als (of alvorens) ze de stad bezoeken om een overzicht " +
                     "te krijgen van de lokale ondernemingen(winkels, cafés, restaurants, scholen, …). " +
                     "Gebruikers kunnen via een zoekfunctie op zoek gaan naar bijvoorbeeld. " +
-                    "een sushi restaurant.Gebruikers kunnen ook meteen zoeken / filteren op " +
+                    "een sushi restaurant. Gebruikers kunnen ook meteen zoeken / filteren op " +
                     "promoties om een overzicht te krijgen van handelszaken waar momenteel promoties " +
                     "lopen en dus zeker interessant zijn om te bezoeken.";
         }

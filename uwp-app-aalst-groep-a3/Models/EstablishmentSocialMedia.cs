@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace uwp_app_aalst_groep_a3.Models
+﻿namespace uwp_app_aalst_groep_a3.Models
 {
     public class EstablishmentSocialMedia
     {
@@ -9,6 +6,6 @@ namespace uwp_app_aalst_groep_a3.Models
         public Establishment Establishment { get; set; }
         public int SocialMediaId { get; set; }
         public SocialMedia SocialMedia { get; set; }
-        public string url { get; set; }
+        public string Url { get; set; }
     }
 }

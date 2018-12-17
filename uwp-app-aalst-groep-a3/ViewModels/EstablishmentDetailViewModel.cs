@@ -82,7 +82,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             initMap();
         }
 
-        private async Task SetupSubscriptionButtonAsync()
+        private async void SetupSubscriptionButtonAsync()
         {
             List<Establishment> establishments_subscribed = await networkAPI.GetSubscriptions();
 
@@ -144,7 +144,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
             Promotion p = args as Promotion;
 
-            Debug.WriteLine("test lol hihi: " + p.Name);
+            p.Establishment = Establishment;
 
             string start = p.StartDate.ToString("d MMMM yyyy");
             string end = p.EndDate.ToString("d MMMM yyyy");
@@ -153,9 +153,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (p.Name != "Er zijn nog geen promoties toegevoegd")
             {
-                contentDialog.Content = p.Message + "\n" + "Geldig van " + start + " tot " + end;
-            }
+                contentDialog.Content = p.Message + "\n" + "Geldig van " + start + " tot " + end + ".";
 
+                contentDialog.PrimaryButtonText = "Bekijk promotie";
+                contentDialog.DefaultButton = ContentDialogButton.Primary;
+
+                contentDialog.PrimaryButtonCommand = new RelayCommand((object o) => NavigateToPromotionDetail(o));
+                contentDialog.PrimaryButtonCommandParameter = p;
+            }
 
             contentDialog.CloseButtonText = "Sluiten";
 
@@ -167,12 +172,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
             Event e = args as Event;
 
+            e.Establishment = Establishment;
+
             string start = e.StartDate.ToString("d MMMM yyyy");
             string end = e.EndDate.ToString("d MMMM yyyy");
 
             if (e.Name != "Er zijn nog geen events toegevoegd")
             {
                 contentDialog.Content = e.Message + "\n" + "Geldig van " + start + " tot " + end;
+
+                contentDialog.PrimaryButtonText = "Bekijk evenement";
+                contentDialog.DefaultButton = ContentDialogButton.Primary;
+
+                contentDialog.PrimaryButtonCommand = new RelayCommand((object o) => NavigateToEventDetail(o));
+                contentDialog.PrimaryButtonCommandParameter = e;
             }
 
             contentDialog.Title = e.Name;
@@ -237,8 +250,13 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ContentDialog contentDialog = new ContentDialog();
 
             contentDialog.Title = Establishment.Name;
-            contentDialog.Content = Establishment.Street + " " + Establishment.HouseNumber + "," + Establishment.PostalCode + " " + Establishment.City;
+            contentDialog.Content = $"{Establishment.Street} {Establishment.HouseNumber}\n{Establishment.PostalCode} {Establishment.City}";
             contentDialog.CloseButtonText = "Sluiten";
+
+            contentDialog.PrimaryButtonText = "Bekijk kaart";
+            contentDialog.DefaultButton = ContentDialogButton.Primary;
+
+            contentDialog.PrimaryButtonCommand = new RelayCommand(_ => NavigateToMap());
 
             await contentDialog.ShowAsync();
         }
@@ -308,19 +326,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             await contentDialog.ShowAsync();
         }
 
-        private async Task ShowDialog(string title, string message)
-        {
-            ContentDialog contentDialog = new ContentDialog();
-
-            contentDialog.Title = title;
-            contentDialog.Content = message;
-            contentDialog.PrimaryButtonText = "Oké";
-
-            await contentDialog.ShowAsync();
-        }
-
-        private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
-
         private async Task Subscribe()
         {
             if (isSubscribed)
@@ -330,11 +335,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     SubscriptionButtonText = is_not_subbed_text;
                     isSubscribed = false;
-                    await ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
+                    await MessageUtils.ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
                 }
                 else
                 {
-                    await ShowDialog("Abonneren", message);
+                    await MessageUtils.ShowDialog("Abonneren", message);
                 }
             }
             else
@@ -347,11 +352,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     {
                         isSubscribed = true;
                         SubscriptionButtonText = is_subbed_text;
-                        await ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
+                        await MessageUtils.ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
                     }
                     else
                     {
-                        await ShowDialog("Abonneren", message);
+                        await MessageUtils.ShowDialog("Abonneren", message);
                     }
                 }
                 catch
@@ -360,6 +365,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 }
             }
         }
+
+        private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
+
+        private void NavigateToPromotionDetail(object args) => mainPageViewModel.NavigateTo(new PromotionDetailViewModel(args as Promotion, mainPageViewModel));
+
+        private void NavigateToEventDetail(object args) => mainPageViewModel.NavigateTo(new EventDetailViewModel(args as Event, mainPageViewModel));
+
+        private void NavigateToMap() => mainPageViewModel.NavigateTo(new MapViewModel(mainPageViewModel));
+
     }
 
 }

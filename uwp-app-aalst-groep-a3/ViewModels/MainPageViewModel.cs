@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Base;
@@ -62,9 +66,23 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             NavigationViewItems = new ObservableCollection<NavigationViewItem>(CreateNavigationViewItems());
 
+            // De navigatiebalk weet niet dat standaard het geselecteerde icoontje het huisje is, dus dit wordt manueel gedaan
             SelectedItem = NavigationViewItems.FirstOrDefault();
 
+            // De homepage wordt meteen toegevoegd aan de navigatiegeschiedenis
             NavigationHistoryItems.Add(new HomePageViewModel(this));
+
+            // Als de gebruiker aangemeld is, dan moet er een gepast extra icoontje in de navigatiebalk verschijnen
+            try
+            {
+                var role = UserUtils.GetUserRole();
+                if (role.ToLower() == "customer") AddSubscriptionNavigationViewItem();
+                else if (role.ToLower() == "merchant") AddMerchantPanelNavigationViewItem();
+            }
+            catch
+            {
+                Debug.WriteLine("De gebruiker is niet aangemeld.");
+            }
 
             CurrentData = NavigationHistoryItems[0];
 
@@ -86,6 +104,18 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             return items;
         }
+
+        // Toevoegen van het abonnement icoontje aan de navigatiebalk
+        public void AddSubscriptionNavigationViewItem() => NavigationViewItems.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.Read), Content = "Abonnementen", Tag = "Subscription" });
+
+        // Verwijderen van het abonnement icoontje in de navigatiebalk
+        public void RemoveSubscriptionNavigationViewItem() => NavigationViewItems.Remove(NavigationViewItems.SingleOrDefault(n => n.Tag.ToString() == "Subscription"));
+
+        // Toevoegen van het handelaar paneel icoontje aan de navigatiebalk
+        public void AddMerchantPanelNavigationViewItem() => NavigationViewItems.Add(new NavigationViewItem() { Icon = new SymbolIcon(Symbol.PreviewLink), Content = "Mijn overzicht", Tag = "Panel" });
+
+        // Verwijderen van het handelaar paneel icoontje in de navigatiebalk
+        public void RemoveMerchantPanelNavigationViewItem() => NavigationViewItems.Remove(NavigationViewItems.SingleOrDefault(n => n.Tag.ToString() == "Panel"));
 
         // Methode voor het navigeren zodra er in de navigatiebalk op een icoontje geklikt wordt
         private void Navigate(object args)
@@ -119,9 +149,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         // Als er een token in de password vault zit, is de gebruiker aangemeld
                         try
                         {
-                            //var pc = passwordVault.Retrieve("Stapp", "Token");
-                            //passwordVault.Remove(pc);
-
                             passwordVault.Retrieve("Stapp", "Token");
                             NavigateTo(new AccountViewModel(this));
                         }
@@ -130,6 +157,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         {
                             NavigateTo(new LoginViewModel(this));
                         }
+                        break;
+                    case "Abonnementen":
+                        NavigateTo(new SubscriptionsViewModel(this));
+                        break;
+                    case "Mijn overzicht":
+                        NavigateTo(new MerchantPanelViewModel(this));
                         break;
                 }
             }
@@ -180,10 +213,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (current.Contains("establishment")) current = "merchants";
             else if (current.Contains("login") || current.Contains("registration")) current = "account";
+            else if (current.Contains("panel")) current = "panel";
 
             SelectedItem = NavigationViewItems.SingleOrDefault(n => current.Contains(n.Tag.ToString().ToLower()));
         }
-
+        
+        // Deze functie zorgt ervoor dat de back button niet zichtbaar is als je niet meer terug kan gaan
         private void AdjustBackButtonVisibility()
         {
             var currentView = SystemNavigationManager.GetForCurrentView();

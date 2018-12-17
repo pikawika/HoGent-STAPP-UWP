@@ -11,6 +11,8 @@ namespace stappBackend.Models
         [Key]
         public int EstablishmentId { get; private set; }
 
+        public bool isDeleted { get; set; } = false;
+
         public string Name { get; set; }
         public string Description { get; set; }
         public string PostalCode { get; set; }
@@ -32,5 +34,10 @@ namespace stappBackend.Models
 
         [JsonIgnore]
         public List<EstablishmentSubscription> EstablishmentSubscriptions { get; set; }
+
+        [JsonIgnore]
+        public Company Company { get; set; }
+        [JsonIgnore]
+        public int CompanyId { get; set; }
     }
 }

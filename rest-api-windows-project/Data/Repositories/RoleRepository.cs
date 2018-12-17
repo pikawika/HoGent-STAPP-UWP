@@ -11,11 +11,9 @@ namespace stappBackend.Data.Repositories
     public class RoleRepository : IRoleRepository
     {
         private readonly DbSet<Role> _roles;
-        private readonly ApplicationDbContext _context;
 
         public  RoleRepository (ApplicationDbContext context)
         {
-            _context = context;
             _roles = context.Roles;
         }
 

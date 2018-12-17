@@ -6,12 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    xmlns:vm="using:uwp_app_aalst_groep_a3.ViewModels">
-
-    <Page.DataContext>
-        <vm:MainPageViewModel />
-    </Page.DataContext>
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <ContentControl 
         Content="{Binding}"

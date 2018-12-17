@@ -9,5 +9,13 @@ namespace stappBackend.Models.IRepositories
     {
         IEnumerable<Promotion> GetAll();
         Promotion getById(int id);
+
+        void addPromotion(int establishmentId, Promotion newPromotion);
+
+        void removePromotion(int promotionId);
+
+        Boolean isOwnerOfPromotion(int userId, int promotionId);
+
+        void SaveChanges();
     }
 }

@@ -128,7 +128,7 @@ namespace stappBackend.Data
                 mrspaghettiAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = restrauntCategory });
                 mrspaghettiAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = cafeCategory });
 
-                mrspaghettiAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() {SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/WeLoveMisterSpaghettiAalst/" });
+                mrspaghettiAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() {SocialMedia = facebookSocialMedia, Url = "https://www.facebook.com/WeLoveMisterSpaghettiAalst/" });
 
                 mrspaghettiAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/1/1.jpg" });
                 mrspaghettiAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/1/2.jpg" });
@@ -156,10 +156,11 @@ namespace stappBackend.Data
                     Images = new List<Image>() { new Image() { Path = "img/events/2/1.jpg" }, new Image() { Path = "img/events/2/2.jpg" } }
                 });
 
-                mrspaghettiAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today.AddDays(11), EndDate = DateTime.Today.AddDays(18),
+                mrspaghettiAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(10).AddHours(5),
                     Name = "€ 5 korting op een spaghetti naar keuze",
                     Message = "€ 5 korting op een spaghetti naar keuze bij het vermelden van de couponcode 'Spaghet5'.",
-                    Images = new List<Image>() { new Image() { Path = "img/promotions/1/1.jpg" }, new Image() { Path = "img/promotions/1/2.jpg" } }
+                    Images = new List<Image>() { new Image() { Path = "img/promotions/1/1.jpg" }, new Image() { Path = "img/promotions/1/2.jpg" } },
+                    Attachments = new List<File>() { new File() { Name = "QR-code", Path = "files/promotions/1/1.pdf" } }
                 });
 
                 mrspaghettiCompany.Establishments.Add(mrspaghettiAalstEstablishment);
@@ -168,8 +169,8 @@ namespace stappBackend.Data
 
                 fnacAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = winkelCategory });
 
-                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/FnacAalst/" });
-                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, url = "https://twitter.com/fnacbelgie" });
+                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, Url = "https://www.facebook.com/FnacAalst/" });
+                fnacAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, Url = "https://twitter.com/fnacbelgie" });
 
                 fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/1.jpg" });
                 fnacAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/2/2.jpg" });
@@ -198,7 +199,7 @@ namespace stappBackend.Data
                 safirAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = cafeCategory });
                 safirAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = restrauntCategory });
 
-                safirAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/pages/category/Cafe/Safir-188724374609159/" });
+                safirAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, Url = "https://www.facebook.com/pages/category/Cafe/Safir-188724374609159/" });
                 safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/1.jpg" });
                 safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/2.jpg" });
                 safirAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/3/3.jpg" });
@@ -223,9 +224,9 @@ namespace stappBackend.Data
 
                 hogentAalstEstablishment.EstablishmentCategories.Add(new EstablishmentCategory() { Category = schoolCategory });
 
-                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, url = "https://www.facebook.com/HoGentCampusAalst/" });
-                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, url = "https://twitter.com/hogeschool_gent" });
-                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = instagramSocialMedia, url = "https://www.instagram.com/explore/locations/420243736/hogent-stadscampus-aalst" });
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = facebookSocialMedia, Url = "https://www.facebook.com/HoGentCampusAalst/" });
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = twitterSocialMedia, Url = "https://twitter.com/hogeschool_gent" });
+                hogentAalstEstablishment.EstablishmentSocialMedias.Add(new EstablishmentSocialMedia() { SocialMedia = instagramSocialMedia, Url = "https://www.instagram.com/explore/locations/420243736/hogent-stadscampus-aalst" });
 
                 hogentAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/4/1.jpg" });
                 hogentAalstEstablishment.Images.Add(new Image() { Path = "img/establishments/4/2.jpg" });
@@ -244,7 +245,8 @@ namespace stappBackend.Data
                     Name = "Open lessen dagen!",
                     Message =
                         "Een goede manier om een toekomstige opleiding te kiezen, is gewoon komen proeven. Proeven van de leerstof, van de manier van lesgeven, van de sfeer op de campus. Gewoon een échte les meemaken tussen onze huidige studenten. Het aanbod aan Live! lessen is zeer divers. Pik eventueel ook een les mee uit een richting die je minder bekend in de oren klinkt.",
-                    Images = new List<Image>() { new Image() { Path = "img/events/3/1.jpg" }, new Image() { Path = "img/events/3/2.jpg" } }
+                    Images = new List<Image>() { new Image() { Path = "img/events/3/1.jpg" }, new Image() { Path = "img/events/3/2.jpg" } },
+                    Attachments = new List<File>() { new File() { Name = "Brochure Toegepaste Informatica", Path = "files/promotions/3/1.pdf" }, new File(){Name = "Brochure bedrijfsmanagement", Path = "files/promotions/3/2.pdf" } }
                 });
 
                 hogentCompany.Establishments.Add(hogentAalstEstablishment);

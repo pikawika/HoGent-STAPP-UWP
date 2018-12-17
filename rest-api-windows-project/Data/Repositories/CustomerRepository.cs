@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Compression;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using stappBackend.Models;
-using stappBackend.Models.Domain;
 using stappBackend.Models.IRepositories;
 
 namespace stappBackend.Data.Repositories
@@ -23,13 +20,13 @@ namespace stappBackend.Data.Repositories
 
         public void addSubscription(int userId, EstablishmentSubscription establishmentSubscription)
         {
-            _customers.FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions.Add(establishmentSubscription);
+            _customers.FirstOrDefault(c => c.UserId == userId)?.EstablishmentSubscriptions.Add(establishmentSubscription);
             SaveChanges();
         }
 
         public void removeSubscription(int userId, EstablishmentSubscription establishmentSubscription)
         {
-            _customers.FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions.Remove(establishmentSubscription);
+            _customers.FirstOrDefault(c => c.UserId == userId)?.EstablishmentSubscriptions.Remove(establishmentSubscription);
             SaveChanges();
         }
 
@@ -40,7 +37,7 @@ namespace stappBackend.Data.Repositories
 
         public List<Establishment> GetEstablishmentSubscriptions(int userId)
         {
-            List<Establishment> establishments =  _customers
+            List<Establishment> establishments = _customers
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Images)
@@ -49,15 +46,23 @@ namespace stappBackend.Data.Repositories
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.ExceptionalDays)
 
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Promotions).ThenInclude(p => p.Images)
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Promotions).ThenInclude(p => p.Attachments)
                 .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Events).ThenInclude(e => e.Images)
-                .FirstOrDefault(c => c.UserId == userId).EstablishmentSubscriptions
-                .Select(es => es.Establishment).ToList();
+                .Include(c => c.EstablishmentSubscriptions).ThenInclude(es => es.Establishment).ThenInclude(e => e.Events).ThenInclude(e => e.Attachments)
+                .FirstOrDefault(c => c.UserId == userId)
+                ?.EstablishmentSubscriptions
+                .Select(es => es.Establishment)
+                .Where(e => !e.isDeleted)
+                .ToList();
+
+            if (establishments == null) return null;
 
             foreach (Establishment establishment in establishments)
             {
-                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Now);
-                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Now);
+                establishment.Promotions.RemoveAll(p => p.EndDate < DateTime.Today || p.isDeleted);
+                establishment.Events.RemoveAll(e => e.EndDate < DateTime.Today || e.isDeleted);
             }
+
 
             return establishments;
         }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using uwp_app_aalst_groep_a3.Models.Domain;
+﻿using uwp_app_aalst_groep_a3.Models.Domain;
 
 namespace uwp_app_aalst_groep_a3.Models
 {
