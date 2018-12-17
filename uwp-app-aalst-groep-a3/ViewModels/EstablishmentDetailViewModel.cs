@@ -14,6 +14,7 @@ using uwp_app_aalst_groep_a3.Utils;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Security.Credentials;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 
@@ -64,6 +65,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand MapElementClickCommand { get; set; }
         public RelayCommand SubscribeCommand { get; set; }
 
+        private Visibility _merchantVisibility = Visibility.Collapsed;
+        public Visibility MerchantVisibility
+        {
+            get { return _merchantVisibility; }
+            set { _merchantVisibility = value; RaisePropertyChanged(nameof(MerchantVisibility)); }
+        }
+
+        public RelayCommand EditEstablishmentCommand { get; set; }
+        public RelayCommand DeleteEstablishmentCommand { get; set; }
+
         public EstablishmentDetailViewModel(Establishment establishment, MainPageViewModel mainPageViewModel)
         {
             Establishment = establishment;
@@ -77,6 +88,11 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             OpeningsurenCommand = new RelayCommand((args) => ShowOpeningHoursAsync());
             MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
             SubscribeCommand = new RelayCommand(async _ => await Subscribe());
+
+            EditEstablishmentCommand = new RelayCommand(_ => EditEstablishment());
+            DeleteEstablishmentCommand = new RelayCommand(async _ => await DeleteEstablishmentDialog());
+
+            CheckMerchantOwnsPromotion();
 
             SetupSubscriptionButtonAsync();
             initMap();
@@ -365,6 +381,48 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     await ShowNotSignedInDialog("Abonneren", "U bent momenteel niet aangemeld. Om te kunnen abonneren op handelaars, heeft u een account nodig. Aanmelden of een account aanmaken kan u doen op de accountpagina.");
                 }
+            }
+        }
+
+        private async void CheckMerchantOwnsPromotion()
+        {
+            try
+            {
+                var role = UserUtils.GetUserRole();
+                if (role.ToLower() == "merchant")
+                {
+                    bool isOwner = await networkAPI.IsOwnerOfEstablishment(Establishment.EstablishmentId);
+
+                    if (isOwner) MerchantVisibility = Visibility.Visible;
+                }
+            }
+            catch { }
+        }
+
+        private void EditEstablishment() { }
+
+        private async Task DeleteEstablishmentDialog()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = "Vestiging verwijderen";
+            contentDialog.Content = "Bent u zeker dat u deze vestiging wilt verwijderen?";
+            contentDialog.PrimaryButtonText = "Ja";
+            contentDialog.CloseButtonText = "Nee";
+
+            contentDialog.PrimaryButtonCommand = new RelayCommand(async _ => await DeleteEstablishment());
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async Task DeleteEstablishment()
+        {
+            var message = await networkAPI.DeleteEstablishment(Establishment.EstablishmentId);
+            await MessageUtils.ShowDialog("Vestiging verwijderen", message.Item1);
+            if (message.Item2)
+            {
+                mainPageViewModel.BackButtonPressed();
+                mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(EstablishmentDetailViewModel));
             }
         }
 

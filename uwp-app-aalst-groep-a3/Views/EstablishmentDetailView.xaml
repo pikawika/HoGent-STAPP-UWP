@@ -171,7 +171,19 @@
                     <i:Interaction.Behaviors>
                         <ic:EventTriggerBehavior EventName="Click">
                             <ic:InvokeCommandAction
-                    Command="{Binding OpeningsurenCommand}" />
+                                Command="{Binding OpeningsurenCommand}" />
+                        </ic:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30" Visibility="{Binding MerchantVisibility}">
+                <Button Content="Bewerk deze vestiging" Command="{Binding EditEstablishmentCommand}" Style="{StaticResource ButtonRemoveHover}" Background="#0078d7" Width="300" HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="White" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}"/>
+                <Button Style="{StaticResource ButtonRemoveHover}" Background="White" Width="300"  HorizontalAlignment="Center" FocusVisualPrimaryBrush="#FF008EFF" Foreground="#0078d7" FocusVisualSecondaryBrush="#FF008EFF" BorderBrush="{x:Null}">
+                    <Button.Content>Verwijder deze vestiging</Button.Content>
+                    <i:Interaction.Behaviors>
+                        <ic:EventTriggerBehavior EventName="Click">
+                            <ic:InvokeCommandAction
+                                Command="{Binding DeleteEstablishmentCommand}" />
                         </ic:EventTriggerBehavior>
                     </i:Interaction.Behaviors>
                 </Button>

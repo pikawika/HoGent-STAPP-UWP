@@ -78,10 +78,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     bool isOwner = await networkAPI.IsOwnerOfEvent(Event.EventId);
 
-                    if (isOwner)
-                    {
-                        MerchantVisibility = Visibility.Visible;
-                    }
+                    if (isOwner) MerchantVisibility = Visibility.Visible;
                 }
             }
             catch { }

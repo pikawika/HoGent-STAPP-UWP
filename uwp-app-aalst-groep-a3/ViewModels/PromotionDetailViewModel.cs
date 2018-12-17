@@ -88,10 +88,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     bool isOwner = await networkAPI.IsOwnerOfPromotion(Promotion.PromotionId);
 
-                    if (isOwner)
-                    {
-                        MerchantVisibility = Visibility.Visible;
-                    }
+                    if (isOwner)  MerchantVisibility = Visibility.Visible;
                 }
             }
             catch { }
@@ -115,7 +112,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async Task DeleteEvent() {
             var message = await networkAPI.DeletePromotion(Promotion.PromotionId);
-            await MessageUtils.ShowDialog("Evenement verwijderen", message.Item1);
+            await MessageUtils.ShowDialog("Promotie verwijderen", message.Item1);
             if (message.Item2)
             {
                 mainPageViewModel.BackButtonPressed();
