@@ -45,18 +45,39 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _event = value; RaisePropertyChanged(nameof(Event)); }
         }
 
-        private string _buttonText = "";
-        public string ButtonText
-        {
-            get => _buttonText;
-            set { _buttonText = value; RaisePropertyChanged(nameof(ButtonText)); }
-        }
-
         private Visibility _companyVisibility = Visibility.Collapsed;
         public Visibility CompanyVisibility
         {
             get => _companyVisibility;
             set { _companyVisibility = value; RaisePropertyChanged(nameof(CompanyVisibility)); }
+        }
+
+        private Visibility _establishmentVisibility = Visibility.Collapsed;
+        public Visibility EstablishmentVisibility
+        {
+            get => _establishmentVisibility;
+            set { _establishmentVisibility = value; RaisePropertyChanged(nameof(EstablishmentVisibility)); }
+        }
+
+        private Visibility _promotionVisibility = Visibility.Collapsed;
+        public Visibility PromotionVisibility
+        {
+            get => _promotionVisibility;
+            set { _promotionVisibility = value; RaisePropertyChanged(nameof(PromotionVisibility)); }
+        }
+
+        private Visibility _eventVisibility = Visibility.Collapsed;
+        public Visibility EventVisibility
+        {
+            get => _eventVisibility;
+            set { _eventVisibility = value; RaisePropertyChanged(nameof(EventVisibility)); }
+        }
+
+        private string _buttonText = "";
+        public string ButtonText
+        {
+            get => _buttonText;
+            set { _buttonText = value; RaisePropertyChanged(nameof(ButtonText)); }
         }
 
         public MerchantAddViewModel(MerchantObjectType merchantObjectType, MainPageViewModel mainPageViewModel)
@@ -74,12 +95,44 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 case MerchantObjectType.COMPANY:
                     InitializeCompany();
                     break;
+                case MerchantObjectType.ESTABLISHMENT:
+                    InitializeEstablishment();
+                    break;
+                case MerchantObjectType.PROMOTION:
+                    InitializePromotion();
+                    break;
+                case MerchantObjectType.EVENT:
+                    InitializeEvent();
+                    break;
             }
         }
 
         private void InitializeCompany()
         {
-            
+            Company = new Company();
+            ButtonText = "Voeg bedrijf toe";
+            CompanyVisibility = Visibility.Visible;
+        }
+
+        private void InitializeEstablishment()
+        {
+            Establishment = new Establishment();
+            ButtonText = "Voeg vestiging toe";
+            EstablishmentVisibility = Visibility.Visible;
+        }
+
+        private void InitializePromotion()
+        {
+            Promotion = new Promotion();
+            ButtonText = "Voeg promotie toe";
+            PromotionVisibility = Visibility.Visible;
+        }
+
+        private void InitializeEvent()
+        {
+            Event = new Event();
+            ButtonText = "Voeg evenement toe";
+            EventVisibility = Visibility.Visible;
         }
     }
 }
