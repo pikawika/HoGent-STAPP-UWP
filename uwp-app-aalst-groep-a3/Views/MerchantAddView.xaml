@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <StackPanel Width="600" VerticalAlignment="Center" Spacing="10">
-        
+
         <!-- ADD COMPANY -->
         <TextBlock Text="Naam" Visibility="{Binding CompanyVisibility}" />
         <TextBox PlaceholderText="Naam" Text="{Binding Company.Name, Mode=TwoWay}" Visibility="{Binding CompanyVisibility}" />
@@ -33,13 +33,17 @@
         <TextBlock Text="Gemeente" Visibility="{Binding EstablishmentVisibility}" />
         <TextBox PlaceholderText="Gemeente" Text="{Binding Establishment.City, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
+        <Button Content="Kies afbeelding(en)" Command="{Binding PickImageCommand}" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+        
         <!-- CompanyId-->
         <!-- Categories -->
         <!-- SocialMedias -->
         <!-- OpenDays -->
         <!-- ExceptionalDays -->
-        <!-- Images -->
+
         
+
+
         <!-- ADD PROMOTION -->
         <TextBlock Text="Naam" Visibility="{Binding PromotionVisibility}" />
         <TextBox PlaceholderText="Naam" Text="{Binding Promotion.Name, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
@@ -53,10 +57,12 @@
         <TextBlock Text="Einddatum" Visibility="{Binding PromotionVisibility}" />
         <DatePicker Date="{Binding Promotion.EndDate, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
 
+        <Button Content="Kies afbeelding(en)" Command="{Binding PickImageCommand}" Visibility="{Binding PromotionVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+        <Button Content="Kies kortingsbon" Command="{Binding PickAttachmentCommand}" Visibility="{Binding PromotionVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
         <!-- establishmentId -->
-        <!-- Images -->
-        <!-- Attachments -->
-        
+
         <!-- ADD EVENT -->
         <TextBlock Text="Naam" Visibility="{Binding EventVisibility}" />
         <TextBox PlaceholderText="Naam" Text="{Binding Event.Name, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
@@ -70,14 +76,16 @@
         <TextBlock Text="Einddatum" Visibility="{Binding EventVisibility}" />
         <DatePicker Date="{Binding Event.EndDate, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
 
+        <Button Content="Kies afbeelding(en)" Command="{Binding PickImageCommand}" Visibility="{Binding EventVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+        <Button Content="Kies kortingsbon" Command="{Binding PickAttachmentCommand}" Visibility="{Binding EventVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
         <!-- establishmentId -->
-        <!-- Images -->
-        <!-- Attachments -->
 
         <!-- BUTTONS (USED FOR ALL TYPES) -->
         <Button Content="{Binding ButtonText}" Command="{Binding AddMerchantObjectCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
         <Button Content="Annuleren" Command="{Binding CancelAddCommand}" HorizontalAlignment="Stretch" Background="Transparent" Foreground="#0078d7"/>
-        
+
     </StackPanel>
-    
+
 </UserControl>

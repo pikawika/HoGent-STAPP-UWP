@@ -103,6 +103,7 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\FileExtension.cs" />
     <Compile Include="Network\Request\Attachments\FileRequest.cs" />
     <Compile Include="Network\Request\Establishment\CategoryRequest.cs" />
     <Compile Include="Network\Request\Establishment\ExceptionalDayRequest.cs" />
