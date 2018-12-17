@@ -322,32 +322,138 @@ namespace uwp_app_aalst_groep_a3.Network
 
         #region MERCHANT
 
-        // Get companies from a merchant
-        public async Task<List<Company>> GetCompanies()
+        #region MERCHANT COMPANIES
+        // Haal alle companies van ingelogde merchant op
+        public async Task<(List<Company>, string)> getCompaniesFromMerchant()
         {
-            List<Company> companies = new List<Company>();
+            string errorMessage = null;
+            List<Company> companiesFromMerchant = new List<Company>();
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
             try
             {
-                var token = UserUtils.GetUserToken();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                try
+                var res = await client.GetAsync(new Uri($"{baseUrl}api/merchant/company"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    var json = await client.GetStringAsync(new Uri($"{baseUrl}api/merchant/company"));
-                    companies = JsonConvert.DeserializeObject<List<Company>>(json);
+                    ErrorMessage message = new ErrorMessage();
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
+                    errorMessage = message.Error;
                 }
-                catch (HttpRequestException e)
+                else
                 {
-                    Debug.WriteLine($"Er is een error opgetreden tijdens het " +
-                                    $"ophalen van alle companies uit de databank: " +
-                                    $"{e}");
+                    companiesFromMerchant = JsonConvert.DeserializeObject<List<Company>>(await res.Content.ReadAsStringAsync());
                 }
-                return companies;
             }
-            catch
+            catch (Exception e)
             {
-                return companies;
+                errorMessage = e.Message;
             }
+
+            return (companiesFromMerchant, errorMessage);
         }
+
+        // Voegt nieuwe company voor ingelogde merchant toe
+        public async Task<string> addCompany(String naam)
+        {
+            string errorMessage = null;
+
+            var newCompany = new { name = naam };
+            var newCompanyJson = JsonConvert.SerializeObject(newCompany);
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/company"), new StringContent(newCompanyJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    ErrorMessage message = new ErrorMessage();
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
+                    errorMessage = message.Error;
+                }
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+
+            return errorMessage;
+        }
+
+        // edit company voor ingelogde merchant
+        public async Task<string> editCompany(int companyId, String naam)
+        {
+            string errorMessage = null;
+
+            var newCompany = new { name = naam };
+            var newCompanyJson = JsonConvert.SerializeObject(newCompany);
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.PutAsync(new Uri($"{baseUrl}api/company/{companyId}"), new StringContent(newCompanyJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    ErrorMessage message = new ErrorMessage();
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
+                    errorMessage = message.Error;
+                }
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+
+            return errorMessage;
+        }
+
+        // delete company voor ingelogde merchant
+        public async Task<string> deleteCompany(int companyId)
+        {
+            string errorMessage = null;
+
+            var credentials = passwordVault.Retrieve("Stapp", "Token");
+            credentials.RetrievePassword();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+
+            try
+            {
+                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/company/{companyId}"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    ErrorMessage message = new ErrorMessage();
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync());
+                    errorMessage = message.Error;
+                }
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+
+            return errorMessage;
+        }
+        #endregion
+
+        #region MERCHANT ESTABLISHMENTS
+        
+        #endregion
+
+        #region MERCHANT PROMOTIONS
+        
+        #endregion
+
+        #region MERCHANT EVENTS
+
+        #endregion
 
         #endregion
 
