@@ -54,6 +54,7 @@
         <DatePicker Date="{Binding Promotion.EndDate, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
 
         <!-- establishmentId -->
+        <!-- Images -->
         <!-- Attachments -->
         
         <!-- ADD EVENT -->
@@ -70,6 +71,7 @@
         <DatePicker Date="{Binding Event.EndDate, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
 
         <!-- establishmentId -->
+        <!-- Images -->
         <!-- Attachments -->
 
         <!-- BUTTONS (USED FOR ALL TYPES) -->

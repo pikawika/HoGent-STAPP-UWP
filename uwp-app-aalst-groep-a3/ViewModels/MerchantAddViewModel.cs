@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Models;
 using uwp_app_aalst_groep_a3.Network;
+using uwp_app_aalst_groep_a3.Utils;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -80,12 +81,18 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _buttonText = value; RaisePropertyChanged(nameof(ButtonText)); }
         }
 
+        public RelayCommand CancelAddCommand { get; set; }
+        public RelayCommand AddMerchantObjectCommand { get; set; }
+
         public MerchantAddViewModel(MerchantObjectType merchantObjectType, MainPageViewModel mainPageViewModel)
         {
             this.merchantObjectType = merchantObjectType;
             this.mainPageViewModel = mainPageViewModel;
 
             InitializeMerchantAdd();
+
+            CancelAddCommand = new RelayCommand(_ => CancelAddDialog());
+            AddMerchantObjectCommand = new RelayCommand(_ => AddMerchantObject());
         }
 
         private void InitializeMerchantAdd()
@@ -134,5 +141,27 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             ButtonText = "Voeg evenement toe";
             EventVisibility = Visibility.Visible;
         }
+
+        private void AddMerchantObject()
+        {
+
+        }
+
+        private async void CancelAddDialog()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = "Toevoegen annuleren";
+            contentDialog.Content = "Bent u zeker dat u het toevoegen wilt annuleren?";
+            contentDialog.PrimaryButtonText = "Ja";
+            contentDialog.CloseButtonText = "Nee";
+
+            contentDialog.PrimaryButtonCommand = new RelayCommand(_ => CancelAdd());
+
+            await contentDialog.ShowAsync();
+        }
+
+        private void CancelAdd() => mainPageViewModel.BackButtonPressed();
+
     }
 }
