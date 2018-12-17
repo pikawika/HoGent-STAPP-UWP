@@ -126,6 +126,7 @@
     <Compile Include="Utils\DateTimeConverter.cs" />
     <Compile Include="Utils\MessageUtils.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
+    <Compile Include="Utils\UserUtils.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\EstablishmentDetailViewModel.cs" />
     <Compile Include="ViewModels\EventDetailViewModel.cs" />
@@ -134,11 +135,14 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MapViewModel.cs" />
+    <Compile Include="ViewModels\MerchantPanelViewModel.cs" />
     <Compile Include="ViewModels\MerchantRegistrationViewModel.cs" />
     <Compile Include="ViewModels\MerchantsViewModel.cs" />
+    <Compile Include="ViewModels\PromotionDetailViewModel.cs" />
     <Compile Include="ViewModels\PromotionsViewModel.cs" />
     <Compile Include="ViewModels\RegistrationViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\SubscriptionsViewModel.cs" />
     <Compile Include="Views\AccountView.xaml.cs">
       <DependentUpon>AccountView.xaml</DependentUpon>
     </Compile>
@@ -163,11 +167,17 @@
     <Compile Include="Views\MapView.xaml.cs">
       <DependentUpon>MapView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MerchantPanelView.xaml.cs">
+      <DependentUpon>MerchantPanelView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MerchantRegistrationView.xaml.cs">
       <DependentUpon>MerchantRegistrationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MerchantsView.xaml.cs">
       <DependentUpon>MerchantsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PromotionDetailView.xaml.cs">
+      <DependentUpon>PromotionDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PromotionsView.xaml.cs">
       <DependentUpon>PromotionsView.xaml</DependentUpon>
@@ -177,6 +187,9 @@
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubscriptionsView.xaml.cs">
+      <DependentUpon>SubscriptionsView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -285,11 +298,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MerchantPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MerchantRegistrationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MerchantsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PromotionDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -302,6 +323,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubscriptionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -319,8 +344,13 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.2</Version>
     </PackageReference>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt">
+      <Version>5.3.0</Version>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="stapp.cer" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

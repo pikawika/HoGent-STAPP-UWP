@@ -56,6 +56,8 @@ namespace stappBackend.Data.Repositories
                 .Include(e => e.ExceptionalDays)
                 .Include(e => e.Promotions).ThenInclude(p => p.Images)
                 .Include(e => e.Events).ThenInclude(e => e.Images)
+                .Include(e => e.Promotions).ThenInclude(p => p.Attachments)
+                .Include(e => e.Events).ThenInclude(e => e.Attachments)
                 .FirstOrDefault();
 
             if (establishment != null)

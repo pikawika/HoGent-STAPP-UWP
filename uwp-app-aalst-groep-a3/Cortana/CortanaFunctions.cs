@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using uwp_app_aalst_groep_a3.Utils;
 using uwp_app_aalst_groep_a3.ViewModels;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.VoiceCommands;
 using Windows.Media.SpeechRecognition;
+using Windows.Security.Credentials;
 using Windows.Storage;
 using Windows.System;
 
@@ -34,8 +36,8 @@ namespace uwp_app_aalst_groep_a3.Cortana
             }
             catch
             {
-                Debug.WriteLine("Er is iets fout gegaan tijdens het installeren van" +
-                                "de voice commands definitions van de Stapp app." +
+                Debug.WriteLine("Er is iets fout gegaan tijdens het installeren van " +
+                                "de voice commands definitions van de Stapp app. " +
                                 "Mogelijks is Cortana niet geïnstalleerd op het toestel.");
             }
         }
@@ -57,6 +59,9 @@ namespace uwp_app_aalst_groep_a3.Cortana
                 case "ShowMap":
                     ShowMap();
                     break;
+                case "ShowSubscriptions":
+                    ShowSubscriptions();
+                    break;
                 default:
                     break;
             }
@@ -69,6 +74,20 @@ namespace uwp_app_aalst_groep_a3.Cortana
         private void ShowPromotions() => mainPageViewModel.NavigateTo(new PromotionsViewModel(mainPageViewModel));
 
         private void ShowMap() => mainPageViewModel.NavigateTo(new MapViewModel(mainPageViewModel));
+
+        private void ShowSubscriptions()
+        {
+            try
+            {
+                var role = UserUtils.GetUserRole();
+                if (role.ToLower() == "customer") mainPageViewModel.NavigateTo(new SubscriptionsViewModel(mainPageViewModel));
+                else if (role.ToLower() == "merchant") mainPageViewModel.NavigateTo(new MerchantPanelViewModel(mainPageViewModel));
+            }
+            catch
+            {
+                mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
+            }
+        }
 
     }
 }

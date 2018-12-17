@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Models;
+using uwp_app_aalst_groep_a3.Utils;
 using Windows.Security.Credentials;
 
 namespace uwp_app_aalst_groep_a3.Network
@@ -164,24 +165,32 @@ namespace uwp_app_aalst_groep_a3.Network
             return errorMessage;
         }
 
+        // Get subscriptions from a customer
         public async Task<List<Establishment>> GetSubscriptions()
         {
             List<Establishment> establishments = new List<Establishment>();
-            var credentials = passwordVault.Retrieve("Stapp", "Token");
-            credentials.RetrievePassword();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
             try
             {
-                var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/subscriptions"));
-                establishments = JsonConvert.DeserializeObject<List<Establishment>>(json);
+                var credentials = passwordVault.Retrieve("Stapp", "Token");
+                credentials.RetrievePassword();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+                try
+                {
+                    var json = await client.GetStringAsync(new Uri($"{baseUrl}api/customer/subscriptions"));
+                    establishments = JsonConvert.DeserializeObject<List<Establishment>>(json);
+                }
+                catch (HttpRequestException e)
+                {
+                    Debug.WriteLine($"Er is een error opgetreden tijdens het " +
+                                    $"ophalen van alle subscriptions uit de databank: " +
+                                    $"{e}");
+                }
+                return establishments;
             }
-            catch (HttpRequestException e)
+            catch
             {
-                Debug.WriteLine($"Er is een error opgetreden tijdens het " +
-                                $"ophalen van alle subscriptions uit de databank: " +
-                                $"{e}");
+                return establishments;
             }
-            return establishments;
         }
 
         #endregion

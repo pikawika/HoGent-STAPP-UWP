@@ -27,7 +27,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _user = value; RaisePropertyChanged(nameof(User)); }
         }
 
+        private string _buttonText = "";
+
+        public string ButtonText
+        {
+            get => _buttonText;
+            set { _buttonText = value; RaisePropertyChanged(nameof(ButtonText)); }
+        }
+
         public RelayCommand SignOutCommand { get; set; }
+        public RelayCommand ShowSubscriptionsCommand { get; set; }
 
         public AccountViewModel(MainPageViewModel mainPageViewModel)
         {
@@ -37,7 +46,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             SignOutCommand = new RelayCommand(async _ => await SignOutAsync());
 
+            ShowSubscriptionsCommand = new RelayCommand(_ => ShowPageMatchingRole());
+
             GetUser();
+
+            var role = UserUtils.GetUserRole();
+
+            if (role.ToLower() == "customer") ButtonText = "Bekijk abonnementen";
+            else if (role.ToLower() == "merchant") ButtonText = "Bekijk uw overzicht";
         }
 
         private async void GetUser()
@@ -47,13 +63,30 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         private async Task SignOutAsync()
         {
-            PasswordCredential pc = passwordVault.Retrieve("Stapp", "Token");
-            passwordVault.Remove(pc);
             NavigateToLogin();
-            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel));
+            mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(AccountViewModel) || v.GetType() == typeof(SubscriptionsViewModel) || v.GetType() == typeof(MerchantPanelViewModel));
+
+            var role = UserUtils.GetUserRole();
+            if (role.ToLower() == "customer") mainPageViewModel.RemoveSubscriptionNavigationViewItem();
+            else if (role.ToLower() == "merchant") mainPageViewModel.RemoveMerchantPanelNavigationViewItem();
+
+            UserUtils.RemoveUserToken();
+            
             await MessageUtils.ShowDialog("Afmelden", "U bent succesvol afgemeld.");
         }
 
+        private void ShowPageMatchingRole()
+        {
+            var role = UserUtils.GetUserRole();
+
+            if (role.ToLower() == "customer") ShowSubscriptions();
+            else if (role.ToLower() == "merchant") ShowMerchantPanel();
+        }
+
         private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
+
+        private void ShowSubscriptions() => mainPageViewModel.NavigateTo(new SubscriptionsViewModel(mainPageViewModel));
+
+        private void ShowMerchantPanel() => mainPageViewModel.NavigateTo(new MerchantPanelViewModel(mainPageViewModel));
     }
 }

@@ -59,6 +59,28 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 return;
             }
 
+            await ShowGDPRDialogAsync();
+        }
+
+        private async Task ShowGDPRDialogAsync()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = "Handelaar account aanmaken";
+            contentDialog.Content = "Door op de knop 'Bevestigen' te drukken, bevestigt u dat u het privacybeleid van Stapp gelezen en goedgekeurd heeft en wordt uw handelaar account aangemaakt.";
+            contentDialog.PrimaryButtonText = "Bevestigen";
+            contentDialog.SecondaryButtonText = "Bekijk privacybeleid";
+            contentDialog.CloseButtonText = "Annuleren";
+            contentDialog.DefaultButton = ContentDialogButton.Primary;
+
+            contentDialog.PrimaryButtonCommand = new RelayCommand(async _ => await CreateAccount());
+            contentDialog.SecondaryButtonCommand = new RelayCommand(async _ => await ShowPrivacyPolicy());
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async Task CreateAccount()
+        {
             var token = await networkAPI.CreateAccount(FirstName, LastName, EmailAddress, Username, Password, "merchant");
 
             if (string.IsNullOrWhiteSpace(token))
@@ -69,6 +91,14 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             NavigateToLogin();
             await MessageUtils.ShowDialog("Handelaar account aanmaken", "Uw account werd succesvol aangemaakt. Welkom bij Stapp!");
+        }
+
+        private async Task ShowPrivacyPolicy()
+        {
+            string uriToLaunch = @"https://technology-salesman-toolkit.firebaseapp.com/privacy_policy_stapp.html";
+            var uri = new Uri(uriToLaunch);
+
+            await Windows.System.Launcher.LaunchUriAsync(uri);
         }
 
         private void NavigateToLogin() => mainPageViewModel.NavigateTo(new LoginViewModel(mainPageViewModel));
