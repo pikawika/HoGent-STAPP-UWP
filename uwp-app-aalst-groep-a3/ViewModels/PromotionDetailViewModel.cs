@@ -11,6 +11,8 @@ using uwp_app_aalst_groep_a3.Utils;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace uwp_app_aalst_groep_a3.ViewModels
 {
@@ -22,6 +24,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand ShowPromotionCommandClicked { get; set; }
         public RelayCommand DownloadCouponCommandClicked { get; set; }
 
+        private Visibility _merchantVisibility = Visibility.Collapsed;
+        public Visibility MerchantVisibility
+        {
+            get { return _merchantVisibility; }
+            set { _merchantVisibility = value; RaisePropertyChanged(nameof(MerchantVisibility)); }
+        }
+
+        public RelayCommand EditPromotionCommand { get; set; }
+        public RelayCommand DeletePromotionCommand { get; set; }
+
         public PromotionDetailViewModel(Promotion promotion, MainPageViewModel mainPageViewModel)
         {
             Promotion = promotion;
@@ -29,6 +41,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             ShowPromotionCommandClicked = new RelayCommand(async (object args) => await ShowPromotionAsync());
             DownloadCouponCommandClicked = new RelayCommand(async _ => await DownloadCoupon());
+
+            CheckMerchantOwnsPromotion();
         }
 
         private async Task ShowPromotionAsync()
@@ -60,5 +74,40 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 Debug.WriteLine("Download Error", ex.Message);
             }
         }
+
+        private void CheckMerchantOwnsPromotion()
+        {
+            try
+            {
+                var role = UserUtils.GetUserRole();
+                if (role.ToLower() == "merchant")
+                {
+                    // HIER CODE TOEVOEGEN OM TE ZIEN OF DE MERCHANT EIGENAAR IS
+
+                    EditPromotionCommand = new RelayCommand(_ => EditPromotion());
+                    DeletePromotionCommand = new RelayCommand(_ => DeletePromotionDialog());
+                }
+            }
+            catch { }
+        }
+
+        private void EditPromotion() { }
+
+        private async void DeletePromotionDialog()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = "Promotie verwijderen";
+            contentDialog.Content = "Bent u zeker dat u deze promotie wilt verwijderen?";
+            contentDialog.PrimaryButtonText = "Ja";
+            contentDialog.CloseButtonText = "Nee";
+
+            contentDialog.PrimaryButtonCommand = new RelayCommand(_ => DeleteEvent());
+
+            await contentDialog.ShowAsync();
+        }
+
+        private void DeleteEvent() { }
+
     }
 }

@@ -26,6 +26,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand ShowEstablishmentCommandClicked { get; set; }
         public RelayCommand AddToCalendarCommand { get; set; }
 
+        private Visibility _merchantVisibility = Visibility.Collapsed;
+        public Visibility MerchantVisibility
+        {
+            get { return _merchantVisibility; }
+            set { _merchantVisibility = value; RaisePropertyChanged(nameof(MerchantVisibility)); }
+        }
+
+        public RelayCommand EditEventCommand { get; set; }
+        public RelayCommand DeleteEventCommand { get; set; }
+
         public EventDetailViewModel(Event Event, MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
@@ -33,6 +43,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             ShowEstablishmentCommandClicked = new RelayCommand(async (object args) => await ShowEstablishmentAsync());
             AddToCalendarCommand = new RelayCommand((object args) => AddEventToCalendar(args));
+
+            CheckMerchantOwnsEvent();
         }
 
         private async Task ShowEstablishmentAsync() {
@@ -53,12 +65,46 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             string appointmentID = await AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Placement.Default);
         }
 
+        private void CheckMerchantOwnsEvent()
+        {
+            try
+            {
+                var role = UserUtils.GetUserRole();
+                if (role.ToLower() == "merchant")
+                {
+                    // HIER CODE TOEVOEGEN OM TE ZIEN OF DE MERCHANT EIGENAAR IS
+
+                    EditEventCommand = new RelayCommand(_ => EditEvent());
+                    DeleteEventCommand = new RelayCommand(_ => DeleteEventDialog());
+                }
+            }
+            catch { }
+        }
+
         public static Rect GetElementRect(FrameworkElement element)
         {
             GeneralTransform buttonTransform = element.TransformToVisual(null);
             Point point = buttonTransform.TransformPoint(new Point());
             return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
         }
+
+        private void EditEvent() { }
+
+        private async void DeleteEventDialog()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = "Evenement verwijderen";
+            contentDialog.Content = "Bent u zeker dat u dit evenement wilt verwijderen?";
+            contentDialog.PrimaryButtonText = "Ja";
+            contentDialog.CloseButtonText = "Nee";
+
+            contentDialog.PrimaryButtonCommand = new RelayCommand(_ => DeleteEvent());
+
+            await contentDialog.ShowAsync();
+        }
+
+        private void DeleteEvent() { }
 
     }
 }
