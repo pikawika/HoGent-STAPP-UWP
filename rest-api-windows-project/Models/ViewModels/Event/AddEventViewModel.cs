@@ -25,7 +25,6 @@ namespace stappBackend.Models.ViewModels.Event
         [Required(ErrorMessage = "{0} is verplicht.")]
         public DateTime? EndDate { get; set; }
 
-        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Upload)]
         public IFormCollection Attachments { set; get; }
     }

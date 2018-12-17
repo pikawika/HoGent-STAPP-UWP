@@ -54,6 +54,9 @@
         <DataTemplate x:Key="MerchantPanelViewModel">
             <view:MerchantPanelView />
         </DataTemplate>
+        <DataTemplate x:Key="MerchantAddViewModel">
+            <view:MerchantAddView />
+        </DataTemplate>
     </Application.Resources>
 
 </Application>

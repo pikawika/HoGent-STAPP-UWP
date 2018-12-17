@@ -329,9 +329,8 @@ namespace uwp_app_aalst_groep_a3.Network
             string errorMessage = null;
             List<Company> companiesFromMerchant = new List<Company>();
 
-            var credentials = passwordVault.Retrieve("Stapp", "Token");
-            credentials.RetrievePassword();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", credentials.Password);
+            var token = UserUtils.GetUserToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             try
             {
@@ -347,16 +346,16 @@ namespace uwp_app_aalst_groep_a3.Network
                     companiesFromMerchant = JsonConvert.DeserializeObject<List<Company>>(await res.Content.ReadAsStringAsync());
                 }
             }
-            catch (Exception e)
+            catch
             {
-                errorMessage = e.Message;
+                errorMessage = "Er is een overwachte fout opgetreden tijdens het ophalen van uw gegevens.";
             }
 
             return (companiesFromMerchant, errorMessage);
         }
 
         // Voegt nieuwe company voor ingelogde merchant toe
-        public async Task<string> addCompany(String naam)
+        public async Task<string> addCompany(string naam)
         {
             string errorMessage = null;
 
@@ -377,16 +376,16 @@ namespace uwp_app_aalst_groep_a3.Network
                     errorMessage = message.Error;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                errorMessage = e.Message;
+                errorMessage = "Er is een overwachte fout opgetreden tijdens het toevoegen van een bedrijf.";
             }
 
             return errorMessage;
         }
 
         // edit company voor ingelogde merchant
-        public async Task<string> editCompany(int companyId, String naam)
+        public async Task<string> editCompany(int companyId, string naam)
         {
             string errorMessage = null;
 
@@ -407,9 +406,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     errorMessage = message.Error;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                errorMessage = e.Message;
+                errorMessage = errorMessage = "Er is een overwachte fout opgetreden tijdens het bewerken van een bedrijf.";
             }
 
             return errorMessage;
@@ -434,9 +433,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     errorMessage = message.Error;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                errorMessage = e.Message;
+                errorMessage = "Er is een overwachte fout opgetreden tijdens het verwijderen van een bedrijf.";
             }
 
             return errorMessage;

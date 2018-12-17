@@ -50,20 +50,26 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         }
 
         public RelayCommand EstablishmentClickedCommand { get; set; }
-
         public RelayCommand PromotionClickedCommand { get; set; }
-
         public RelayCommand EventClickedCommand { get; set; }
+
+        public RelayCommand AddCompanyClickedCommand { get; set; }
+        public RelayCommand AddEstablishmentClickedCommand { get; set; }
+        public RelayCommand AddPromotionClickedCommand { get; set; }
+        public RelayCommand AddEventClickedCommand { get; set; }
 
         public MerchantPanelViewModel(MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
 
             EstablishmentClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
-
             PromotionClickedCommand = new RelayCommand((object args) => PromotionClicked(args));
-
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
+
+            AddCompanyClickedCommand = new RelayCommand(_ => AddCompanyClicked());
+            AddEstablishmentClickedCommand = new RelayCommand(_ => AddEstablishmentClicked());
+            AddPromotionClickedCommand = new RelayCommand(_ => AddPromotionClicked());
+            AddEventClickedCommand = new RelayCommand(_ => AddEventClicked());
 
             InitializeHomePage();
         }
@@ -117,9 +123,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         }
 
         private void EstablishmentClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));
-
         private void PromotionClicked(object args) => mainPageViewModel.NavigateTo(new PromotionDetailViewModel(args as Promotion, mainPageViewModel));
-
         private void EventClicked(object args) => mainPageViewModel.NavigateTo(new EventDetailViewModel(args as Event, mainPageViewModel));
+
+        private void AddCompanyClicked() => mainPageViewModel.NavigateTo(new MerchantAddViewModel(MerchantObjectType.COMPANY, mainPageViewModel));
+        private void AddEstablishmentClicked() => mainPageViewModel.NavigateTo(new MerchantAddViewModel(MerchantObjectType.ESTABLISHMENT, mainPageViewModel));
+        private void AddPromotionClicked() => mainPageViewModel.NavigateTo(new MerchantAddViewModel(MerchantObjectType.PROMOTION, mainPageViewModel));
+        private void AddEventClicked() => mainPageViewModel.NavigateTo(new MerchantAddViewModel(MerchantObjectType.EVENT, mainPageViewModel));
     }
 }
