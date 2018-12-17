@@ -26,7 +26,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _subscriptions = value; RaisePropertyChanged(nameof(Subscriptions)); }
         }
 
-        private ObservableCollection<Promotion> _promotions;
+        private ObservableCollection<Promotion> _promotions = new ObservableCollection<Promotion>();
 
         public ObservableCollection<Promotion> Promotions
         {
@@ -34,12 +34,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _promotions = value; RaisePropertyChanged(nameof(Promotions)); }
         }
 
-        private ObservableCollection<Event> _events;
+        private ObservableCollection<Event> _events = new ObservableCollection<Event>();
 
         public ObservableCollection<Event> Events
         {
             get { return _events; }
-            set { _events = value; RaisePropertyChanged(nameof(Events)); }
+            set { _events = value; RaisePropertyChanged(nameof(Events)); HandleEmpty(); }
         }
 
         public RelayCommand SubscriptionClickedCommand { get; set; }
@@ -59,6 +59,46 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
 
             InitializeHomePage();
+            //HandleEmpty();
+        }
+
+        private void HandleEmpty()
+        {
+            Models.Domain.Image image = new Models.Domain.Image() { Path = "img/establishments/none/empty.jpg" };
+            List<Models.Domain.Image> images = new List<Models.Domain.Image>();
+            images.Add(image);
+
+            if(Subscriptions.Count == 0)
+            {
+                Establishment establishment = new Establishment()
+                {
+                    Name = "Je hebt nog geen abonnementen",
+                    Images = images
+                };
+                Subscriptions.Add(establishment);
+            }
+
+            if (Promotions.Count == 0)
+            {
+                Promotion p = new Promotion()
+                {
+                    Name = "Er zijn nog geen promoties toegevoegd",
+                    Images = images
+                };
+
+                Promotions.Add(p);
+            }
+
+            if (Events.Count == 0)
+            {
+                Event e = new Event()
+                {
+                    Name = "Er zijn nog geen events toegevoegd",
+                    Images = images
+                };
+
+                Events.Add(e);
+            }
         }
 
         private async void InitializeHomePage()
@@ -83,6 +123,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             Promotions = new ObservableCollection<Promotion>(promotionList);
             Events = new ObservableCollection<Event>(eventList);
+
+            
         }
 
         private void SubscriptionClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));
