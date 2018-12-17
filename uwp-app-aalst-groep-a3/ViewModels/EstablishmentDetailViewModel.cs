@@ -336,6 +336,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     SubscriptionButtonText = is_not_subbed_text;
                     isSubscribed = false;
                     await MessageUtils.ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
+                    Toast toast = new Toast();
+                    toast.SubscriptionAsyncWriteOnly();
                 }
                 else
                 {
