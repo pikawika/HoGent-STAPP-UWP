@@ -56,7 +56,7 @@ namespace uwp_app_aalst_groep_a3.Views
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if(e.NewSize.Width < 700)
+            if(e.NewSize.Width < 700 || e.NewSize.Height < 500)
             {
                 topcarousel.Visibility = Visibility.Collapsed;
                 bottompart.Height = new GridLength(500);

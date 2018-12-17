@@ -43,12 +43,12 @@ namespace uwp_app_aalst_groep_a3.Utils
             {
                 Buttons =
                 {
-                    new ToastButton("Hier Bekijken!", new QueryString()
+                    new ToastButton("Bekijk hier!", "showsubscriptions")
                     {
-                        { "action", "Bekijken" },
-                    }.ToString())
+                        ActivationType = ToastActivationType.Foreground
+                    },
                 }
-                
+
             };
 
             ToastContent toastContent = new ToastContent()
@@ -59,7 +59,7 @@ namespace uwp_app_aalst_groep_a3.Utils
                 // Arguments when the user taps body of toast
                 Launch = new QueryString()
                 {
-                    { "action", "viewConversation" }
+                    {"showsubscriptions" }
 
                 }.ToString()
             };
