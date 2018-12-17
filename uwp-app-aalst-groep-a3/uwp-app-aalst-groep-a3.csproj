@@ -349,7 +349,11 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="stapp.cer" />
+    <None Include="local_host_bram" />
+    <Content Include="local_host_bram.cer" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="local_host_lennert.cer" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

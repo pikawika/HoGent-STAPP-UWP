@@ -41,7 +41,8 @@
   <Extensions>
     <Extension Category="windows.certificates">
       <Certificates>
-        <Certificate StoreName="Root" Content="stapp.cer" />
+        <Certificate StoreName="Root" Content="local_host_bram.cer" />
+        <Certificate StoreName="Root" Content="local_host_lennert.cer" />
       </Certificates>
     </Extension>
   </Extensions>
