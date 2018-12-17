@@ -68,7 +68,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 v.GetType() == typeof(AccountViewModel) ||
                 v.GetType() == typeof(SubscriptionsViewModel) ||
                 v.GetType() == typeof(MerchantPanelViewModel) ||
-                v.GetType() == typeof(MerchantAddViewModel));
+                v.GetType() == typeof(MerchantAddViewModel) ||
+                v.GetType() == typeof(MerchantEditViewModel));
 
             var role = UserUtils.GetUserRole();
             if (role.ToLower() == "customer") mainPageViewModel.RemoveSubscriptionNavigationViewItem();
