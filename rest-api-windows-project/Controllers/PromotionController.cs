@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using stappBackend.Models;
 using stappBackend.Models.Domain;
 using stappBackend.Models.IRepositories;
+using stappBackend.Models.ViewModels.Attachments;
 using stappBackend.Models.ViewModels.Promotion;
 using File = stappBackend.Models.Domain.File;
 
@@ -17,7 +16,7 @@ namespace stappBackend.Controllers
     [ApiController]
     public class PromotionController : ControllerBase
     {
-        private IPromotionRepository _promotionRepository;
+        private readonly IPromotionRepository _promotionRepository;
 
         public PromotionController(IPromotionRepository promotionRepository)
         {
@@ -39,16 +38,16 @@ namespace stappBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm]AddPromotionViewModel promotionToAdd)
+        public IActionResult Post([FromBody]AddPromotionViewModel promotionToAdd)
         {
-            if (!isMerchant())
+            if (!IsMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             //modelstate werkt niet op lijsten :-D
-            if (promotionToAdd.Attachments.Files == null || !promotionToAdd.Attachments.Files.Any())
+            if (promotionToAdd.Attachments == null || !promotionToAdd.Attachments.Any())
                 return BadRequest(new { error = "geen Images meegeven." });
 
-            if (!containsJpgs(promotionToAdd.Attachments.Files.ToList()))
+            if (!ContainsJpgs(promotionToAdd.Attachments.ToList()))
                 return BadRequest(new { error = "geen jpg images gevonden" });
 
             if (promotionToAdd.StartDate == null)
@@ -68,11 +67,11 @@ namespace stappBackend.Controllers
                     EndDate = (DateTime)promotionToAdd.EndDate
                 };
 
-                _promotionRepository.addPromotion(promotionToAdd.establishmentId ?? 0, newPromotion);
+                _promotionRepository.addPromotion(promotionToAdd.EstablishmentId ?? 0, newPromotion);
 
                 //we hebben id nodig voor img path dus erna
-                newPromotion.Images = await ConvertFormFilesToImagesAsync(promotionToAdd.Attachments.Files.ToList(), newPromotion.PromotionId);
-                newPromotion.Attachments = await ConvertFormFilesToAttachmentsAsync(promotionToAdd.Attachments.Files.ToList(), newPromotion.PromotionId);
+                newPromotion.Images = ConvertFileViewModelToImages(promotionToAdd.Images, newPromotion.PromotionId);
+                newPromotion.Attachments = ConvertFileViewModelToAttachments(promotionToAdd.Attachments, newPromotion.PromotionId);
                 _promotionRepository.SaveChanges();
 
                 return Ok(new { bericht = "De promotion werd succesvol toegevoegd." });
@@ -83,11 +82,11 @@ namespace stappBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromForm]ModifyPromotionViewModel editedPromotion)
+        public IActionResult Put(int id, [FromBody]ModifyPromotionViewModel editedPromotion)
         {
             if (ModelState.IsValid)
             {
-                if (!isMerchant())
+                if (!IsMerchant())
                     return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
                 Promotion promotion = _promotionRepository.getById(id);
@@ -110,14 +109,18 @@ namespace stappBackend.Controllers
                 if (editedPromotion.EndDate != null)
                     promotion.EndDate = (DateTime)editedPromotion.EndDate;
 
-                if (editedPromotion.Attachments != null && editedPromotion.Attachments.Files.Any())
+                if (editedPromotion.Attachments != null && editedPromotion.Attachments.Any())
                 {
-                    var images = await ConvertFormFilesToImagesAsync(editedPromotion.Attachments.Files.ToList(), id);
-                    var attachments = await ConvertFormFilesToAttachmentsAsync(editedPromotion.Attachments.Files.ToList(), id);
-                    if (images.Any())
-                        promotion.Images = images;
+                    var attachments = ConvertFileViewModelToAttachments(editedPromotion.Attachments, id);
                     if (attachments.Any())
                         promotion.Attachments = attachments;
+                }
+
+                if (editedPromotion.Images != null && editedPromotion.Images.Any())
+                {
+                    var images = ConvertFileViewModelToImages(editedPromotion.Images, id);
+                    if (images.Any())
+                        promotion.Images = images;
                 }
 
                 _promotionRepository.SaveChanges();
@@ -131,7 +134,7 @@ namespace stappBackend.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (!isMerchant())
+            if (!IsMerchant())
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             if (!_promotionRepository.isOwnerOfPromotion(int.Parse(User.FindFirst("userId")?.Value), id))
@@ -147,12 +150,12 @@ namespace stappBackend.Controllers
         }
 
         #region Helper Functies
-        private bool isMerchant()
+        private bool IsMerchant()
         {
             return User.FindFirst("customRole")?.Value.ToLower() == "merchant" && User.FindFirst("userId")?.Value != null;
         }
 
-        private async Task<List<Image>> ConvertFormFilesToImagesAsync(List<IFormFile> imageFiles, int promotionId)
+        private List<Image> ConvertFileViewModelToImages(List<FileViewModel> imageFiles, int promotionId)
         {
             List<Image> images = new List<Image>();
 
@@ -161,14 +164,18 @@ namespace stappBackend.Controllers
 
             for (int i = 1; i <= imageFiles.Count; i++)
             {
-                if (Path.GetExtension(imageFiles[(i - 1)].FileName) == ".jpg")
+                if (Path.GetExtension(imageFiles[(i - 1)].FullFileName) == ".jpg")
                 {
                     string imagePath = "img/promotions/" + promotionId + "/" + i + ".jpg";
                     images.Add(new Image { Path = imagePath });
                     string filePath = @"wwwroot/" + imagePath;
+
+                    var bytes = Convert.FromBase64String(imageFiles[(i - 1)].Base64File);
+
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                     FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                    await imageFiles[(i - 1)].CopyToAsync(fileStream);
+                    if (bytes.Length > 0)
+                        fileStream.Write(bytes, 0, bytes.Length);
                     fileStream.Close();
                 }
             }
@@ -176,33 +183,37 @@ namespace stappBackend.Controllers
             return images;
         }
 
-        private async Task<List<File>> ConvertFormFilesToAttachmentsAsync(List<IFormFile> attachmentsFiles, int promotionId)
+
+        private List<File> ConvertFileViewModelToAttachments(List<FileViewModel> attachmentsFiles, int promotionId)
         {
             List<File> attachments = new List<File>();
-            
+
             if (attachmentsFiles == null)
                 return attachments;
 
             for (int i = 1; i <= attachmentsFiles.Count; i++)
             {
-                if (Path.GetExtension(attachmentsFiles[(i - 1)].FileName) == ".pdf")
+                if (Path.GetExtension(attachmentsFiles[(i - 1)].FullFileName) == ".pdf")
                 {
-                    string imagePath = "files/promotions/" + promotionId + "/" + i + ".pdf";
-                    attachments.Add(new File {Path = imagePath, Name = attachmentsFiles[(i - 1)].FileName});
-                    string filePath = @"wwwroot/" + imagePath;
+                    string attachmentPath = "files/promotions/" + promotionId + "/" + i + ".pdf";
+                    attachments.Add(new File { Path = attachmentPath, Name = attachmentsFiles[(i - 1)].Name });
+                    string filePath = @"wwwroot/" + attachmentPath;
+
+                    var bytes = Convert.FromBase64String(attachmentsFiles[(i - 1)].Base64File);
+
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                     FileStream fileStream = new FileStream(filePath, FileMode.Create);
-                    await attachmentsFiles[(i - 1)].CopyToAsync(fileStream);
+                    if (bytes.Length > 0)
+                        fileStream.Write(bytes, 0, bytes.Length);
                     fileStream.Close();
                 }
             }
-
             return attachments;
         }
 
-        private bool containsJpgs(List<IFormFile> files)
+        private bool ContainsJpgs(List<FileViewModel> files)
         {
-            return files.Any(f => Path.GetExtension(f.FileName) == ".jpg");
+            return files.Any(f => Path.GetExtension(f.FullFileName) == ".jpg");
         }
 
         #endregion

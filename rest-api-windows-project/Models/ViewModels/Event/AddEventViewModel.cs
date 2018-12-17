@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using stappBackend.Models.ViewModels.Attachments;
 using stappBackend.Models.ViewModels.Establishment;
 
 namespace stappBackend.Models.ViewModels.Event
@@ -26,7 +27,8 @@ namespace stappBackend.Models.ViewModels.Event
         public DateTime? EndDate { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        [DataType(DataType.Upload)]
-        public IFormCollection Attachments { set; get; }
+        public List<FileViewModel> Images { get; set; }
+
+        public List<FileViewModel> Attachments { get; set; }
     }
 }

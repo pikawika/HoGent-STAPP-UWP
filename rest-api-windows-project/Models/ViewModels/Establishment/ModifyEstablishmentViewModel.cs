@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using stappBackend.Models.ViewModels.Attachments;
 
 namespace stappBackend.Models.ViewModels.Establishment
 {
@@ -27,7 +28,6 @@ namespace stappBackend.Models.ViewModels.Establishment
 
         public List<ExceptionalDayViewModel> ExceptionalDays { get; set; }
 
-        [DataType(DataType.Upload)]
-        public IFormCollection Images { set; get; }
+        public List<FileViewModel> Images { get; set; }
     }
 }
