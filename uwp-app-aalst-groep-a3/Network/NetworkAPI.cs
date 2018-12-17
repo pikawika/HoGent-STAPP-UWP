@@ -103,7 +103,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             return token;
         }
-        #endregion
+        
 
         #region USER
 
