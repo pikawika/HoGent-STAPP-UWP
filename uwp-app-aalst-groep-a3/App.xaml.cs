@@ -99,7 +99,27 @@ namespace uwp_app_aalst_groep_a3
                 var arguments = toastArgs.Argument;
                 Debug.WriteLine("Toast arguments are: " + arguments);
                 Frame rootFrame = Window.Current.Content as Frame;
-                if (arguments == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                if(rootFrame != null)
+                {
+                    if (arguments == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                }
+                else
+                {
+                    if (rootFrame == null)
+                    {
+                        rootFrame = new Frame();
+
+                        rootFrame.NavigationFailed += OnNavigationFailed;
+
+                        Window.Current.Content = rootFrame;
+                    }
+                    if (rootFrame.Content == null)
+                    {
+                        if (arguments == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                    }
+                    Window.Current.Activate();
+                }
+                
             }
 
 
