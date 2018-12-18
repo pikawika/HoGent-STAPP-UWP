@@ -46,7 +46,7 @@
                             <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
                             <TextBlock Text="Stop" />
                             <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
-                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                            <CheckBox IsChecked="{Binding IsClosed, Mode=TwoWay}" Content="Gesloten op deze dag" />
                         </controls:UniformGrid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -68,7 +68,7 @@
                             <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
                             <TextBlock Text="Stop" />
                             <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
-                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                            <CheckBox IsChecked="{Binding IsClosed, Mode=TwoWay}" Content="Gesloten op deze dag" />
                         </controls:UniformGrid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -90,7 +90,7 @@
                             <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
                             <TextBlock Text="Stop" />
                             <TimePicker Time="{Binding EndTime, Mode=TwoWay}" ClockIdentifier="24HourClock" />
-                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                            <CheckBox IsChecked="{Binding IsClosed, Mode=TwoWay}" Content="Gesloten op deze dag" />
                         </controls:UniformGrid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -112,7 +112,7 @@
                             <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
                             <TextBlock Text="Stop" />
                             <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
-                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                            <CheckBox IsChecked="{Binding IsClosed, Mode=TwoWay}" Content="Gesloten op deze dag" />
                         </controls:UniformGrid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -134,7 +134,7 @@
                             <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
                             <TextBlock Text="Stop" />
                             <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
-                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                            <CheckBox IsChecked="{Binding IsClosed, Mode=TwoWay}" Content="Gesloten op deze dag" />
                         </controls:UniformGrid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -156,7 +156,7 @@
                             <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
                             <TextBlock Text="Stop" />
                             <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
-                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                            <CheckBox IsChecked="{Binding IsClosed, Mode=TwoWay}" Content="Gesloten op deze dag" />
                         </controls:UniformGrid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -178,7 +178,7 @@
                             <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
                             <TextBlock Text="Stop" />
                             <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
-                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                            <CheckBox IsChecked="{Binding IsClosed, Mode=TwoWay}" Content="Gesloten op deze dag" />
                         </controls:UniformGrid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -204,10 +204,10 @@
             <TextBox PlaceholderText="Facebook url" Text="{Binding Facebook, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
             <TextBlock Text="Instagram" Visibility="{Binding EstablishmentVisibility}" />
-            <TextBox PlaceholderText="Instagram url" Text="{Binding Twitter, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Instagram url" Text="{Binding Instagram, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
             <TextBlock Text="Twitter" Visibility="{Binding EstablishmentVisibility}" />
-            <TextBox PlaceholderText="Twitter url" Text="{Binding Instagram, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Twitter url" Text="{Binding Twitter, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
             <TextBlock Text="Categorieën" Visibility="{Binding EstablishmentVisibility}" />
             <ItemsControl ItemsSource="{Binding Categories}" Visibility="{Binding EstablishmentVisibility}">

@@ -157,7 +157,7 @@ namespace stappBackend.Data
                 });
 
                 mrspaghettiAalstEstablishment.Promotions.Add(new Promotion() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(10).AddHours(5),
-                    Name = "€ 5 korting op een spaghetti naar keuze",
+                    Name = "€ 5 korting op spaghetti",
                     Message = "€ 5 korting op een spaghetti naar keuze bij het vermelden van de couponcode 'Spaghet5'.",
                     Images = new List<Image>() { new Image() { Path = "img/promotions/1/1.jpg" }, new Image() { Path = "img/promotions/1/2.jpg" } },
                     Attachments = new List<File>() { new File() { Name = "QR-code", Path = "files/promotions/1/1.pdf" } }

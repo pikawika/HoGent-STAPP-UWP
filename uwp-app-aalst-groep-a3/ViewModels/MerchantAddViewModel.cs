@@ -442,23 +442,25 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 if (message.Item2)
                 {
                     mainPageViewModel.BackButtonPressed();
-                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel) || v.GetType() == typeof(MerchantPanelViewModel));
+                    mainPageViewModel.NavigateTo(new MerchantPanelViewModel(mainPageViewModel));
                 }
             }
 
             if (Establishment != null)
             {
-                if (Facebook != null)
+                if (!string.IsNullOrEmpty(Facebook))
                 {
                     Establishment.SocialMedias.Add(new SocialMediaRequest { Name = "facebook", Url = Facebook });
                 }
 
-                if (Twitter != null)
+                if (!string.IsNullOrEmpty(Twitter))
                 {
                     Establishment.SocialMedias.Add(new SocialMediaRequest { Name = "twitter", Url = Twitter });
                 }
 
-                if (Instagram != null)
+                if (!string.IsNullOrEmpty(Instagram))
                 {
                     Establishment.SocialMedias.Add(new SocialMediaRequest { Name = "instagram", Url = Instagram });
                 }
@@ -471,7 +473,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
                 var exceptionalDays = ExceptionalDays.ToList();
                 exceptionalDays.RemoveAll(ed => string.IsNullOrEmpty(ed.Message));
-                Establishment.ExceptionalDays = ExceptionalDays.ToList();
+                Establishment.ExceptionalDays = exceptionalDays;
 
                 var openHoursVm0 = OpenHoursMonday.ToList();
                 openHoursVm0.RemoveAll(oh => oh.IsClosed);
@@ -519,7 +521,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 Establishment.OpenDays.Add(openDays4);
 
                 var openHoursVm5 = OpenHoursSaturday.ToList();
-                openHoursVm1.RemoveAll(oh => oh.IsClosed);
+                openHoursVm5.RemoveAll(oh => oh.IsClosed);
                 var openDays5 = new OpenDayRequest { DayOfTheWeek = 5 };
                 foreach (var openHourVm in openHoursVm5)
                 {
@@ -541,7 +543,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 if (message.Item2)
                 {
                     mainPageViewModel.BackButtonPressed();
-                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel) || v.GetType() == typeof(MerchantPanelViewModel));
+                    mainPageViewModel.NavigateTo(new MerchantPanelViewModel(mainPageViewModel));
                 }
 
             }
@@ -554,7 +558,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 if (message.Item2)
                 {
                     mainPageViewModel.BackButtonPressed();
-                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel) || v.GetType() == typeof(MerchantPanelViewModel));
+                    mainPageViewModel.NavigateTo(new MerchantPanelViewModel(mainPageViewModel));
                 }
             }
 
@@ -566,7 +572,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 if (message.Item2)
                 {
                     mainPageViewModel.BackButtonPressed();
-                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel) || v.GetType() == typeof(MerchantPanelViewModel));
+                    mainPageViewModel.NavigateTo(new MerchantPanelViewModel(mainPageViewModel));
                 }
             }
         }
