@@ -64,8 +64,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private async Task ChangeUsername()
         {
             var username = await InputTextDialogAsync("Kies een gebruikersnaam");
-            if (username == "") await MessageUtils.ShowDialog("Gebruikersnaam wijzigen", "Gelieve een geldige gebruikersnaam in te voeren.");
-            else
+            if (username != "")
             {
                 var message = await networkAPI.ChangeUsername(username);
                 await MessageUtils.ShowDialog("Gebruikersnaam wijzigen", message);
@@ -76,13 +75,16 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         {
             var password = await PasswordInputTextDialogAsync("Kies een nieuw wachtwoord");
             var repeat = await PasswordInputTextDialogAsync("Herhaal het nieuwe wachtwoord");
-            if (password != repeat) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "De twee ingevoerde wachtwoorden komen niet overeen.");
-            else if (password.Length < 6) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "Uw wachtwoord moet minstens 6 karakters lang zijn.");
-            else if (password.Length > 30) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "Uw wachtwoord moet mag niet langer dan 30 karakters zijn.");
-            else
+            if (password != "")
             {
-                var message = await networkAPI.ChangePassword(password);
-                await MessageUtils.ShowDialog("Wachtwoord wijzigen", message);
+                if (password != repeat) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "De twee ingevoerde wachtwoorden komen niet overeen.");
+                else if (password.Length < 6) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "Uw wachtwoord moet minstens 6 karakters lang zijn.");
+                else if (password.Length > 30) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "Uw wachtwoord moet mag niet langer dan 30 karakters zijn.");
+                else
+                {
+                    var message = await networkAPI.ChangePassword(password);
+                    await MessageUtils.ShowDialog("Wachtwoord wijzigen", message);
+                }
             }
         }
 
