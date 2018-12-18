@@ -96,20 +96,22 @@ namespace uwp_app_aalst_groep_a3.Utils
                 //eerst initialiseren anders null indien file niet bestaat
                 List<Establishment> subs = new List<Establishment>();
                 subs = await networkAPI.GetSubscriptions();
-
-                try
-                {
-                    bool isEqual = await networkAPI.CheckSubbedDifferenceByJSONAsync(subs);
-                    if (!isEqual)
+                if(subs.Count != 0){
+                    try
                     {
-                        ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("Stapp", "Er zijn nieuwe promoties of evenementen toegevoegd, klik hier om ze te bekijken!"));
+                        bool isEqual = await networkAPI.CheckSubbedDifferenceByJSONAsync(subs);
+                        if (!isEqual)
+                        {
+                            //als veranderd, dan toast tonen en wegschrijven van nieue subs
+                            ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("Stapp", "Er zijn nieuwe promoties of evenementen toegevoegd, klik hier om ze te bekijken!"));
+                            await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
+                        }
+                    }
+                    catch
+                    {
                         await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
                     }
-                }
-                catch
-                {
-                    await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
-                } 
+                }            
             }
 
         }
