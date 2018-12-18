@@ -217,7 +217,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             this.merchantObjectType = merchantObjectType;
             this.mainPageViewModel = mainPageViewModel;
 
-            InitializeMerchantAdd();
+            InitializeMerchantAddAsync();
 
             CancelAddCommand = new RelayCommand(_ => CancelAddDialog());
 
@@ -238,12 +238,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             attachmentsExtensions.Add(new FileExtension { Extension = ".pdf" });
             PickAttachmentCommand = new RelayCommand(_ => AttachmentPickerDialog(attachmentsExtensions));
 
-            AddMerchantObjectCommand = new RelayCommand(_ => AddMerchantObject());
+            AddMerchantObjectCommand = new RelayCommand(async _ => await AddMerchantObject());
 
 
         }
 
-        private void InitializeMerchantAdd()
+        private async void InitializeMerchantAddAsync()
         {
             switch (merchantObjectType)
             {
@@ -251,13 +251,13 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     InitializeCompany();
                     break;
                 case MerchantObjectType.ESTABLISHMENT:
-                    InitializeEstablishment();
+                    await InitializeEstablishment();
                     break;
                 case MerchantObjectType.PROMOTION:
-                    InitializePromotion();
+                    await InitializePromotion();
                     break;
                 case MerchantObjectType.EVENT:
-                    InitializeEvent();
+                    await InitializeEvent();
                     break;
             }
         }
@@ -537,7 +537,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 Establishment.OpenDays.Add(openDays6);
 
                 var message = await networkAPI.AddEstablishment(Establishment);
-                await MessageUtils.ShowDialog("Promotie toevoegen", message.Item1);
+                await MessageUtils.ShowDialog("Vestiging toevoegen", message.Item1);
                 if (message.Item2)
                 {
                     mainPageViewModel.BackButtonPressed();
