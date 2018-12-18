@@ -31,12 +31,26 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Establishment> Establishments
         {
             get { return _establishments; }
-            set { _establishments = value; RaisePropertyChanged(nameof(Establishments));  }
+            set { _establishments = value; RaisePropertyChanged(nameof(Establishments)); Loading = false;  }
         }
 
         private NetworkAPI NetworkAPI { get; set; }
 
         public RelayCommand EstablishmentClickedCommand { get; set; }
+
+        private bool _loading = true;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
+        }
+
+        public bool Shown
+        {
+            get { return !_loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
+        }
 
         public HomePageViewModel(MainPageViewModel mainPageViewModel)
         {
@@ -45,8 +59,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             NetworkAPI = new NetworkAPI();
             InitializeHomePage();
         }
-
-        
 
         private async void InitializeHomePage()
         {

@@ -37,9 +37,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <ProgressRing Grid.Row="2" IsActive="{Binding Loading}" HorizontalAlignment="Center" Height="50" Margin="0,0,0,0" VerticalAlignment="Center" Width="50"/>
+
         <StackPanel Spacing="20" Padding="50" >
-            <TextBlock Text="Te beleven in Aalst" TextAlignment="Center" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+            <TextBlock Visibility="{Binding Shown}" Text="Te beleven in Aalst" TextAlignment="Center" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
             <AutoSuggestBox
+                Visibility="{Binding Shown}"
                 PlaceholderText="Zoek een handelaar"
                 HorizontalAlignment="Center"
                 Width="300"
