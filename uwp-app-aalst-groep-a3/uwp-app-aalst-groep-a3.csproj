@@ -103,8 +103,10 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\FileExtension.cs" />
     <Compile Include="Network\Request\Attachments\FileRequest.cs" />
     <Compile Include="Network\Request\Establishment\CategoryRequest.cs" />
+    <Compile Include="Network\Request\Establishment\OpenHourForVm.cs" />
     <Compile Include="Network\Request\Establishment\ExceptionalDayRequest.cs" />
     <Compile Include="Network\Request\Establishment\EstablishmentRequest.cs" />
     <Compile Include="Network\Request\Establishment\OpenDayRequest.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MapViewModel.cs" />
     <Compile Include="ViewModels\MerchantAddViewModel.cs" />
+    <Compile Include="ViewModels\MerchantEditViewModel.cs" />
     <Compile Include="ViewModels\MerchantPanelViewModel.cs" />
     <Compile Include="ViewModels\MerchantRegistrationViewModel.cs" />
     <Compile Include="ViewModels\MerchantsViewModel.cs" />
@@ -182,6 +185,9 @@
     </Compile>
     <Compile Include="Views\MerchantAddView.xaml.cs">
       <DependentUpon>MerchantAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MerchantEditView.xaml.cs">
+      <DependentUpon>MerchantEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MerchantPanelView.xaml.cs">
       <DependentUpon>MerchantPanelView.xaml</DependentUpon>
@@ -318,6 +324,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MerchantEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MerchantPanelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -372,7 +382,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="local_host_bram" />
     <Content Include="local_host_bram.cer" />
   </ItemGroup>
   <ItemGroup>

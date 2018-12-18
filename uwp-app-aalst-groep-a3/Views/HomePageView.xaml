@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    SizeChanged="UserControl_SizeChanged"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
 
@@ -33,11 +34,15 @@
 
     <Grid x:Name="myGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"  />
-            <RowDefinition Height="300" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="300" x:Name="bottompart" />
         </Grid.RowDefinitions>
 
+        <ProgressRing Grid.Row="0" IsActive="{Binding Loading}" HorizontalAlignment="Center" Height="50" Margin="0,0,0,0" VerticalAlignment="Center" Width="50"/>
+        
         <controls:Carousel
+            x:Name="topcarousel"
+            Visibility="Visible"
             InvertPositive="True" 
             Orientation="Horizontal"
             SelectedIndex="0"
@@ -62,19 +67,10 @@
 
                         <TextBlock Text="{Binding Name}" FocusVisualPrimaryBrush="White" FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
                     </Grid>
-
-
-
                 </DataTemplate>
             </controls:Carousel.ItemTemplate>
 
         </controls:Carousel>
-
-
-
-        
-
-
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -82,7 +78,7 @@
                 <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Te beleven in Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+            <TextBlock Visibility="{Binding Shown}" Text="Te beleven in Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
 
             <Grid Grid.Row="2">
                 <controls:AdaptiveGridView Name="AdaptiveGridViewControl"

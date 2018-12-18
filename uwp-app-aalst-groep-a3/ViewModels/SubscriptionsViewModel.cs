@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Models;
+using uwp_app_aalst_groep_a3.Models.Domain;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 
@@ -23,10 +24,10 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Establishment> Subscriptions
         {
             get { return _subscriptions; }
-            set { _subscriptions = value; RaisePropertyChanged(nameof(Subscriptions)); }
+            set { _subscriptions = value; RaisePropertyChanged(nameof(Subscriptions)); Loading = false; }
         }
 
-        private ObservableCollection<Promotion> _promotions;
+        private ObservableCollection<Promotion> _promotions = new ObservableCollection<Promotion>();
 
         public ObservableCollection<Promotion> Promotions
         {
@@ -34,12 +35,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _promotions = value; RaisePropertyChanged(nameof(Promotions)); }
         }
 
-        private ObservableCollection<Event> _events;
+        private ObservableCollection<Event> _events = new ObservableCollection<Event>();
 
         public ObservableCollection<Event> Events
         {
             get { return _events; }
-            set { _events = value; RaisePropertyChanged(nameof(Events)); }
+            set { _events = value; RaisePropertyChanged(nameof(Events)); HandleEmpty(); }
         }
 
         public RelayCommand SubscriptionClickedCommand { get; set; }
@@ -47,6 +48,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand PromotionClickedCommand { get; set; }
 
         public RelayCommand EventClickedCommand { get; set; }
+
+        private bool _loading = true;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
+        }
+
+        public bool Shown
+        {
+            get { return !_loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
+        }
 
         public SubscriptionsViewModel(MainPageViewModel mainPageViewModel)
         {
@@ -59,6 +74,45 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
 
             InitializeHomePage();
+        }
+
+        private void HandleEmpty()
+        {
+            Image image = new Image() { Path = "img/establishments/none/empty.jpg" };
+            List<Image> images = new List<Image>();
+            images.Add(image);
+
+            if(Subscriptions.Count == 0)
+            {
+                Establishment establishment = new Establishment()
+                {
+                    Name = "Je hebt nog geen abonnementen",
+                    Images = images
+                };
+                Subscriptions.Add(establishment);
+            }
+
+            if (Promotions.Count == 0)
+            {
+                Promotion p = new Promotion()
+                {
+                    Name = "Er zijn nog geen promoties toegevoegd",
+                    Images = images
+                };
+
+                Promotions.Add(p);
+            }
+
+            if (Events.Count == 0)
+            {
+                Event e = new Event()
+                {
+                    Name = "Er zijn nog geen events toegevoegd",
+                    Images = images
+                };
+
+                Events.Add(e);
+            }
         }
 
         private async void InitializeHomePage()
@@ -83,6 +137,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             Promotions = new ObservableCollection<Promotion>(promotionList);
             Events = new ObservableCollection<Event>(eventList);
+
+            HandleEmpty();
         }
 
         private void SubscriptionClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));

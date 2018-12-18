@@ -51,16 +51,16 @@ namespace stappBackend.Controllers
 
             //modelstate werkt niet op lijsten :-D
             if (promotionToAdd.Images == null || !promotionToAdd.Images.Any())
-                return BadRequest(new { error = "geen Images meegeven." });
+                return BadRequest(new { error = "Geen afbeelding(en) meegeven." });
 
             if (!ContainsJpgs(promotionToAdd.Images))
-                return BadRequest(new { error = "geen jpg images gevonden" });
+                return BadRequest(new { error = "Geen jpg afbeelding(en) gevonden" });
 
             if (promotionToAdd.StartDate == null)
-                return BadRequest(new { error = "geen StartDate meegeven." });
+                return BadRequest(new { error = "Geen start datum meegeven." });
 
             if (promotionToAdd.EndDate == null)
-                return BadRequest(new { error = "geen EndDate meegeven." });
+                return BadRequest(new { error = "Geen eind datum meegeven." });
 
 
             if (ModelState.IsValid)
@@ -68,10 +68,10 @@ namespace stappBackend.Controllers
                 Establishment establishmentFromDb = _establishmentRepository.getById(promotionToAdd.EstablishmentId ?? 0);
 
                 if (establishmentFromDb == null)
-                    return BadRequest(new { error = "Establishment niet gevonden" });
+                    return BadRequest(new { error = "Vestiging niet gevonden." });
 
                 if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), establishmentFromDb.EstablishmentId))
-                    return BadRequest(new { error = "Establishment behoord niet tot uw establishments" });
+                    return BadRequest(new { error = "Vestiging behoord niet tot uw vestigingen." });
 
                 Promotion newPromotion = new Promotion
                 {
@@ -88,7 +88,7 @@ namespace stappBackend.Controllers
                 newPromotion.Attachments = ConvertFileViewModelToAttachments(promotionToAdd.Attachments, newPromotion.PromotionId);
                 _promotionRepository.SaveChanges();
 
-                return Ok(new { bericht = "De promotion werd succesvol toegevoegd." });
+                return Ok(new { bericht = "De promotie werd succesvol toegevoegd." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -106,10 +106,10 @@ namespace stappBackend.Controllers
                 Promotion promotion = _promotionRepository.getById(id);
 
                 if (promotion == null)
-                    return BadRequest(new { error = "Promotion niet gevonden" });
+                    return BadRequest(new { error = "Promotie niet gevonden" });
 
                 if (!_promotionRepository.isOwnerOfPromotion(int.Parse(User.FindFirst("userId")?.Value), id))
-                    return BadRequest(new { error = "promotion behoord niet tot uw promotions" });
+                    return BadRequest(new { error = "Promotie behoord niet tot uw promoties" });
 
                 if (!string.IsNullOrEmpty(editedPromotion.Name))
                     promotion.Name = editedPromotion.Name;
@@ -138,7 +138,7 @@ namespace stappBackend.Controllers
                 }
 
                 _promotionRepository.SaveChanges();
-                return Ok(new { bericht = "De promotion werd succesvol bijgewerkt." });
+                return Ok(new { bericht = "De promotie werd succesvol bijgewerkt." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -152,15 +152,15 @@ namespace stappBackend.Controllers
                 return BadRequest(new { error = "De voorziene token voldoet niet aan de eisen." });
 
             if (!_promotionRepository.isOwnerOfPromotion(int.Parse(User.FindFirst("userId")?.Value), id))
-                return BadRequest(new { error = "promotion behoord niet tot uw promotions" });
+                return BadRequest(new { error = "Promotie behoord niet tot uw promoties" });
 
             Promotion promotion = _promotionRepository.getById(id);
 
             if (promotion == null)
-                return BadRequest(new { error = "promotion niet gevonden" });
+                return BadRequest(new { error = "Promotie niet gevonden" });
 
             _promotionRepository.removePromotion(id);
-            return Ok(new { bericht = "De promotion werd succesvol verwijderd." });
+            return Ok(new { bericht = "De promotie werd succesvol verwijderd." });
         }
 
         [HttpPost("ownerof/{id}")]

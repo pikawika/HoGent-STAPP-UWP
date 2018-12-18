@@ -43,17 +43,12 @@ namespace uwp_app_aalst_groep_a3.Utils
             {
                 Buttons =
                 {
-                    new ToastButton("Hier Bekijken!", new QueryString()
+                    new ToastButton("Bekijk hier!", "showsubscriptions")
                     {
-                        { "action", "Bekijken" },
-                    }.ToString())
-                    {
-                        ActivationType = ToastActivationType.Background, 
-                        // Reference the text box's ID in order to
-                        // place this button next to the text box
-                        TextBoxId = "tbReply"
+                        ActivationType = ToastActivationType.Foreground
                     },
                 }
+
             };
 
             ToastContent toastContent = new ToastContent()
@@ -64,7 +59,7 @@ namespace uwp_app_aalst_groep_a3.Utils
                 // Arguments when the user taps body of toast
                 Launch = new QueryString()
                 {
-                    { "action", "viewConversation" }
+                    {"showsubscriptions" }
 
                 }.ToString()
             };
@@ -74,44 +69,49 @@ namespace uwp_app_aalst_groep_a3.Utils
             toast.ExpirationTime = DateTime.Now.AddDays(1);
             toast.Tag = "18365";
             toast.Group = "stapp";
-
+            
             return toast;
         }
 
-        public async void SubscriptionToastAsync(ViewModels.MainPageViewModel mainPageViewModel)
+        public async void SubscriptionAsyncWriteOnly()
         {
-            this.MainPage = mainPageViewModel;
             NetworkAPI networkAPI = new NetworkAPI();
             User user = await networkAPI.GetUser();
             if (user.UserId != -2)
             {
-                bool changed = false;
                 //eerst initialiseren anders null indien file niet bestaat
                 List<Establishment> subs = new List<Establishment>();
                 subs = await networkAPI.GetSubscriptions();
+                await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
+            }
+        }
 
-                //List<Establishment> merc = await NetworkAPI.GetSubscribedEstablishmentsAsync();
-
-                try
-                {
-                    bool isEqual = await networkAPI.CheckSubbedDifferenceByJSONAsync(subs);
-                    if (!isEqual)
+        public async void SubscriptionToastAsync(MainPageViewModel mainPageViewModel)
+        {
+            MainPage = mainPageViewModel;
+            NetworkAPI networkAPI = new NetworkAPI();
+            User user = await networkAPI.GetUser();
+            if (user.UserId != -2)
+            {
+                //eerst initialiseren anders null indien file niet bestaat
+                List<Establishment> subs = new List<Establishment>();
+                subs = await networkAPI.GetSubscriptions();
+                if(subs.Count != 0){
+                    try
                     {
-                        //als veranderd, dan toast tonen en wegschrijven van nieue subs
-                        ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("STAPP", "Er zijn nieuwe promoties of evenementen toegevoegd, bekijk ze hier!"));
+                        bool isEqual = await networkAPI.CheckSubbedDifferenceByJSONAsync(subs);
+                        if (!isEqual)
+                        {
+                            //als veranderd, dan toast tonen en wegschrijven van nieue subs
+                            ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("Stapp", "Er zijn nieuwe promoties of evenementen toegevoegd, klik hier om ze te bekijken!"));
+                            await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
+                        }
+                    }
+                    catch
+                    {
                         await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
                     }
-                }
-                catch
-                {
-                    await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
-                }
-
-                
-            }
-            else
-            {
-                ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("Welkom!", "Om alle functionaliteit van deze app te ontgrendelen, kan je hier aanmelden!"));
+                }            
             }
 
         }

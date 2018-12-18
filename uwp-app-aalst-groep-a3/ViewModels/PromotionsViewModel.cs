@@ -22,10 +22,24 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Promotion> Promotions
         {
             get { return _promotions; }
-            set { _promotions = value; RaisePropertyChanged(nameof(Promotions)); }
+            set { _promotions = value; RaisePropertyChanged(nameof(Promotions)); Loading = false; }
         }
 
         public RelayCommand PromotionClickedCommand { get; set; }
+
+        private bool _loading = true;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
+        }
+
+        public bool Shown
+        {
+            get { return !_loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
+        }
 
         public PromotionsViewModel(MainPageViewModel mainPageViewModel)
         {

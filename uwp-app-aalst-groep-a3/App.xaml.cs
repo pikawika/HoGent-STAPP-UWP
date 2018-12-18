@@ -91,19 +91,40 @@ namespace uwp_app_aalst_groep_a3
         // Extra code voor het gebruik van Cortana
         protected override void OnActivated(IActivatedEventArgs args)
         {
-            if (args.Kind == ActivationKind.Protocol)
+
+            if(args.Kind == ActivationKind.ToastNotification)
+    {
+                //Get the pre-defined arguments and user inputs from the eventargs;
+                var toastArgs = args as ToastNotificationActivatedEventArgs;
+                var arguments = toastArgs.Argument;
+                Debug.WriteLine("Toast arguments are: " + arguments);
+                Frame rootFrame = Window.Current.Content as Frame;
+                if(rootFrame != null)
+                {
+                    if (arguments == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                }
+                else
+                {
+                    if (rootFrame == null)
+                    {
+                        rootFrame = new Frame();
+
+                        rootFrame.NavigationFailed += OnNavigationFailed;
+
+                        Window.Current.Content = rootFrame;
+                    }
+                    if (rootFrame.Content == null)
+                    {
+                        if (arguments == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                    }
+                    Window.Current.Activate();
+                }
+                
+            }
+            else if (args.Kind == ActivationKind.Protocol)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
-
-                if (rootFrame == null)
-                {
-                    rootFrame = new Frame();
-
-                    rootFrame.NavigationFailed += OnNavigationFailed;
-
-                    Window.Current.Content = rootFrame;
-                }
-                if (rootFrame.Content == null)
+                if (rootFrame != null)
                 {
                     var uriArgs = args as ProtocolActivatedEventArgs;
                     if (uriArgs != null)
@@ -116,28 +137,62 @@ namespace uwp_app_aalst_groep_a3
                         if (uriArgs.Uri.Host == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
                     }
                 }
-                Window.Current.Activate();
+                else
+                {
+                    if (rootFrame == null)
+                    {
+                        rootFrame = new Frame();
+
+                        rootFrame.NavigationFailed += OnNavigationFailed;
+
+                        Window.Current.Content = rootFrame;
+                    }
+                    if (rootFrame.Content == null)
+                    {
+                        var uriArgs = args as ProtocolActivatedEventArgs;
+                        if (uriArgs != null)
+                        {
+                            if (uriArgs.Uri.Host == "showpromotions") rootFrame.Navigate(typeof(MainPage), "ShowPromotions");
+                            if (uriArgs.Uri.Host == "showmerchants") rootFrame.Navigate(typeof(MainPage), "ShowMerchants");
+                            if (uriArgs.Uri.Host == "showmap") rootFrame.Navigate(typeof(MainPage), "ShowMap");
+                            if (uriArgs.Uri.Host == "showhomepage") rootFrame.Navigate(typeof(MainPage), "ShowHomePage");
+                            if (uriArgs.Uri.Host == "showevents") rootFrame.Navigate(typeof(MainPage), "ShowEvents");
+                            if (uriArgs.Uri.Host == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                        }
+                    }
+                    Window.Current.Activate();
+                }
             }
             else if (args.Kind == ActivationKind.VoiceCommand)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
 
-                if (rootFrame == null)
-                {
-                    rootFrame = new Frame();
-
-                    rootFrame.NavigationFailed += OnNavigationFailed;
-
-                    Window.Current.Content = rootFrame;
-                }
-                if (rootFrame.Content == null)
+                if (rootFrame != null)
                 {
                     SpeechRecognitionResult result = (args as VoiceCommandActivatedEventArgs).Result;
                     string commandName = result.RulePath[0];
 
                     rootFrame.Navigate(typeof(MainPage), commandName);
                 }
-                Window.Current.Activate();
+                else
+                {
+                    if (rootFrame == null)
+                    {
+                        rootFrame = new Frame();
+
+                        rootFrame.NavigationFailed += OnNavigationFailed;
+
+                        Window.Current.Content = rootFrame;
+                    }
+                    if (rootFrame.Content == null)
+                    {
+                        SpeechRecognitionResult result = (args as VoiceCommandActivatedEventArgs).Result;
+                        string commandName = result.RulePath[0];
+
+                        rootFrame.Navigate(typeof(MainPage), commandName);
+                    }
+                    Window.Current.Activate();
+                }
             }
         }
 

@@ -14,6 +14,7 @@ using uwp_app_aalst_groep_a3.Utils;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Security.Credentials;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 
@@ -64,6 +65,39 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand MapElementClickCommand { get; set; }
         public RelayCommand SubscribeCommand { get; set; }
 
+        private Visibility _merchantVisibility = Visibility.Collapsed;
+        public Visibility MerchantVisibility
+        {
+            get { return _merchantVisibility; }
+            set { _merchantVisibility = value; RaisePropertyChanged(nameof(MerchantVisibility)); }
+        }
+
+        public RelayCommand EditEstablishmentCommand { get; set; }
+        public RelayCommand DeleteEstablishmentCommand { get; set; }
+
+        private Visibility _facebookVisibility = Visibility.Collapsed;
+        public Visibility FacebookVisibility
+        {
+            get { return _facebookVisibility; }
+            set { _facebookVisibility = value; RaisePropertyChanged(nameof(FacebookVisibility)); }
+        }
+
+        private Visibility _twitterVisibility = Visibility.Collapsed;
+        public Visibility TwitterVisibility
+        {
+            get { return _twitterVisibility; }
+            set { _twitterVisibility = value; RaisePropertyChanged(nameof(TwitterVisibility)); }
+        }
+
+        private Visibility _instagramVisibility = Visibility.Collapsed;
+        public Visibility InstagramVisibility
+        {
+            get { return _instagramVisibility; }
+            set { _instagramVisibility = value; RaisePropertyChanged(nameof(InstagramVisibility)); }
+        }
+
+        public RelayCommand SocialMediaClickedCommand { get; set; }
+
         public EstablishmentDetailViewModel(Establishment establishment, MainPageViewModel mainPageViewModel)
         {
             Establishment = establishment;
@@ -72,20 +106,60 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             HandleEmptyEvents();
             HandleEmptyPromotions();
 
+            MakeSocialMediaVisible();
+
             PromotionClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
             OpeningsurenCommand = new RelayCommand((args) => ShowOpeningHoursAsync());
             MapElementClickCommand = new RelayCommand((object args) => MapElementClicked(args));
             SubscribeCommand = new RelayCommand(async _ => await Subscribe());
 
+            EditEstablishmentCommand = new RelayCommand(_ => EditEstablishment());
+            DeleteEstablishmentCommand = new RelayCommand(async _ => await DeleteEstablishmentDialog());
+
+            SocialMediaClickedCommand = new RelayCommand((object args) => SocialMediaClickedAsync(args));
+
+            CheckMerchantOwnsPromotion();
+
             SetupSubscriptionButtonAsync();
             initMap();
+        }
+
+        private void MakeSocialMediaVisible()
+        {
+            if (Establishment.EstablishmentSocialMedias.Exists(esm => esm.SocialMedia.Name.ToLower() == "facebook")) FacebookVisibility = Visibility.Visible;
+            if (Establishment.EstablishmentSocialMedias.Exists(esm => esm.SocialMedia.Name.ToLower() == "twitter")) TwitterVisibility = Visibility.Visible;
+            if (Establishment.EstablishmentSocialMedias.Exists(esm => esm.SocialMedia.Name.ToLower() == "instagram")) InstagramVisibility = Visibility.Visible;
+        }
+
+        private async void SocialMediaClickedAsync(object args)
+        {
+            var type = args as string;
+            var link = "";
+            switch(type)
+            {
+                case "Facebook":
+                    link = Establishment.EstablishmentSocialMedias.SingleOrDefault(esm => esm.SocialMedia.Name.ToLower() == "facebook").Url;
+                    break;
+                case "Twitter":
+                    link = Establishment.EstablishmentSocialMedias.SingleOrDefault(esm => esm.SocialMedia.Name.ToLower() == "twitter").Url;
+                    break;
+                case "Instagram":
+                    link = Establishment.EstablishmentSocialMedias.SingleOrDefault(esm => esm.SocialMedia.Name.ToLower() == "instagram").Url;
+                    break;
+            }
+            if (link != "") await OpenSocialMedia(link);
+        }
+
+        private async Task OpenSocialMedia(string link)
+        {
+            var uri = new Uri(link);
+            await Windows.System.Launcher.LaunchUriAsync(uri);
         }
 
         private async void SetupSubscriptionButtonAsync()
         {
             List<Establishment> establishments_subscribed = await networkAPI.GetSubscriptions();
-
 
             if (establishments_subscribed.Where(e => e.EstablishmentId == Establishment.EstablishmentId).ToList().Count != 0)
             {
@@ -336,6 +410,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                     SubscriptionButtonText = is_not_subbed_text;
                     isSubscribed = false;
                     await MessageUtils.ShowDialog("Abonneren", $"U zal geen meldingen meer ontvangen van {Establishment.Name}!");
+                    Toast toast = new Toast();
+                    toast.SubscriptionAsyncWriteOnly();
                 }
                 else
                 {
@@ -363,6 +439,48 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     await ShowNotSignedInDialog("Abonneren", "U bent momenteel niet aangemeld. Om te kunnen abonneren op handelaars, heeft u een account nodig. Aanmelden of een account aanmaken kan u doen op de accountpagina.");
                 }
+            }
+        }
+
+        private async void CheckMerchantOwnsPromotion()
+        {
+            try
+            {
+                var role = UserUtils.GetUserRole();
+                if (role.ToLower() == "merchant")
+                {
+                    bool isOwner = await networkAPI.IsOwnerOfEstablishment(Establishment.EstablishmentId);
+
+                    if (isOwner) MerchantVisibility = Visibility.Visible;
+                }
+            }
+            catch { }
+        }
+
+        private void EditEstablishment() => mainPageViewModel.NavigateTo(new MerchantEditViewModel(MerchantObjectType.ESTABLISHMENT, mainPageViewModel, null, Establishment));
+
+        private async Task DeleteEstablishmentDialog()
+        {
+            ContentDialog contentDialog = new ContentDialog();
+
+            contentDialog.Title = "Vestiging verwijderen";
+            contentDialog.Content = "Bent u zeker dat u deze vestiging wilt verwijderen?";
+            contentDialog.PrimaryButtonText = "Ja";
+            contentDialog.CloseButtonText = "Nee";
+
+            contentDialog.PrimaryButtonCommand = new RelayCommand(async _ => await DeleteEstablishment());
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async Task DeleteEstablishment()
+        {
+            var message = await networkAPI.DeleteEstablishment(Establishment.EstablishmentId);
+            await MessageUtils.ShowDialog("Vestiging verwijderen", message.Item1);
+            if (message.Item2)
+            {
+                mainPageViewModel.BackButtonPressed();
+                mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(EstablishmentDetailViewModel));
             }
         }
 

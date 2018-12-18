@@ -12,8 +12,8 @@ namespace uwp_app_aalst_groep_a3.Models
         public bool isDeleted { get; set; } = false;
         public List<Image> Images { get; set; } = new List<Image>();
         public List<File> Attachments { get; set; } = new List<File>();
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTimeOffset StartDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
 
         public Establishment Establishment { get; set; }
     }

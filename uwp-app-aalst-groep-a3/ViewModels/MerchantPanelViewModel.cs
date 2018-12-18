@@ -22,7 +22,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Company> Companies
         {
             get { return _companies; }
-            set { _companies = value; RaisePropertyChanged(nameof(Companies)); }
+            set { _companies = value; RaisePropertyChanged(nameof(Companies)); Loading = false; }
         }
 
         private ObservableCollection<Establishment> _establishments;
@@ -49,6 +49,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _events = value; RaisePropertyChanged(nameof(Events)); }
         }
 
+        public RelayCommand CompanyClickedCommand { get; set; }
         public RelayCommand EstablishmentClickedCommand { get; set; }
         public RelayCommand PromotionClickedCommand { get; set; }
         public RelayCommand EventClickedCommand { get; set; }
@@ -58,10 +59,25 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand AddPromotionClickedCommand { get; set; }
         public RelayCommand AddEventClickedCommand { get; set; }
 
+        private bool _loading = true;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
+        }
+
+        public bool Shown
+        {
+            get { return !_loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
+        }
+
         public MerchantPanelViewModel(MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
 
+            CompanyClickedCommand = new RelayCommand((object args) => CompanyClicked(args));
             EstablishmentClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             PromotionClickedCommand = new RelayCommand((object args) => PromotionClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
@@ -122,6 +138,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
         }
 
+        private void CompanyClicked(object args) => mainPageViewModel.NavigateTo(new MerchantEditViewModel(MerchantObjectType.COMPANY, mainPageViewModel, args as Company));
         private void EstablishmentClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));
         private void PromotionClicked(object args) => mainPageViewModel.NavigateTo(new PromotionDetailViewModel(args as Promotion, mainPageViewModel));
         private void EventClicked(object args) => mainPageViewModel.NavigateTo(new EventDetailViewModel(args as Event, mainPageViewModel));

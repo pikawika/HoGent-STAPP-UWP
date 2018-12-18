@@ -30,8 +30,8 @@ namespace stappBackend.Data.Repositories
         {
             Company company = _companies
                 .Include(c => c.Merchant)
-                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentCategories)
-                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentSocialMedias)
+                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
+                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(c => c.Establishments).ThenInclude(e => e.Images)
                 .Include(c => c.Establishments).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
                 .Include(c => c.Establishments).ThenInclude(e => e.ExceptionalDays)
@@ -60,8 +60,8 @@ namespace stappBackend.Data.Repositories
             List<Company> companies = _companies
                 .Where(c => c.MerchantId == merchantId && !c.isDeleted)
                 .Include(c => c.Merchant)
-                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentCategories)
-                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentSocialMedias)
+                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentCategories).ThenInclude(ec => ec.Category)
+                .Include(c => c.Establishments).ThenInclude(e => e.EstablishmentSocialMedias).ThenInclude(esm => esm.SocialMedia)
                 .Include(c => c.Establishments).ThenInclude(e => e.Images)
                 .Include(c => c.Establishments).ThenInclude(e => e.OpenDays).ThenInclude(od => od.OpenHours)
                 .Include(c => c.Establishments).ThenInclude(e => e.ExceptionalDays)

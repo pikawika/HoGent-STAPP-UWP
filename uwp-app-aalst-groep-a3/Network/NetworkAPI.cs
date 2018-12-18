@@ -11,6 +11,7 @@ using uwp_app_aalst_groep_a3.Network.requests;
 using uwp_app_aalst_groep_a3.Network.responses;
 using uwp_app_aalst_groep_a3.Network.Request.Event;
 using uwp_app_aalst_groep_a3.Network.Request.Promotion;
+using uwp_app_aalst_groep_a3.Utils;
 
 namespace uwp_app_aalst_groep_a3.Network
 {
@@ -63,7 +64,6 @@ namespace uwp_app_aalst_groep_a3.Network
 
         /* AUTHENTICATION */
         // Sign in
-        #region AUTHENTICATION
         public async Task<string> SignIn(string username, string password)
         {
             var token = "";
@@ -133,6 +133,66 @@ namespace uwp_app_aalst_groep_a3.Network
                                 $"{e}");
             }
             return user;
+        }
+
+        // Change username
+        public async Task<string> ChangeUsername(string username)
+        {
+            var data = new { Username = username };
+            var dataJson = JsonConvert.SerializeObject(data);
+            string message = null;
+
+            var token = UserUtils.GetUserToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/user/changeusername"), new StringContent(dataJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                }
+            }
+            catch
+            {
+                message = "Er is een onverwachte fout opgetreden bij het veranderen van de gebruikersnaam.";
+            }
+
+            return message;
+        }
+
+        // Change password
+        public async Task<string> ChangePassword(string password)
+        {
+            var data = new { Password = password };
+            var dataJson = JsonConvert.SerializeObject(data);
+            string message = null;
+
+            var token = UserUtils.GetUserToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/user/changepassword"), new StringContent(dataJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                }
+            }
+            catch
+            {
+                message = "Er is een onverwachte fout opgetreden bij het veranderen van het wachtwoord.";
+            }
+
+            return message;
         }
 
         #endregion
@@ -515,9 +575,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een onverwachte fout opgetreden tijdens het toevoegen van de vestiging.";
             }
 
             return (message, isSuccess);
@@ -548,9 +608,9 @@ namespace uwp_app_aalst_groep_a3.Network
                     isSuccess = true;
                 }
             }
-            catch (Exception e)
+            catch
             {
-                message = e.Message;
+                message = "Er is een onverwachte fout opgetreden tijdens het bewerken van de vestiging.";
             }
 
             return (message, isSuccess);
@@ -603,7 +663,7 @@ namespace uwp_app_aalst_groep_a3.Network
                 {
                     isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
                 }
-            } catch(Exception e) { }
+            } catch { }
 
             return isOwner;
         }
@@ -658,7 +718,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.PutAsync(new Uri($"{baseUrl}api/promotion/{promotionId}"), new StringContent(editedPromotionJson, System.Text.Encoding.UTF8, "application/json"));
+                var res = await client.PutAsync(new Uri($"{baseUrl}api/event/{promotionId}"), new StringContent(editedPromotionJson, System.Text.Encoding.UTF8, "application/json"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
@@ -725,7 +785,7 @@ namespace uwp_app_aalst_groep_a3.Network
                     isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
                 }
             }
-            catch (Exception e) { }
+            catch { }
 
             return isOwner;
         }
@@ -748,7 +808,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.PostAsync(new Uri($"{baseUrl}api/promotion"), new StringContent(newEventJson, System.Text.Encoding.UTF8, "application/json"));
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/event"), new StringContent(newEventJson, System.Text.Encoding.UTF8, "application/json"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
@@ -812,7 +872,7 @@ namespace uwp_app_aalst_groep_a3.Network
 
             try
             {
-                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/promotion/{eventId}"));
+                var res = await client.DeleteAsync(new Uri($"{baseUrl}api/event/{eventId}"));
                 if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
@@ -848,7 +908,7 @@ namespace uwp_app_aalst_groep_a3.Network
                     isOwner = JsonConvert.DeserializeObject<bool>(await res.Content.ReadAsStringAsync());
                 }
             }
-            catch (Exception e) { }
+            catch { }
 
             return isOwner;
         }

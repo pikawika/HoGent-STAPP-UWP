@@ -5,79 +5,303 @@
     xmlns:local="using:uwp_app_aalst_groep_a3.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Width="600" VerticalAlignment="Center" Spacing="10">
-        
-        <!-- ADD COMPANY -->
-        <TextBlock Text="Naam" Visibility="{Binding CompanyVisibility}" />
-        <TextBox PlaceholderText="Naam" Text="{Binding Company.Name, Mode=TwoWay}" Visibility="{Binding CompanyVisibility}" />
 
-        <!-- ADD ESTABLISHMENT-->
-        <TextBlock Text="Naam" Visibility="{Binding EstablishmentVisibility}" />
-        <TextBox PlaceholderText="Naam" Text="{Binding Establishment.Name, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+    <ScrollViewer>
 
-        <TextBlock Text="Beschrijving" Visibility="{Binding EstablishmentVisibility}" />
-        <TextBox PlaceholderText="Beschrijving" Text="{Binding Establishment.Description, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+        <StackPanel Width="600" VerticalAlignment="Center" Spacing="10">
 
-        <TextBlock Text="Straat" Visibility="{Binding EstablishmentVisibility}" />
-        <TextBox PlaceholderText="Straat" Text="{Binding Establishment.Street, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+            <!-- ADD COMPANY -->
+            <TextBlock Text="Naam" Visibility="{Binding CompanyVisibility}" />
+            <TextBox PlaceholderText="Naam" Text="{Binding Company.Name, Mode=TwoWay}" Visibility="{Binding CompanyVisibility}" />
 
-        <TextBlock Text="Huisnummer + bus" Visibility="{Binding EstablishmentVisibility}" />
-        <TextBox PlaceholderText="Huisnummer + bus" Text="{Binding Establishment.HouseNumber, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+            <!-- ADD ESTABLISHMENT-->
+            <TextBlock Text="Moederbedrijf" Visibility="{Binding EstablishmentVisibility}" />
+            <ComboBox
+            ItemsSource="{Binding Companies}"
+            DisplayMemberPath="Name"
+            SelectedItem="{Binding PickedCompany, Mode=TwoWay}"
+            Visibility="{Binding EstablishmentVisibility}"/>
 
-        <TextBlock Text="Postcode" Visibility="{Binding EstablishmentVisibility}" />
-        <TextBox PlaceholderText="Postcode" Text="{Binding Establishment.PostalCode, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBlock Text="Naam" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Naam" Text="{Binding Establishment.Name, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
-        <TextBlock Text="Gemeente" Visibility="{Binding EstablishmentVisibility}" />
-        <TextBox PlaceholderText="Gemeente" Text="{Binding Establishment.City, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBlock Text="Beschrijving" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Beschrijving" Text="{Binding Establishment.Description, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
-        <!-- CompanyId-->
-        <!-- Categories -->
-        <!-- SocialMedias -->
-        <!-- OpenDays -->
-        <!-- ExceptionalDays -->
-        <!-- Images -->
-        
-        <!-- ADD PROMOTION -->
-        <TextBlock Text="Naam" Visibility="{Binding PromotionVisibility}" />
-        <TextBox PlaceholderText="Naam" Text="{Binding Promotion.Name, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+            <TextBlock Text="Openingsuren maandag" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding OpenHoursMonday}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:UniformGrid Columns="1" Orientation="Horizontal">
+                            <TextBlock Text="Start" />
+                            <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <TextBlock Text="Stop" />
+                            <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                        </controls:UniformGrid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een openingsuur deze dag" Command="{Binding AddOpenHoursCommand}" CommandParameter="0" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle openingsuren deze dag" Command="{Binding DeleteOpenHoursCommand}" CommandParameter="0" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
-        <TextBlock Text="Omschrijving" Visibility="{Binding PromotionVisibility}" />
-        <TextBox PlaceholderText="Omschrijving" Text="{Binding Promotion.Message, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+            <TextBlock Text="Openingsuren dinsdag" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding OpenHoursTuesday}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:UniformGrid Columns="1" Orientation="Horizontal">
+                            <TextBlock Text="Start" />
+                            <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <TextBlock Text="Stop" />
+                            <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                        </controls:UniformGrid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een openingsuur deze dag" Command="{Binding AddOpenHoursCommand}" CommandParameter="1" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle openingsuren deze dag" Command="{Binding DeleteOpenHoursCommand}" CommandParameter="1" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
-        <TextBlock Text="Startdatum" Visibility="{Binding PromotionVisibility}" />
-        <DatePicker Date="{Binding Promotion.StartDate, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+            <TextBlock Text="Openingsuren woensdag" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding OpenHoursWednesday}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:UniformGrid Columns="1" Orientation="Horizontal">
+                            <TextBlock Text="Start" />
+                            <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <TextBlock Text="Stop" />
+                            <TimePicker Time="{Binding EndTime, Mode=TwoWay}" ClockIdentifier="24HourClock" />
+                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                        </controls:UniformGrid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een openingsuur deze dag" Command="{Binding AddOpenHoursCommand}" CommandParameter="2" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle openingsuren deze dag" Command="{Binding DeleteOpenHoursCommand}" CommandParameter="2" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
-        <TextBlock Text="Einddatum" Visibility="{Binding PromotionVisibility}" />
-        <DatePicker Date="{Binding Promotion.EndDate, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+            <TextBlock Text="Openingsuren donderdag" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding OpenHoursThursday}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:UniformGrid Columns="1" Orientation="Horizontal">
+                            <TextBlock Text="Start" />
+                            <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <TextBlock Text="Stop" />
+                            <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                        </controls:UniformGrid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een openingsuur deze dag" Command="{Binding AddOpenHoursCommand}" CommandParameter="3" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle openingsuren deze dag" Command="{Binding DeleteOpenHoursCommand}" CommandParameter="3" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
-        <!-- establishmentId -->
-        <!-- Images -->
-        <!-- Attachments -->
-        
-        <!-- ADD EVENT -->
-        <TextBlock Text="Naam" Visibility="{Binding EventVisibility}" />
-        <TextBox PlaceholderText="Naam" Text="{Binding Event.Name, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+            <TextBlock Text="Openingsuren vrijdag" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding OpenHoursFriday}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:UniformGrid Columns="1" Orientation="Horizontal">
+                            <TextBlock Text="Start" />
+                            <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <TextBlock Text="Stop" />
+                            <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                        </controls:UniformGrid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een openingsuur deze dag" Command="{Binding AddOpenHoursCommand}" CommandParameter="4" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle openingsuren deze dag" Command="{Binding DeleteOpenHoursCommand}" CommandParameter="4" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
-        <TextBlock Text="Omschrijving" Visibility="{Binding EventVisibility}" />
-        <TextBox PlaceholderText="Omschrijving" Text="{Binding Event.Message, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+            <TextBlock Text="Openingsuren zaterdag" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding OpenHoursSaturday}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:UniformGrid Columns="1" Orientation="Horizontal">
+                            <TextBlock Text="Start" />
+                            <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <TextBlock Text="Stop" />
+                            <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                        </controls:UniformGrid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een openingsuur deze dag" Command="{Binding AddOpenHoursCommand}" CommandParameter="5" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle openingsuren deze dag" Command="{Binding DeleteOpenHoursCommand}" CommandParameter="5" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
-        <TextBlock Text="Startdatum" Visibility="{Binding EventVisibility}" />
-        <DatePicker Date="{Binding Event.StartDate, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+            <TextBlock Text="Openingsuren zondag" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding OpenHoursSunday}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:UniformGrid Columns="1" Orientation="Horizontal">
+                            <TextBlock Text="Start" />
+                            <TimePicker Time="{Binding StartTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <TextBlock Text="Stop" />
+                            <TimePicker Time="{Binding EndTime, Mode=TwoWay}"  ClockIdentifier="24HourClock"/>
+                            <CheckBox IsChecked="{Binding IsClosed}" Content="Gesloten op deze dag" />
+                        </controls:UniformGrid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een openingsuur deze dag" Command="{Binding AddOpenHoursCommand}" CommandParameter="6" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle openingsuren deze dag" Command="{Binding DeleteOpenHoursCommand}" CommandParameter="6" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
 
-        <TextBlock Text="Einddatum" Visibility="{Binding EventVisibility}" />
-        <DatePicker Date="{Binding Event.EndDate, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+            <TextBlock Text="Straat" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Straat" Text="{Binding Establishment.Street, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
-        <!-- establishmentId -->
-        <!-- Images -->
-        <!-- Attachments -->
+            <TextBlock Text="Huisnummer + bus" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Huisnummer + bus" Text="{Binding Establishment.HouseNumber, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
 
-        <!-- BUTTONS (USED FOR ALL TYPES) -->
-        <Button Content="{Binding ButtonText}" Command="{Binding AddMerchantObjectCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
-        <Button Content="Annuleren" Command="{Binding CancelAddCommand}" HorizontalAlignment="Stretch" Background="Transparent" Foreground="#0078d7"/>
-        
-    </StackPanel>
-    
+            <TextBlock Text="Postcode" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Postcode" Text="{Binding Establishment.PostalCode, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+
+            <TextBlock Text="Gemeente" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Gemeente" Text="{Binding Establishment.City, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+
+            <Button Content="Kies afbeelding(en)" Command="{Binding PickImageCommand}" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+            <TextBlock Text="Facebook" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Facebook url" Text="{Binding Facebook, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+
+            <TextBlock Text="Instagram" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Instagram url" Text="{Binding Twitter, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+
+            <TextBlock Text="Twitter" Visibility="{Binding EstablishmentVisibility}" />
+            <TextBox PlaceholderText="Twitter url" Text="{Binding Instagram, Mode=TwoWay}" Visibility="{Binding EstablishmentVisibility}" />
+
+            <TextBlock Text="Categorieën" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding Categories}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel 
+                        Orientation="Horizontal">
+                            <TextBox PlaceholderText="Categorie" Text="{Binding Name, Mode=TwoWay}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een categorie" Command="{Binding AddCategoryCommand}" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle categorieën" Command="{Binding DeleteCategoryCommand}" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+            
+            <TextBlock Text="Uitzonderlijk gesloten dagen" Visibility="{Binding EstablishmentVisibility}" />
+            <ItemsControl ItemsSource="{Binding ExceptionalDays}" Visibility="{Binding EstablishmentVisibility}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <DatePicker Date="{Binding Day, Mode=TwoWay}" />
+                            <TextBox PlaceholderText="Boodschap" Text="{Binding Message, Mode=TwoWay}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Nog een uitzonderlijk gesloten dag" Command="{Binding AddExceptionalDayCommand}" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+            <Button Content="Verwijder alle uitzonderlijk gesloten dagen" Command="{Binding DeleteExceptionalDayCommand}" Visibility="{Binding EstablishmentVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+            <!-- ADD PROMOTION -->
+            <TextBlock Text="Vestiging" Visibility="{Binding PromotionVisibility}" />
+            <ComboBox
+            ItemsSource="{Binding Establishments}"
+            DisplayMemberPath="Name"
+            SelectedItem="{Binding PickedEstablishment, Mode=TwoWay}"
+            Visibility="{Binding PromotionVisibility}"/>
+
+            <TextBlock Text="Naam" Visibility="{Binding PromotionVisibility}" />
+            <TextBox PlaceholderText="Naam" Text="{Binding Promotion.Name, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+
+            <TextBlock Text="Omschrijving" Visibility="{Binding PromotionVisibility}" />
+            <TextBox PlaceholderText="Omschrijving" Text="{Binding Promotion.Message, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+
+            <TextBlock Text="Startdatum" Visibility="{Binding PromotionVisibility}" />
+            <DatePicker Date="{Binding Promotion.StartDate, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+
+            <TextBlock Text="Einddatum" Visibility="{Binding PromotionVisibility}" />
+            <DatePicker Date="{Binding Promotion.EndDate, Mode=TwoWay}" Visibility="{Binding PromotionVisibility}" />
+
+            <Button Content="Kies afbeelding(en)" Command="{Binding PickImageCommand}" Visibility="{Binding PromotionVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+            <Button Content="Kies kortingsbon" Command="{Binding PickAttachmentCommand}" Visibility="{Binding PromotionVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+            <!-- ADD EVENT -->
+            <TextBlock Text="Vestiging" Visibility="{Binding EventVisibility}" />
+            <ComboBox
+            ItemsSource="{Binding Establishments}"
+            DisplayMemberPath="Name"
+            SelectedItem="{Binding PickedEstablishment, Mode=TwoWay}"
+            Visibility="{Binding EventVisibility}"/>
+
+            <TextBlock Text="Naam" Visibility="{Binding EventVisibility}" />
+            <TextBox PlaceholderText="Naam" Text="{Binding Event.Name, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+
+            <TextBlock Text="Omschrijving" Visibility="{Binding EventVisibility}" />
+            <TextBox PlaceholderText="Omschrijving" Text="{Binding Event.Message, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+
+            <TextBlock Text="Startdatum" Visibility="{Binding EventVisibility}" />
+            <DatePicker Date="{Binding Event.StartDate, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+
+            <TextBlock Text="Einddatum" Visibility="{Binding EventVisibility}" />
+            <DatePicker Date="{Binding Event.EndDate, Mode=TwoWay}" Visibility="{Binding EventVisibility}" />
+
+            <Button Content="Kies afbeelding(en)" Command="{Binding PickImageCommand}" Visibility="{Binding EventVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+            <Button Content="Kies kortingsbon" Command="{Binding PickAttachmentCommand}" Visibility="{Binding EventVisibility}" HorizontalAlignment="Left" Background="Transparent" Foreground="#0078d7"/>
+
+            <!-- BUTTONS (USED FOR ALL TYPES) -->
+            <Button Content="{Binding ButtonText}" Command="{Binding AddMerchantObjectCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
+            <Button Content="Annuleren" Command="{Binding CancelAddCommand}" HorizontalAlignment="Stretch" Background="Transparent" Foreground="#0078d7"/>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
 </UserControl>

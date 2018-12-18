@@ -62,25 +62,17 @@ namespace stappBackend.Controllers
 
                 //modelstate werkt niet op lijsten :-D
                 if (establishmentToAdd.Categories == null || !establishmentToAdd.Categories.Any())
-                    return BadRequest(new { error = "geen categories meegeven." });
-
-                //modelstate werkt niet op lijsten :-D
-                if (establishmentToAdd.SocialMedias == null || !establishmentToAdd.SocialMedias.Any())
-                    return BadRequest(new { error = "geen SocialMedias meegeven." });
-
-                //modelstate werkt niet op lijsten :-D
-                if (establishmentToAdd.OpenDays == null || !establishmentToAdd.OpenDays.Any())
-                    return BadRequest(new { error = "geen OpenDays meegeven." });
+                    return BadRequest(new { error = "Geen categorieën meegeven." });
 
                 //modelstate werkt niet op lijsten :-D
                 if (establishmentToAdd.Images == null || !establishmentToAdd.Images.Any())
-                    return BadRequest(new { error = "geen Images meegeven." });
+                    return BadRequest(new { error = "Geen afbeelding(en) meegeven." });
 
                 if (!ContainsJpgs(establishmentToAdd.Images))
-                    return BadRequest(new { error = "geen jpg images gevonden" });
+                    return BadRequest(new { error = "Geen jpg afbeelding(en) meegeven." });
 
                 if (!_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), establishmentToAdd.CompanyId ?? 0))
-                    return BadRequest(new { error = "De company waaraan u deze establishment wilt toevoegen is niet van u." });
+                    return BadRequest(new { error = "Het bedrijf waaraan u deze vestiging wilt toevoegen behoord niet tot u." });
 
                 // Ophalen van Latitude en Longitude op basis van het meegegeven adres
                 var adress = $"{establishmentToAdd.Street}+{establishmentToAdd.HouseNumber},+{establishmentToAdd.PostalCode}+{establishmentToAdd.City},+België";
@@ -112,7 +104,7 @@ namespace stappBackend.Controllers
                 //we hebben id nodig voor img path dus erna
                 newEstablishment.Images = ConvertFileViewModelToImages(establishmentToAdd.Images, newEstablishment.EstablishmentId);
                 _establishmentRepository.SaveChanges();
-                return Ok(new { bericht = "De establishment werd succesvol toegevoegd." });
+                return Ok(new { bericht = "De vestiging werd succesvol toegevoegd." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -130,10 +122,10 @@ namespace stappBackend.Controllers
                 Establishment establishment = _establishmentRepository.getById(id);
 
                 if (establishment == null)
-                    return BadRequest(new { error = "Establishment niet gevonden" });
+                    return BadRequest(new { error = "Vestiging met meegegeven id niet gevonden." });
 
                 if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), id))
-                    return BadRequest(new { error = "Establishment behoord niet tot uw establishments" });
+                    return BadRequest(new { error = "Vestiging behoord niet tot uw vestigingen." });
 
                 //alles ok, mag editen 
 
@@ -177,7 +169,7 @@ namespace stappBackend.Controllers
                 }
 
                 _companyRepository.SaveChanges();
-                return Ok(new { bericht = "De company werd succesvol bijgewerkt." });
+                return Ok(new { bericht = "De vestiging werd succesvol bijgewerkt." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -193,13 +185,13 @@ namespace stappBackend.Controllers
             Establishment establishment = _establishmentRepository.getById(id);
 
             if (establishment == null)
-                return BadRequest(new { error = "Establishment niet gevonden" });
+                return BadRequest(new { error = "Vestiging met meegegeven id niet gevonden." });
 
             if (!_establishmentRepository.isOwnerOfEstablishment(int.Parse(User.FindFirst("userId")?.Value), id))
-                return BadRequest(new { error = "Establishment behoord niet tot uw Establishments" });
+                return BadRequest(new { error = "Vestiging behoord niet tot uw Establishments." });
 
             _establishmentRepository.removeEstablishment(id);
-            return Ok(new { bericht = "De establishment werd succesvol verwijderd." });
+            return Ok(new { bericht = "De vestiging werd succesvol verwijderd." });
         }
 
         [HttpPost("ownerof/{id}")]

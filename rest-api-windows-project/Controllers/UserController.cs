@@ -43,7 +43,7 @@ namespace stappBackend.Controllers
             if (user != null){
                 return Ok(user);
             }
-            return BadRequest(new { error = "Geen user gevonden met de opgegeven id." });
+            return BadRequest(new { error = "Geen gebruiker gevonden met de opgegeven id." });
         }
 
         [HttpPost("CheckEmailExists")]
@@ -91,7 +91,7 @@ namespace stappBackend.Controllers
                 //geen user gevonden
                 if (CheckUsernameExists(login.Username))
                 {
-                    return BadRequest(new { error = "Incorrect wachtwoord" });
+                    return BadRequest(new { error = "Incorrect wachtwoord." });
                 }
                 else
                 {
@@ -142,7 +142,7 @@ namespace stappBackend.Controllers
 
                 ChangePassword(int.Parse(User.FindFirst("userId")?.Value), changeRequest.Password);
 
-                return Ok(new { bericht = "Het wachtwoord is succesvol gewijzigd." });
+                return Ok(new { bericht = "Uw wachtwoord werd succesvol gewijzigd." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -160,12 +160,12 @@ namespace stappBackend.Controllers
 
                 if (CheckUsernameExists(changeRequest.Username))
                 {
-                    return BadRequest(new { error = "Gebruikersnaam reeds in gebruik." });
+                    return BadRequest(new { error = "Deze gebruikersnaam is reeds in gebruik." });
                 }
 
                 ChangeUsername(int.Parse(User.FindFirst("userId")?.Value), changeRequest.Username);
 
-                return Ok(new { bericht = "Uw username is succesvol gewijzigd." });
+                return Ok(new { bericht = "Uw gebruikersnaam werd succesvol gewijzigd." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));

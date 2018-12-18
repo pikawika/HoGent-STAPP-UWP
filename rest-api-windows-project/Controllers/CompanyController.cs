@@ -33,7 +33,7 @@ namespace stappBackend.Controllers
                 };
 
                 _companyRepository.addCompany(int.Parse(User.FindFirst("userId")?.Value), newCompany);
-                return Ok(new { bericht = "De company werd succesvol toegevoegd." });
+                return Ok(new { bericht = "Het bedrijf werd succesvol toegevoegd." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -51,16 +51,16 @@ namespace stappBackend.Controllers
                 Company company = _companyRepository.getById(id);
 
                 if (company == null)
-                    return BadRequest(new { error = "Company niet gevonden" });
+                    return BadRequest(new { error = "Het bedrijf is niet gevonden." });
 
                 if (_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), id))
-                    return BadRequest(new { error = "Company behoord niet tot uw companies" });
+                    return BadRequest(new { error = "Company behoord niet tot uw companies." });
 
                 if (!string.IsNullOrEmpty(editedCompany.Name))
                     company.Name = editedCompany.Name;
 
                 _companyRepository.SaveChanges();
-                return Ok(new { bericht = "De company werd succesvol bijgewerkt." });
+                return Ok(new { bericht = "Het bedrijf werd succesvol bijgewerkt." });
             }
             //Als we hier zijn is is modelstate niet voldaan dus stuur error 400, slechte aanvraag
             string errorMsg = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
@@ -76,13 +76,13 @@ namespace stappBackend.Controllers
             Company company = _companyRepository.getById(id);
 
             if (company == null)
-                return BadRequest(new { error = "Company niet gevonden" });
+                return BadRequest(new { error = "Het bedrijf is niet gevonden." });
 
             if (!_companyRepository.isOwnerOfCompany(int.Parse(User.FindFirst("userId")?.Value), id))
-                return BadRequest(new { error = "Company behoord niet tot uw companies" });
+                return BadRequest(new { error = "Het bedrijf behoord niet tot uw companies." });
 
             _companyRepository.removeCompany(id);
-            return Ok(new { bericht = "De company werd succesvol verwijderd." });
+            return Ok(new { bericht = "Het bedrijf werd succesvol verwijderd." });
         }
 
         private bool IsMerchant()

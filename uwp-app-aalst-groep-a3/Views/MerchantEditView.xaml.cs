@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using System.Timers;
-using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -20,23 +17,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace uwp_app_aalst_groep_a3.Views
 {
-    public sealed partial class EstablishmentDetailView : UserControl
+    public sealed partial class MerchantEditView : UserControl
     {
-        public EstablishmentDetailView()
+        public MerchantEditView()
         {
             this.InitializeComponent();
-        }
-
-        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (e.NewSize.Width < 700 || e.NewSize.Height < 600)
-            {
-                topcarousel.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                topcarousel.Visibility = Visibility.Visible;
-            }
         }
     }
 }

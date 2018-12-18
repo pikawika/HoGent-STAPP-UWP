@@ -12,12 +12,12 @@ namespace uwp_app_aalst_groep_a3.Network.Request.Event
 
         public string Message { get; set; }
 
-        public DateTime? StartDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
 
-        public List<FileRequest> Images { get; set; }
+        public List<FileRequest> Images { get; set; } = new List<FileRequest>();
 
-        public List<FileRequest> Attachments { get; set; }
+        public List<FileRequest> Attachments { get; set; } = new List<FileRequest>();
     }
 }
