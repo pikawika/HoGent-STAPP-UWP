@@ -9,6 +9,7 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    
     <UserControl.Resources>
         <DataTemplate x:Key="SubscriptionsTemplate">
             <Grid
@@ -40,8 +41,8 @@
                 <RowDefinition/>
                 <RowDefinition Height="6*"/>
             </Grid.RowDefinitions>
-
-            <TextBlock Text="Uw abonnementen" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
+            <ProgressRing Grid.Row="2" IsActive="{Binding Loading}" HorizontalAlignment="Center" Height="50" Margin="0,0,0,0" VerticalAlignment="Center" Width="50"/>
+            <TextBlock Visibility="{Binding Shown}" Text="Uw abonnementen" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
 
             <Grid Grid.Row="1">
                 <controls:AdaptiveGridView
@@ -56,7 +57,7 @@
                 ItemTemplate="{StaticResource SubscriptionsTemplate}"/>
             </Grid>
 
-            <TextBlock Text="Promoties van uw abonnementen" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
+            <TextBlock Visibility="{Binding Shown}" Text="Promoties van uw abonnementen" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
 
             <Grid Grid.Row="3">
                 <controls:AdaptiveGridView
@@ -71,7 +72,7 @@
                 ItemTemplate="{StaticResource SubscriptionsTemplate}"/>
             </Grid>
 
-            <TextBlock Text="Evenementen van uw abonnementen" Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
+            <TextBlock Visibility="{Binding Shown}" Text="Evenementen van uw abonnementen" Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
 
             <Grid Grid.Row="5">
                 <controls:AdaptiveGridView

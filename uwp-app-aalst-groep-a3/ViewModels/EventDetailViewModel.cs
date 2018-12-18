@@ -91,7 +91,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
         }
 
-        private void EditEvent() { }
+        private void EditEvent() => mainPageViewModel.NavigateTo(new MerchantEditViewModel(MerchantObjectType.EVENT, mainPageViewModel, null, null, null, Event));
 
         private async Task DeleteEventDialog()
         {

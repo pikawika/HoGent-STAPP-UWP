@@ -91,6 +91,38 @@ namespace uwp_app_aalst_groep_a3
         // Extra code voor het gebruik van Cortana
         protected override void OnActivated(IActivatedEventArgs args)
         {
+
+            if(args.Kind == ActivationKind.ToastNotification)
+    {
+                //Get the pre-defined arguments and user inputs from the eventargs;
+                var toastArgs = args as ToastNotificationActivatedEventArgs;
+                var arguments = toastArgs.Argument;
+                Debug.WriteLine("Toast arguments are: " + arguments);
+                Frame rootFrame = Window.Current.Content as Frame;
+                if(rootFrame != null)
+                {
+                    if (arguments == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                }
+                else
+                {
+                    if (rootFrame == null)
+                    {
+                        rootFrame = new Frame();
+
+                        rootFrame.NavigationFailed += OnNavigationFailed;
+
+                        Window.Current.Content = rootFrame;
+                    }
+                    if (rootFrame.Content == null)
+                    {
+                        if (arguments == "showsubscriptions") rootFrame.Navigate(typeof(MainPage), "ShowSubscriptions");
+                    }
+                    Window.Current.Activate();
+                }
+                
+            }
+
+
             if (args.Kind == ActivationKind.Protocol)
             {
                 Frame rootFrame = Window.Current.Content as Frame;

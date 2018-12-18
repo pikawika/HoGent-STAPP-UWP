@@ -8,36 +8,39 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Padding="50" HorizontalAlignment="Left" MaxWidth="780">
-        <TextBlock FontWeight="Bold" Padding="0,30,0,0">
+    <ScrollViewer>
+
+        <StackPanel Padding="50" HorizontalAlignment="Left" MaxWidth="780">
+            <TextBlock FontWeight="Bold" Padding="0,30,0,0">
            Over deze applicatie
-        </TextBlock>
-        <TextBlock Text="{Binding LongDescription}" TextWrapping="Wrap" />
-        <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Padding="0,20,0,0" />
-        <TextBlock FontWeight="Bold"  Padding="0,30,0,0">
+            </TextBlock>
+            <TextBlock Text="{Binding LongDescription}" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding ShortDescription}" TextWrapping="Wrap" Padding="0,20,0,0" />
+            <TextBlock FontWeight="Bold"  Padding="0,30,0,0">
            Ontwikkelaars
-        </TextBlock>
-        <ListView ItemsSource="{Binding Developers}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </TextBlock>
+            <ListView ItemsSource="{Binding Developers}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-        <TextBlock Padding="0,30,0,0" TextWrapping="Wrap" MaxWidth="600" HorizontalAlignment="Left">
+            <TextBlock Padding="0,30,0,0" TextWrapping="Wrap" MaxWidth="600" HorizontalAlignment="Left">
             <Span xml:space="preserve"><Run>Deze applicatie is een open-source project. De broncode kan teruggevonden worden op </Run><Hyperlink NavigateUri="https://github.com/BramDC3/uwp-app-aalst-groep-a3">de Stapp GitHub repository</Hyperlink><Run>.</Run></Span>
-        </TextBlock>
-        <TextBlock Padding="0,20,0,0">
+            </TextBlock>
+            <TextBlock Padding="0,20,0,0">
            Versie: 1.0.0.0
-        </TextBlock>
-        <TextBlock FontWeight="Light">
+            </TextBlock>
+            <TextBlock FontWeight="Light">
            <Span xml:space="preserve"><Run>Privacybeleid: Het privacybeleid vindt u </Run><Hyperlink NavigateUri="https://technology-salesman-toolkit.firebaseapp.com/privacy_policy_stapp.html">hier</Hyperlink><Run>.</Run></Span>
-        </TextBlock>
+            </TextBlock>
 
-        <TextBlock FontWeight="Light">
+            <TextBlock FontWeight="Light">
            Copyright (c) Team Stapp. Alle rechten voorbehouden.
-        </TextBlock>
-    </StackPanel>
-
+            </TextBlock>
+        </StackPanel>
+    </ScrollViewer>
+    
 </UserControl>

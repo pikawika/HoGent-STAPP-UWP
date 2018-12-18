@@ -75,6 +75,29 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand EditEstablishmentCommand { get; set; }
         public RelayCommand DeleteEstablishmentCommand { get; set; }
 
+        private Visibility _facebookVisibility = Visibility.Collapsed;
+        public Visibility FacebookVisibility
+        {
+            get { return _facebookVisibility; }
+            set { _facebookVisibility = value; RaisePropertyChanged(nameof(FacebookVisibility)); }
+        }
+
+        private Visibility _twitterVisibility = Visibility.Collapsed;
+        public Visibility TwitterVisibility
+        {
+            get { return _twitterVisibility; }
+            set { _twitterVisibility = value; RaisePropertyChanged(nameof(TwitterVisibility)); }
+        }
+
+        private Visibility _instagramVisibility = Visibility.Collapsed;
+        public Visibility InstagramVisibility
+        {
+            get { return _instagramVisibility; }
+            set { _instagramVisibility = value; RaisePropertyChanged(nameof(InstagramVisibility)); }
+        }
+
+        public RelayCommand SocialMediaClickedCommand { get; set; }
+
         public EstablishmentDetailViewModel(Establishment establishment, MainPageViewModel mainPageViewModel)
         {
             Establishment = establishment;
@@ -82,6 +105,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             HandleEmptyEvents();
             HandleEmptyPromotions();
+
+            MakeSocialMediaVisible();
 
             PromotionClickedCommand = new RelayCommand((object args) => EstablishmentClicked(args));
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
@@ -92,16 +117,49 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             EditEstablishmentCommand = new RelayCommand(_ => EditEstablishment());
             DeleteEstablishmentCommand = new RelayCommand(async _ => await DeleteEstablishmentDialog());
 
+            SocialMediaClickedCommand = new RelayCommand((object args) => SocialMediaClickedAsync(args));
+
             CheckMerchantOwnsPromotion();
 
             SetupSubscriptionButtonAsync();
             initMap();
         }
 
+        private void MakeSocialMediaVisible()
+        {
+            if (Establishment.EstablishmentSocialMedias.Exists(esm => esm.SocialMedia.Name.ToLower() == "facebook")) FacebookVisibility = Visibility.Visible;
+            if (Establishment.EstablishmentSocialMedias.Exists(esm => esm.SocialMedia.Name.ToLower() == "twitter")) TwitterVisibility = Visibility.Visible;
+            if (Establishment.EstablishmentSocialMedias.Exists(esm => esm.SocialMedia.Name.ToLower() == "instagram")) InstagramVisibility = Visibility.Visible;
+        }
+
+        private async void SocialMediaClickedAsync(object args)
+        {
+            var type = args as string;
+            var link = "";
+            switch(type)
+            {
+                case "Facebook":
+                    link = Establishment.EstablishmentSocialMedias.SingleOrDefault(esm => esm.SocialMedia.Name.ToLower() == "facebook").Url;
+                    break;
+                case "Twitter":
+                    link = Establishment.EstablishmentSocialMedias.SingleOrDefault(esm => esm.SocialMedia.Name.ToLower() == "twitter").Url;
+                    break;
+                case "Instagram":
+                    link = Establishment.EstablishmentSocialMedias.SingleOrDefault(esm => esm.SocialMedia.Name.ToLower() == "instagram").Url;
+                    break;
+            }
+            if (link != "") await OpenSocialMedia(link);
+        }
+
+        private async Task OpenSocialMedia(string link)
+        {
+            var uri = new Uri(link);
+            await Windows.System.Launcher.LaunchUriAsync(uri);
+        }
+
         private async void SetupSubscriptionButtonAsync()
         {
             List<Establishment> establishments_subscribed = await networkAPI.GetSubscriptions();
-
 
             if (establishments_subscribed.Where(e => e.EstablishmentId == Establishment.EstablishmentId).ToList().Count != 0)
             {
@@ -399,7 +457,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             catch { }
         }
 
-        private void EditEstablishment() { }
+        private void EditEstablishment() => mainPageViewModel.NavigateTo(new MerchantEditViewModel(MerchantObjectType.ESTABLISHMENT, mainPageViewModel, null, Establishment));
 
         private async Task DeleteEstablishmentDialog()
         {

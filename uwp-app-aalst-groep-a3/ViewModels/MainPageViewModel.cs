@@ -209,7 +209,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (current.Contains("establishment")) current = "merchants";
             else if (current.Contains("login") || current.Contains("registration")) current = "account";
-            else if (current.Contains("panel") || current.Contains("add")) current = "panel";
+            else if (current.Contains("panel") || current.Contains("add") || current.Contains("edit")) current = "panel";
 
             SelectedItem = NavigationViewItems.SingleOrDefault(n => current.Contains(n.Tag.ToString().ToLower()));
         }

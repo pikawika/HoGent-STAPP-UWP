@@ -10,8 +10,8 @@ namespace uwp_app_aalst_groep_a3.Models
         public string Name { get; set; }
         public string Message { get; set; }
         
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTimeOffset StartDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
 
         public List<Image> Images { get; set; } = new List<Image>();
         public List<File> Attachments { get; set; } = new List<File>();

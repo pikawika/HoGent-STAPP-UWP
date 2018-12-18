@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Cortana;
 using uwp_app_aalst_groep_a3.ViewModels;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.UserActivities;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -40,5 +42,6 @@ namespace uwp_app_aalst_groep_a3
                 cortanaFunctions.RunCommand(e.Parameter as string);
             }
         }
+
     }
 }
