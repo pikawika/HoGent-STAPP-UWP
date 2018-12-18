@@ -103,11 +103,74 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             set { _instagram = value; RaisePropertyChanged(nameof(Instagram)); }
         }
 
+        private ObservableCollection<OpenHourForVm> _openHoursMonday = new ObservableCollection<OpenHourForVm>();
+        public ObservableCollection<OpenHourForVm> OpenHoursMonday
+        {
+            get => _openHoursMonday;
+            set { _openHoursMonday = value; RaisePropertyChanged(nameof(OpenHoursMonday)); }
+        }
+
+        private ObservableCollection<OpenHourForVm> _openHoursTuesday = new ObservableCollection<OpenHourForVm>();
+        public ObservableCollection<OpenHourForVm> OpenHoursTuesday
+        {
+            get => _openHoursTuesday;
+            set { _openHoursTuesday = value; RaisePropertyChanged(nameof(OpenHoursTuesday)); }
+        }
+
+        private ObservableCollection<OpenHourForVm> _openHoursWednesday = new ObservableCollection<OpenHourForVm>();
+        public ObservableCollection<OpenHourForVm> OpenHoursWednesday
+        {
+            get => _openHoursWednesday;
+            set { _openHoursWednesday = value; RaisePropertyChanged(nameof(OpenHoursWednesday)); }
+        }
+
+        private ObservableCollection<OpenHourForVm> _openHoursThursday = new ObservableCollection<OpenHourForVm>();
+        public ObservableCollection<OpenHourForVm> OpenHoursThursday
+        {
+            get => _openHoursThursday;
+            set { _openHoursThursday = value; RaisePropertyChanged(nameof(OpenHoursThursday)); }
+        }
+
+        private ObservableCollection<OpenHourForVm> _openHoursFriday = new ObservableCollection<OpenHourForVm>();
+        public ObservableCollection<OpenHourForVm> OpenHoursFriday
+        {
+            get => _openHoursFriday;
+            set { _openHoursFriday = value; RaisePropertyChanged(nameof(OpenHoursFriday)); }
+        }
+
+        private ObservableCollection<OpenHourForVm> _openHoursSaturday = new ObservableCollection<OpenHourForVm>();
+        public ObservableCollection<OpenHourForVm> OpenHoursSaturday
+        {
+            get => _openHoursSaturday;
+            set { _openHoursSaturday = value; RaisePropertyChanged(nameof(OpenHoursSaturday)); }
+        }
+
+        private ObservableCollection<OpenHourForVm> _openHoursSunday = new ObservableCollection<OpenHourForVm>();
+        public ObservableCollection<OpenHourForVm> OpenHoursSunday
+        {
+            get => _openHoursSunday;
+            set { _openHoursSunday = value; RaisePropertyChanged(nameof(OpenHoursSunday)); }
+        }
+
         private ObservableCollection<Company> _companies;
         public ObservableCollection<Company> Companies
         {
             get => _companies;
             set { _companies = value; RaisePropertyChanged(nameof(Companies)); }
+        }
+
+        private ObservableCollection<CategoryRequest> _categories = new ObservableCollection<CategoryRequest>();
+        public ObservableCollection<CategoryRequest> Categories
+        {
+            get => _categories;
+            set { _categories = value; RaisePropertyChanged(nameof(Categories)); }
+        }
+
+        private ObservableCollection<ExceptionalDayRequest> _exceptionalDays = new ObservableCollection<ExceptionalDayRequest>();
+        public ObservableCollection<ExceptionalDayRequest> ExceptionalDays
+        {
+            get => _exceptionalDays;
+            set { _exceptionalDays = value; RaisePropertyChanged(nameof(ExceptionalDays)); }
         }
 
         private Company _pickedCompany;
@@ -141,6 +204,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand PickImageCommand { get; set; }
         public RelayCommand PickAttachmentCommand { get; set; }
         public RelayCommand CancelAddCommand { get; set; }
+        public RelayCommand AddCategoryCommand { get; set; }
+        public RelayCommand DeleteCategoryCommand { get; set; }
+        public RelayCommand AddExceptionalDayCommand { get; set; }
+        public RelayCommand DeleteExceptionalDayCommand { get; set; }
+        public RelayCommand AddOpenHoursCommand { get; set; }
+        public RelayCommand DeleteOpenHoursCommand { get; set; }
         public RelayCommand AddMerchantObjectCommand { get; set; }
 
         public MerchantAddViewModel(MerchantObjectType merchantObjectType, MainPageViewModel mainPageViewModel)
@@ -152,6 +221,15 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             CancelAddCommand = new RelayCommand(_ => CancelAddDialog());
 
+            AddCategoryCommand = new RelayCommand(_ => AddCategoryField());
+            DeleteCategoryCommand = new RelayCommand(_ => DeleteCategoryField());
+
+            AddExceptionalDayCommand = new RelayCommand(_ => AddExceptionalDayField());
+            DeleteExceptionalDayCommand = new RelayCommand(_ => DeleteExceptionalDayField());
+
+            AddOpenHoursCommand = new RelayCommand((object args) => AddOpenHourField(args));
+            DeleteOpenHoursCommand = new RelayCommand((object args) => DeleteOpenHourField(args));
+
             List<FileExtension> imageExtensions = new List<FileExtension>();
             imageExtensions.Add(new FileExtension { Extension = ".jpg" });
             PickImageCommand = new RelayCommand(_ => ImagePickerDialog(imageExtensions));
@@ -161,6 +239,8 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             PickAttachmentCommand = new RelayCommand(_ => AttachmentPickerDialog(attachmentsExtensions));
 
             AddMerchantObjectCommand = new RelayCommand(_ => AddMerchantObject());
+
+
         }
 
         private void InitializeMerchantAdd()
@@ -209,14 +289,44 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 if (Companies.Any())
                 {
                     PickedCompany = Companies[0];
+
+                    ExceptionalDays.Add(new ExceptionalDayRequest() { Day = DateTime.Today, Message = "" });
+
+                    Categories.Add(new CategoryRequest { Name = "" });
+
+                    OpenHoursMonday.Add(new OpenHourForVm());
+                    OpenHoursTuesday.Add(new OpenHourForVm());
+                    OpenHoursWednesday.Add(new OpenHourForVm());
+                    OpenHoursThursday.Add(new OpenHourForVm());
+                    OpenHoursFriday.Add(new OpenHourForVm());
+                    OpenHoursSaturday.Add(new OpenHourForVm());
+                    OpenHoursSunday.Add(new OpenHourForVm());
                 }
+                else
+                {
+                    var message = await networkAPI.AddEvent(Event);
+                    await MessageUtils.ShowDialog("Gelieve eerst een bedrijf toe te voegen", message.Item1);
+                    if (message.Item2)
+                    {
+                        mainPageViewModel.BackButtonPressed();
+                        mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                    }
+                }
+
+
             }
             else
             {
-                //TODO nog geen companie voegt da keer toe
+                var message = await networkAPI.AddEvent(Event);
+                await MessageUtils.ShowDialog("Gelieve eerst een company toe te voegen", message.Item1);
+                if (message.Item2)
+                {
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                }
             }
 
-            
+
         }
 
         private async Task InitializePromotion()
@@ -248,10 +358,26 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     PickedEstablishment = Establishments[0];
                 }
+                else
+                {
+                    var message = await networkAPI.AddEvent(Event);
+                    await MessageUtils.ShowDialog("Gelieve eerst een vestiging toe te voegen", message.Item1);
+                    if (message.Item2)
+                    {
+                        mainPageViewModel.BackButtonPressed();
+                        mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                    }
+                }
             }
             else
             {
-                //TODO nog geen establishment voegt da keer toe
+                var message = await networkAPI.AddEvent(Event);
+                await MessageUtils.ShowDialog("Gelieve eerst een vestiging toe te voegen", message.Item1);
+                if (message.Item2)
+                {
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                }
             }
         }
 
@@ -284,10 +410,26 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 {
                     PickedEstablishment = Establishments[0];
                 }
+                else
+                {
+                    var message = await networkAPI.AddEvent(Event);
+                    await MessageUtils.ShowDialog("Gelieve eerst een vestiging toe te voegen", message.Item1);
+                    if (message.Item2)
+                    {
+                        mainPageViewModel.BackButtonPressed();
+                        mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                    }
+                }
             }
             else
             {
-                //TODO nog geen establishment voegt da keer toe
+                var message = await networkAPI.AddEvent(Event);
+                await MessageUtils.ShowDialog("Gelieve eerst een vestiging toe te voegen", message.Item1);
+                if (message.Item2)
+                {
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                }
             }
         }
 
@@ -308,7 +450,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             {
                 if (Facebook != null)
                 {
-                    Establishment.SocialMedias.Add(new SocialMediaRequest{Name = "facebook", Url = Facebook});
+                    Establishment.SocialMedias.Add(new SocialMediaRequest { Name = "facebook", Url = Facebook });
                 }
 
                 if (Twitter != null)
@@ -322,6 +464,86 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                 }
 
                 Establishment.CompanyId = PickedCompany.CompanyId;
+
+                var categories = Categories.ToList();
+                categories.RemoveAll(c => string.IsNullOrEmpty(c.Name));
+                Establishment.Categories = categories;
+
+                var exceptionalDays = ExceptionalDays.ToList();
+                exceptionalDays.RemoveAll(ed => string.IsNullOrEmpty(ed.Message));
+                Establishment.ExceptionalDays = ExceptionalDays.ToList();
+
+                var openHoursVm0 = OpenHoursMonday.ToList();
+                openHoursVm0.RemoveAll(oh => oh.IsClosed);
+                var openDays0 = new OpenDayRequest{DayOfTheWeek = 0};
+                foreach (var openHourVm in openHoursVm0)
+                {
+                    openDays0.OpenHours.Add(new OpenHourRequest{StartHour = openHourVm.StartTime.Hours, EndHour = openHourVm.EndTime.Hours, Startminute = openHourVm.StartTime.Minutes, EndMinute = openHourVm.EndTime.Minutes });
+                }
+                Establishment.OpenDays.Add(openDays0);
+
+                var openHoursVm1 = OpenHoursTuesday.ToList();
+                openHoursVm1.RemoveAll(oh => oh.IsClosed);
+                var openDays1 = new OpenDayRequest { DayOfTheWeek = 1 };
+                foreach (var openHourVm in openHoursVm1)
+                {
+                    openDays1.OpenHours.Add(new OpenHourRequest { StartHour = openHourVm.StartTime.Hours, EndHour = openHourVm.EndTime.Hours, Startminute = openHourVm.StartTime.Minutes, EndMinute = openHourVm.EndTime.Minutes });
+                }
+                Establishment.OpenDays.Add(openDays1);
+
+                var openHoursVm2 = OpenHoursWednesday.ToList();
+                openHoursVm2.RemoveAll(oh => oh.IsClosed);
+                var openDays2 = new OpenDayRequest { DayOfTheWeek = 2 };
+                foreach (var openHourVm in openHoursVm2)
+                {
+                    openDays2.OpenHours.Add(new OpenHourRequest { StartHour = openHourVm.StartTime.Hours, EndHour = openHourVm.EndTime.Hours, Startminute = openHourVm.StartTime.Minutes, EndMinute = openHourVm.EndTime.Minutes });
+                }
+                Establishment.OpenDays.Add(openDays2);
+
+                var openHoursVm3 = OpenHoursThursday.ToList();
+                openHoursVm3.RemoveAll(oh => oh.IsClosed);
+                var openDays3 = new OpenDayRequest { DayOfTheWeek = 3 };
+                foreach (var openHourVm in openHoursVm3)
+                {
+                    openDays3.OpenHours.Add(new OpenHourRequest { StartHour = openHourVm.StartTime.Hours, EndHour = openHourVm.EndTime.Hours, Startminute = openHourVm.StartTime.Minutes, EndMinute = openHourVm.EndTime.Minutes });
+                }
+                Establishment.OpenDays.Add(openDays3);
+
+                var openHoursVm4 = OpenHoursFriday.ToList();
+                openHoursVm4.RemoveAll(oh => oh.IsClosed);
+                var openDays4 = new OpenDayRequest { DayOfTheWeek = 4 };
+                foreach (var openHourVm in openHoursVm4)
+                {
+                    openDays4.OpenHours.Add(new OpenHourRequest { StartHour = openHourVm.StartTime.Hours, EndHour = openHourVm.EndTime.Hours, Startminute = openHourVm.StartTime.Minutes, EndMinute = openHourVm.EndTime.Minutes });
+                }
+                Establishment.OpenDays.Add(openDays4);
+
+                var openHoursVm5 = OpenHoursSaturday.ToList();
+                openHoursVm1.RemoveAll(oh => oh.IsClosed);
+                var openDays5 = new OpenDayRequest { DayOfTheWeek = 5 };
+                foreach (var openHourVm in openHoursVm5)
+                {
+                    openDays5.OpenHours.Add(new OpenHourRequest { StartHour = openHourVm.StartTime.Hours, EndHour = openHourVm.EndTime.Hours, Startminute = openHourVm.StartTime.Minutes, EndMinute = openHourVm.EndTime.Minutes });
+                }
+                Establishment.OpenDays.Add(openDays5);
+
+                var openHoursVm6 = OpenHoursSunday.ToList();
+                openHoursVm6.RemoveAll(oh => oh.IsClosed);
+                var openDays6 = new OpenDayRequest { DayOfTheWeek = 6 };
+                foreach (var openHourVm in openHoursVm6)
+                {
+                    openDays6.OpenHours.Add(new OpenHourRequest { StartHour = openHourVm.StartTime.Hours, EndHour = openHourVm.EndTime.Hours, Startminute = openHourVm.StartTime.Minutes, EndMinute = openHourVm.EndTime.Minutes });
+                }
+                Establishment.OpenDays.Add(openDays6);
+
+                var message = await networkAPI.AddEstablishment(Establishment);
+                await MessageUtils.ShowDialog("Promotie toevoegen", message.Item1);
+                if (message.Item2)
+                {
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                }
+
             }
 
             if (Promotion != null)
@@ -406,6 +628,96 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
         }
 
+        private void AddCategoryField()
+        {
+            _categories.Add(new CategoryRequest { Name = "" });
+        }
+
+        private void DeleteCategoryField()
+        {
+            _categories.Clear();
+            _categories.Add(new CategoryRequest { Name = "" });
+        }
+
+        private void AddOpenHourField(object args)
+        {
+            var dayOfWeek = int.Parse(args as string);
+
+            switch (dayOfWeek)
+            {
+                case 0:
+                    OpenHoursMonday.Add(new OpenHourForVm());
+                    break;
+                case 1:
+                    OpenHoursTuesday.Add(new OpenHourForVm());
+                    break;
+                case 2:
+                    OpenHoursWednesday.Add(new OpenHourForVm());
+                    break;
+                case 3:
+                    OpenHoursThursday.Add(new OpenHourForVm());
+                    break;
+                case 4:
+                    OpenHoursFriday.Add(new OpenHourForVm());
+                    break;
+                case 5:
+                    OpenHoursSaturday.Add(new OpenHourForVm());
+                    break;
+                case 6:
+                    OpenHoursSunday.Add(new OpenHourForVm());
+                    break;
+            }
+        }
+
+        private void DeleteOpenHourField(object args)
+        {
+            var dayOfWeek = int.Parse(args as string);
+
+
+            switch (dayOfWeek)
+            {
+                case 0:
+                    OpenHoursMonday.Clear();
+                    OpenHoursMonday.Add(new OpenHourForVm());
+                    break;
+                case 1:
+                    OpenHoursTuesday.Clear();
+                    OpenHoursTuesday.Add(new OpenHourForVm());
+                    break;
+                case 2:
+                    OpenHoursWednesday.Clear();
+                    OpenHoursWednesday.Add(new OpenHourForVm());
+                    break;
+                case 3:
+                    OpenHoursThursday.Clear();
+                    OpenHoursThursday.Add(new OpenHourForVm());
+                    break;
+                case 4:
+                    OpenHoursFriday.Clear();
+                    OpenHoursFriday.Add(new OpenHourForVm());
+                    break;
+                case 5:
+                    OpenHoursSaturday.Clear();
+                    OpenHoursSaturday.Add(new OpenHourForVm());
+                    break;
+                case 6:
+                    OpenHoursSunday.Clear();
+                    OpenHoursSunday.Add(new OpenHourForVm());
+                    break;
+            }
+        }
+
+        private void AddExceptionalDayField()
+        {
+            _exceptionalDays.Add(new ExceptionalDayRequest() { Day = DateTime.Today, Message = "" });
+        }
+
+        private void DeleteExceptionalDayField()
+        {
+            _exceptionalDays.Clear();
+            _exceptionalDays.Add(new ExceptionalDayRequest() { Day = DateTime.Today, Message = "" });
+        }
+
         private void CancelAdd() => mainPageViewModel.BackButtonPressed();
 
         private async Task<string> FileToBase64(StorageFile file)
@@ -424,6 +736,5 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             return base64String;
         }
-
     }
 }
