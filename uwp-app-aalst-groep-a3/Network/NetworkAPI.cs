@@ -135,6 +135,66 @@ namespace uwp_app_aalst_groep_a3.Network
             return user;
         }
 
+        // Change username
+        public async Task<string> ChangeUsername(string username)
+        {
+            var data = new { Username = username };
+            var dataJson = JsonConvert.SerializeObject(data);
+            string message = null;
+
+            var token = UserUtils.GetUserToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/user/changeusername"), new StringContent(dataJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                }
+            }
+            catch
+            {
+                message = "Er is een onverwachte fout opgetreden bij het veranderen van de gebruikersnaam.";
+            }
+
+            return message;
+        }
+
+        // Change password
+        public async Task<string> ChangePassword(string password)
+        {
+            var data = new { Password = password };
+            var dataJson = JsonConvert.SerializeObject(data);
+            string message = null;
+
+            var token = UserUtils.GetUserToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            try
+            {
+                var res = await client.PostAsync(new Uri($"{baseUrl}api/user/changepassword"), new StringContent(dataJson, System.Text.Encoding.UTF8, "application/json"));
+                if (res.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    message = JsonConvert.DeserializeObject<ErrorMessage>(await res.Content.ReadAsStringAsync()).Error;
+                }
+                else
+                {
+                    message = JsonConvert.DeserializeObject<SuccesMessage>(await res.Content.ReadAsStringAsync()).Bericht;
+                }
+            }
+            catch
+            {
+                message = "Er is een onverwachte fout opgetreden bij het veranderen van het wachtwoord.";
+            }
+
+            return message;
+        }
+
         #endregion
 
         #region CUSTOMER
