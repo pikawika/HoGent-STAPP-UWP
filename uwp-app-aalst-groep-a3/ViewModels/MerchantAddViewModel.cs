@@ -326,6 +326,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (Promotion != null)
             {
+                Promotion.EstablishmentId = PickedEstablishment.EstablishmentId;
                 var message = await networkAPI.AddPromotion(Promotion);
                 await MessageUtils.ShowDialog("Promotie toevoegen", message.Item1);
                 if (message.Item2)
@@ -337,6 +338,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (Event != null)
             {
+                Event.EstablishmentId = PickedEstablishment.EstablishmentId;
                 var message = await networkAPI.AddEvent(Event);
                 await MessageUtils.ShowDialog("Event toevoegen", message.Item1);
                 if (message.Item2)
