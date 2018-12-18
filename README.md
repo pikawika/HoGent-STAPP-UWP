@@ -1,6 +1,6 @@
 # Welkom bij Stapp!
 
-Dit is de GitHub repository voor Stapp, het Stads-app project van Groep A3 uit HoGent Aalst. U kan hier steeds alle broncode raadplegen en clonen.
+Dit is de GitHub repository voor Stapp, het Stads-app project van Groep A3 uit HoGent Aalst. U kan hier steeds alle broncode raadplegen en clonen. Om gebruik te kunnen maken van de Cortana functies, dient Cortana geïnstalleerd te zijn op uw toestel. Om de kortingsbonnen te kunnen downloaden, dient u een beveiligingscertificaat aan te maken en toe te voegen aan de manifest.
 
 ## Inhoudsopgave
 
