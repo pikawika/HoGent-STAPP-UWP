@@ -210,7 +210,7 @@
                 <StackPanel Padding="15">
                     <TextBlock FontSize="20" FontWeight="Bold" TextAlignment="Center" Text="Beschrijving"/>
                     <Line StrokeThickness="3"/>
-                    <TextBlock TextWrapping="Wrap" Padding="0,20,0,20" Text="{Binding Establishment.Description}" />
+                    <TextBlock TextWrapping="Wrap" Padding="0,20,0,20" TextAlignment="Center" Text="{Binding Establishment.Description}" />
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Image Source="https://facebookbrand.com/wp-content/themes/fb-branding/assets/images/fb-logo.png" Height="40" Margin="0, 0, 20, 0" Visibility="{Binding FacebookVisibility}">
                             <i:Interaction.Behaviors>
