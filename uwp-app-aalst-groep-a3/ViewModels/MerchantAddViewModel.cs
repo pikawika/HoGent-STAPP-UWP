@@ -291,11 +291,17 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             }
         }
 
-        private void AddMerchantObject()
+        private async Task AddMerchantObject()
         {
             if (Company != null)
             {
-
+                var message = await networkAPI.AddCompany(Company.Name);
+                await MessageUtils.ShowDialog("Bedrijf toevoegen", message.Item1);
+                if (message.Item2)
+                {
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                }
             }
 
             if (Establishment != null)
@@ -320,12 +326,24 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
             if (Promotion != null)
             {
-
+                var message = await networkAPI.AddPromotion(Promotion);
+                await MessageUtils.ShowDialog("Promotie toevoegen", message.Item1);
+                if (message.Item2)
+                {
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                }
             }
 
             if (Event != null)
             {
-
+                var message = await networkAPI.AddEvent(Event);
+                await MessageUtils.ShowDialog("Event toevoegen", message.Item1);
+                if (message.Item2)
+                {
+                    mainPageViewModel.BackButtonPressed();
+                    mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(MerchantAddViewModel));
+                }
             }
         }
 
