@@ -106,6 +106,7 @@
     <Compile Include="Models\FileExtension.cs" />
     <Compile Include="Network\Request\Attachments\FileRequest.cs" />
     <Compile Include="Network\Request\Establishment\CategoryRequest.cs" />
+    <Compile Include="Network\Request\Establishment\OpenHourForVm.cs" />
     <Compile Include="Network\Request\Establishment\ExceptionalDayRequest.cs" />
     <Compile Include="Network\Request\Establishment\EstablishmentRequest.cs" />
     <Compile Include="Network\Request\Establishment\OpenDayRequest.cs" />
