@@ -86,14 +86,13 @@ namespace uwp_app_aalst_groep_a3.Utils
             }
         }
 
-        public async void SubscriptionToastAsync(ViewModels.MainPageViewModel mainPageViewModel)
+        public async void SubscriptionToastAsync(MainPageViewModel mainPageViewModel)
         {
-            this.MainPage = mainPageViewModel;
+            MainPage = mainPageViewModel;
             NetworkAPI networkAPI = new NetworkAPI();
             User user = await networkAPI.GetUser();
             if (user.UserId != -2)
             {
-                bool changed = false;
                 //eerst initialiseren anders null indien file niet bestaat
                 List<Establishment> subs = new List<Establishment>();
                 subs = await networkAPI.GetSubscriptions();
@@ -104,7 +103,7 @@ namespace uwp_app_aalst_groep_a3.Utils
                         if (!isEqual)
                         {
                             //als veranderd, dan toast tonen en wegschrijven van nieue subs
-                            ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("STAPP", "Er zijn nieuwe promoties of evenementen toegevoegd, bekijk ze hier!"));
+                            ToastNotificationManager.CreateToastNotifier().Show(new Toast().createToast("Stapp", "Er zijn nieuwe promoties of evenementen toegevoegd, klik hier om ze te bekijken!"));
                             await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
                         }
                     }
@@ -113,8 +112,6 @@ namespace uwp_app_aalst_groep_a3.Utils
                         await networkAPI.SaveSubscribedEstablishemtsAsync(subs);
                     }
                 }            
-
-                
             }
 
         }

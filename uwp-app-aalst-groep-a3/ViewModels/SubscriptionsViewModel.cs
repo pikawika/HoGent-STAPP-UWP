@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using uwp_app_aalst_groep_a3.Base;
 using uwp_app_aalst_groep_a3.Models;
+using uwp_app_aalst_groep_a3.Models.Domain;
 using uwp_app_aalst_groep_a3.Network;
 using uwp_app_aalst_groep_a3.Utils;
 
@@ -14,20 +15,6 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 {
     public class SubscriptionsViewModel : ViewModelBase
     {
-        private bool _loading = true;
-
-        public bool Loading
-        {
-            get { return _loading; }
-            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
-        }
-
-        public bool Shown
-        {
-            get { return !_loading; }
-            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
-        }
-
         private MainPageViewModel mainPageViewModel;
 
         private NetworkAPI NetworkAPI = new NetworkAPI();
@@ -62,6 +49,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
 
         public RelayCommand EventClickedCommand { get; set; }
 
+        private bool _loading = true;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
+        }
+
+        public bool Shown
+        {
+            get { return !_loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
+        }
+
         public SubscriptionsViewModel(MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
@@ -73,13 +74,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             EventClickedCommand = new RelayCommand((object args) => EventClicked(args));
 
             InitializeHomePage();
-            //HandleEmpty();
         }
 
         private void HandleEmpty()
         {
-            Models.Domain.Image image = new Models.Domain.Image() { Path = "img/establishments/none/empty.jpg" };
-            List<Models.Domain.Image> images = new List<Models.Domain.Image>();
+            Image image = new Image() { Path = "img/establishments/none/empty.jpg" };
+            List<Image> images = new List<Image>();
             images.Add(image);
 
             if(Subscriptions.Count == 0)
@@ -138,7 +138,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             Promotions = new ObservableCollection<Promotion>(promotionList);
             Events = new ObservableCollection<Event>(eventList);
 
-            
+            HandleEmpty();
         }
 
         private void SubscriptionClicked(object args) => mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(args as Establishment, mainPageViewModel));

@@ -38,6 +38,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand SignOutCommand { get; set; }
         public RelayCommand ShowSubscriptionsCommand { get; set; }
 
+        public RelayCommand ChangeUsernameCommand { get; set; }
+        public RelayCommand ChangePasswordCommand { get; set; }
+
         public AccountViewModel(MainPageViewModel mainPageViewModel)
         {
             this.mainPageViewModel = mainPageViewModel;
@@ -45,8 +48,10 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             User = new User { FirstName = "", LastName = "", Email = "", Login = new Login() { Username = "" } };
 
             SignOutCommand = new RelayCommand(async _ => await SignOutAsync());
-
             ShowSubscriptionsCommand = new RelayCommand(_ => ShowPageMatchingRole());
+
+            ChangeUsernameCommand = new RelayCommand(async _ => await ChangeUsername());
+            ChangePasswordCommand = new RelayCommand(async _ => await ChangePassword());
 
             GetUser();
 
@@ -56,10 +61,63 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             else if (role.ToLower() == "merchant") ButtonText = "Bekijk uw overzicht";
         }
 
-        private async void GetUser()
+        private async Task ChangeUsername()
         {
-            User = await networkAPI.GetUser();
+            var username = await InputTextDialogAsync("Kies een gebruikersnaam");
+            if (username == "") await MessageUtils.ShowDialog("Gebruikersnaam wijzigen", "Gelieve een geldige gebruikersnaam in te voeren.");
+            else
+            {
+                var message = await networkAPI.ChangeUsername(username);
+                await MessageUtils.ShowDialog("Gebruikersnaam wijzigen", message);
+            }
         }
+
+        private async Task ChangePassword()
+        {
+            var password = await PasswordInputTextDialogAsync("Kies een nieuw wachtwoord");
+            var repeat = await PasswordInputTextDialogAsync("Herhaal het nieuwe wachtwoord");
+            if (password != repeat) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "De twee ingevoerde wachtwoorden komen niet overeen.");
+            else if (password.Length < 6) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "Uw wachtwoord moet minstens 6 karakters lang zijn.");
+            else if (password.Length > 30) await MessageUtils.ShowDialog("Wachtwoord wijzigen", "Uw wachtwoord moet mag niet langer dan 30 karakters zijn.");
+            else
+            {
+                var message = await networkAPI.ChangePassword(password);
+                await MessageUtils.ShowDialog("Wachtwoord wijzigen", message);
+            }
+        }
+
+        private async Task<string> InputTextDialogAsync(string title)
+        {
+            TextBox inputTextBox = new TextBox();
+            inputTextBox.AcceptsReturn = false;
+            inputTextBox.Height = 32;
+            ContentDialog dialog = new ContentDialog();
+            dialog.Content = inputTextBox;
+            dialog.Title = title;
+            dialog.IsSecondaryButtonEnabled = true;
+            dialog.PrimaryButtonText = "Oké";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.SecondaryButtonText = "Annuleren";
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary) return inputTextBox.Text;
+            else return "";
+        }
+
+        private async Task<string> PasswordInputTextDialogAsync(string title)
+        {
+            PasswordBox passwordBox = new PasswordBox();
+            passwordBox.Height = 32;
+            ContentDialog dialog = new ContentDialog();
+            dialog.Content = passwordBox;
+            dialog.Title = title;
+            dialog.IsSecondaryButtonEnabled = true;
+            dialog.PrimaryButtonText = "Oké";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.SecondaryButtonText = "Annuleren";
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary) return passwordBox.Password;
+            else return "";
+        }
+
+        private async void GetUser() => User = await networkAPI.GetUser();
 
         private async Task SignOutAsync()
         {

@@ -63,7 +63,9 @@
                 <RowDefinition Height="6*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <ProgressRing Grid.Row="4" IsActive="{Binding Loading}" HorizontalAlignment="Center" Height="50" Margin="0,0,0,0" VerticalAlignment="Center" Width="50"/>
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Visibility="{Binding Shown}">
                 <TextBlock Text="Uw bedrijven" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
                 <Button Content="Nieuw bedrijf" Command="{Binding AddCompanyClickedCommand}" Margin="30,0,0,0" />
             </StackPanel>
@@ -81,7 +83,7 @@
                 ItemTemplate="{StaticResource EmptyTemplate}"/>
             </Grid>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Visibility="{Binding Shown}">
                 <TextBlock Text="Uw vestigingen" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
                 <Button Content="Nieuwe vestiging" Command="{Binding AddEstablishmentClickedCommand}" Margin="30,0,0,0" />
             </StackPanel>
@@ -98,8 +100,8 @@
                 ItemsSource="{Binding Establishments}"
                 ItemTemplate="{StaticResource ImageTemplate}"/>
             </Grid>
-            
-            <StackPanel Orientation="Horizontal" Grid.Row="4">
+
+            <StackPanel Orientation="Horizontal" Grid.Row="4" Visibility="{Binding Shown}">
                 <TextBlock Text="Promoties van uw vestigingen" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
                 <Button Content="Nieuwe promotie" Command="{Binding AddPromotionClickedCommand}" Margin="30,0,0,0" />
             </StackPanel>
@@ -117,7 +119,7 @@
                 ItemTemplate="{StaticResource ImageTemplate}"/>
             </Grid>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="6">
+            <StackPanel Orientation="Horizontal" Grid.Row="6" Visibility="{Binding Shown}">
                 <TextBlock Text="Evenementen van uw vestigingen" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
                 <Button Content="Nieuw evenement" Command="{Binding AddEventClickedCommand}" Margin="30,0,0,0" />
             </StackPanel>

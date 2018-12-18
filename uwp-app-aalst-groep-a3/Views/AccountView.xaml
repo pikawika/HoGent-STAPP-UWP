@@ -31,6 +31,11 @@
 
             <Button Content="{Binding ButtonText}" Command="{Binding ShowSubscriptionsCommand}" HorizontalAlignment="Stretch" Background="#0078d7" Foreground="White" Margin="0,20,0,0"/>
 
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Wijzig gebruikersnaam" Width="300"  Command="{Binding ChangeUsernameCommand}" HorizontalAlignment="Stretch" Background="Transparent" Foreground="#0078d7"/>
+                <Button Content="Wijzig wachtwoord" Width="300"  Command="{Binding ChangePasswordCommand}" HorizontalAlignment="Stretch" Background="Transparent" Foreground="#0078d7"/>
+            </StackPanel>
+            
             <Button Content="Meld af" Command="{Binding SignOutCommand}" HorizontalAlignment="Stretch" Background="Transparent" Foreground="#0078d7"/>
         </StackPanel>
 

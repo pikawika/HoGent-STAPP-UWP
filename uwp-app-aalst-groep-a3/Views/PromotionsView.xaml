@@ -34,8 +34,9 @@
             <RowDefinition/>
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
+        <ProgressRing Grid.Row="2" IsActive="{Binding Loading}" HorizontalAlignment="Center" Height="50" Margin="0,0,0,0" VerticalAlignment="Center" Width="50"/>
 
-        <TextBlock Text="Promoties in Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
+        <TextBlock Visibility="{Binding Shown}" Text="Promoties in Aalst" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="20,0,0,0"/>
 
         <Grid Grid.Row="2">
             <controls:AdaptiveGridView

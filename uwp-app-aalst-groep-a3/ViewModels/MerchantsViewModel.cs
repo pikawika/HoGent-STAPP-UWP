@@ -19,15 +19,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         private MainPageViewModel mainPageViewModel;
         private NetworkAPI NetworkAPI = new NetworkAPI();
 
-
         private ObservableCollection<Establishment> _establishments;
 
-        //vars voor zoeken
         private ObservableCollection<string> _establishment_names;
         private List<Establishment> _all_establishments { get; set; }
         private string _SearchText = "";
 
-        //properties met propertychanged
         public ObservableCollection<string> Establishment_Names {
             get { return _establishment_names; }
             set { _establishment_names = value; RaisePropertyChanged(nameof(Establishment_Names)); }
@@ -41,12 +38,25 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Establishment> Establishments
         {
             get { return _establishments; }
-            set { _establishments = value; RaisePropertyChanged(nameof(Establishments)); }
+            set { _establishments = value; RaisePropertyChanged(nameof(Establishments)); Loading = false; }
         }
 
-        //commands
         public RelayCommand EstablishmentClickedCommand { get; set; }
         public RelayCommand TextChangedCommand { get; set; }
+
+        private bool _loading = true;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
+        }
+
+        public bool Shown
+        {
+            get { return !_loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
+        }
 
         public MerchantsViewModel(MainPageViewModel mainPageViewModel)
         {
@@ -58,16 +68,12 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             InitializeHomePage();
         }
 
-
-
         private void Search(object args)
         {
             Debug.WriteLine("Mijn searchtext:" + _SearchText);
             Establishment_Names = new ObservableCollection<string>(_all_establishments.Where(e => e.Name.IndexOf(_SearchText, StringComparison.OrdinalIgnoreCase) >= 0).Select(e => e.Name).ToList());
             Establishments = new ObservableCollection<Establishment>(_all_establishments.Where(e => e.Name.IndexOf(_SearchText, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
         }
-
-
 
         private async void InitializeHomePage() {
             Establishments = new ObservableCollection<Establishment>(await NetworkAPI.GetAllEstablishments());

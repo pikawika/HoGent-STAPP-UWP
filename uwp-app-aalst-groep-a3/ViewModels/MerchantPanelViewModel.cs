@@ -22,7 +22,7 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public ObservableCollection<Company> Companies
         {
             get { return _companies; }
-            set { _companies = value; RaisePropertyChanged(nameof(Companies)); }
+            set { _companies = value; RaisePropertyChanged(nameof(Companies)); Loading = false; }
         }
 
         private ObservableCollection<Establishment> _establishments;
@@ -58,6 +58,20 @@ namespace uwp_app_aalst_groep_a3.ViewModels
         public RelayCommand AddEstablishmentClickedCommand { get; set; }
         public RelayCommand AddPromotionClickedCommand { get; set; }
         public RelayCommand AddEventClickedCommand { get; set; }
+
+        private bool _loading = true;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Loading)); Shown = value; }
+        }
+
+        public bool Shown
+        {
+            get { return !_loading; }
+            set { _loading = value; RaisePropertyChanged(nameof(Shown)); }
+        }
 
         public MerchantPanelViewModel(MainPageViewModel mainPageViewModel)
         {
