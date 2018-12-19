@@ -429,6 +429,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
                         isSubscribed = true;
                         SubscriptionButtonText = is_subbed_text;
                         await MessageUtils.ShowDialog("Abonneren", $"U bent succesvol geabonneerd op {Establishment.Name}!");
+                        mainPageViewModel.BackButtonPressed();
+                        mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(EstablishmentDetailViewModel));
+                        mainPageViewModel.NavigateTo(new EstablishmentDetailViewModel(Establishment, mainPageViewModel));
                     }
                     else
                     {

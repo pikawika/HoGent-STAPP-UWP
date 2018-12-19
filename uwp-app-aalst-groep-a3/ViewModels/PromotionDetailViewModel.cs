@@ -116,7 +116,9 @@ namespace uwp_app_aalst_groep_a3.ViewModels
             if (message.Item2)
             {
                 mainPageViewModel.BackButtonPressed();
-                mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(PromotionDetailViewModel));
+                mainPageViewModel.BackButtonPressed();
+                mainPageViewModel.NavigationHistoryItems.RemoveAll(v => v.GetType() == typeof(PromotionDetailViewModel) || v.GetType() == typeof(PromotionsViewModel));
+                mainPageViewModel.NavigateTo(new PromotionsViewModel(mainPageViewModel));
             }
         }
 
